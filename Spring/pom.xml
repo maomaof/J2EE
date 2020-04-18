@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.pbz.demo</groupId>
+  <artifactId>pbz-demo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <properties>
+	<encoding>UTF-8</encoding>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<build.plugins.plugin.version>2.1.6.RELEASE</build.plugins.plugin.version>
+	<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+	<spring.boot.version>2.1.6.RELEASE</spring.boot.version>
+  </properties>
+  <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.6.RELEASE</version>
+  </parent>
+  <dependencies>
+	  <dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-dependencies</artifactId>
+		  <version>${spring.boot.version}</version>
+	      <type>pom</type>
+		  <scope>import</scope>
+	 </dependency>
+	 <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-web</artifactId>
+     </dependency>
+   </dependencies>
+   <build>
+	  <plugins>
+		 <plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+			<version>${spring.boot.version}</version>
+		</plugin>
+		 				
+	 </plugins>
+	</build>
+ 
+</project>
