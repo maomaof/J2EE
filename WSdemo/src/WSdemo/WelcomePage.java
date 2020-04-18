@@ -24,7 +24,7 @@ public class WelcomePage extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Welcome! Application for docker demo");
+		response.getWriter().append("Welcome! This is a pplication for docker demo");
 	}
 
 	/**
