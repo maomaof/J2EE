@@ -3,7 +3,6 @@ package com.pbz.demo.hello.controller;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -28,9 +27,10 @@ public class ImageController {
 
 	@RequestMapping(value = "/clock")
 	@ResponseBody
-	public void getClockImage(@RequestParam(name = "time") String time, HttpServletResponse response)
-			throws IOException {
-
+	public void getClockImage(@RequestParam(name = "time") String time, HttpServletResponse response) throws Exception {
+		if (time == null || time.trim().length() == 0) {
+			throw new Exception("The time parameter is not specified.");
+		}
 		response.setHeader("Pragma", "No-cache");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setDateHeader("Expires", 0);
