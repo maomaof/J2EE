@@ -3,6 +3,8 @@ package com.pbz.demo.hello.controller;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -31,6 +33,9 @@ public class ImageController {
 		if (time == null || time.trim().length() == 0) {
 			throw new Exception("The time parameter is not specified.");
 		}
+		else if (isValidTime(time) == false) {
+			throw new Exception("The time parameter format invalid.");
+		}
 		response.setHeader("Pragma", "No-cache");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setDateHeader("Expires", 0);
@@ -51,7 +56,20 @@ public class ImageController {
 		sos.write(buf);
 		bos.close();
 		sos.close();
+	}
+	
+	private static boolean isValidTime(String time) {
+		
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+		try {
+			format.setLenient(false);////此处指定日期/时间解析是否不严格，在true是不严格，false时为严格
+			format.parse(time);
+		}
+		catch (ParseException e) {
+			return false;
+		}
 
+		return true;
 	}
 
 }
