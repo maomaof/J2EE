@@ -30,12 +30,9 @@ public class ImageController {
 	@RequestMapping(value = "/clock")
 	@ResponseBody
 	public void getClockImage(@RequestParam(name = "time") String time, HttpServletResponse response) throws Exception {
-		if (time == null || time.trim().length() == 0) {
-			throw new Exception("The time parameter is not specified.");
-		}
-		else if (isValidTime(time) == false) {
-			throw new Exception("The time parameter format invalid.");
-		}
+
+		verifyParameter(time);
+
 		response.setHeader("Pragma", "No-cache");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setDateHeader("Expires", 0);
@@ -57,19 +54,18 @@ public class ImageController {
 		bos.close();
 		sos.close();
 	}
-	
-	private static boolean isValidTime(String time) {
-		
+
+	private void verifyParameter(String time) throws Exception {
+		if (time == null || time.trim().length() == 0) {
+			throw new Exception("The time parameter is not specified.");
+		}
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 		try {
-			format.setLenient(false);////此处指定日期/时间解析是否不严格，在true是不严格，false时为严格
+			format.setLenient(false);// 此处指定日期/时间解析是否严格，true是不严格，false为严格
 			format.parse(time);
+		} catch (ParseException e) {
+			throw new Exception("The format of time parameter is invalid! " + e.getMessage());
 		}
-		catch (ParseException e) {
-			return false;
-		}
-
-		return true;
 	}
 
 }
