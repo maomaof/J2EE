@@ -21,16 +21,16 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.pbz.demo.hello"))
+                .apis(RequestHandlerSelectors.basePackage("com.pbz.demo.hello.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
     
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Swagger Demo")
-                .description("For swagger practice")
-                .termsOfServiceUrl("http://192.168.1.198:10070/platformgroup/ms-admin")
+                .title("日历API接口说明")
+                .description("用于描述日历API接口")
+                .termsOfServiceUrl("No term of service")
                 .contact(new Contact("Maomaof", "", "lalaxy87@hotmail.com"))
                 .version("1.0")
                 .build();

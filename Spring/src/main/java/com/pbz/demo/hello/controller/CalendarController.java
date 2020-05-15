@@ -19,11 +19,11 @@ import io.swagger.annotations.ApiParam;
 
 @Controller
 @RequestMapping(value = "/calendar", method = RequestMethod.GET)
-@Api(tags = "Calendar")
+@Api(tags = "日历接口")
 public class CalendarController {
 	
-	@ApiOperation(value = "Get Calendar info by input date")
-	@RequestMapping(value = "/DateInfo")
+	@ApiOperation(value = "通过输入日期获取日历信息")
+	@RequestMapping(value = "/getDateInfo")
 	@ResponseBody
 	public Map<String, Object> getDateInfo(@ApiParam(name = "date", value = "yyyy-MM-dd", required = true) 
 	                                   @RequestParam(name = "date") String date) throws Exception{
@@ -44,8 +44,8 @@ public class CalendarController {
 		return calendar;
 	}
 	
-	@ApiOperation(value = "Current time")
-	@RequestMapping(value = "/CurrentTime")
+	@ApiOperation(value = "获取当前时间")
+	@RequestMapping(value = "/getCurrentTime")
 	@ResponseBody
 	public Map<String, Object> getTime() throws Exception{
 		
@@ -59,8 +59,8 @@ public class CalendarController {
 		return calendar;
 	}
 	
-	@ApiOperation(value = "Current Date")
-	@RequestMapping(value = "/CurrentDate")
+	@ApiOperation(value = "获取当期日期")
+	@RequestMapping(value = "/getCurrentDate")
 	@ResponseBody
 	public Map<String, Object> getDate() throws Exception{
 		
@@ -75,8 +75,8 @@ public class CalendarController {
 		
 	}
 	
-	@ApiOperation(value = "Current Week")
-	@RequestMapping(value = "/CurrentWeek")
+	@ApiOperation(value = "获取当期星期")
+	@RequestMapping(value = "/getCurrentWeek")
 	@ResponseBody
 	public Map<String, Object> getWeek() throws Exception{
 		
