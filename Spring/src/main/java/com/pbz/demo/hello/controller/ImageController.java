@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pbz.demo.hello.service.ClockImageService;
+import com.pbz.demo.hello.service.SubtitleImageService;
 
 @RestController
 @RequestMapping(value = "/image")
@@ -25,6 +26,9 @@ public class ImageController {
 
 	@Autowired
 	private ClockImageService clockImageService;
+	@Autowired
+	private SubtitleImageService subtitleImageService;
+
 	@Autowired
 	HttpServletRequest request;
 	@Autowired
@@ -62,6 +66,21 @@ public class ImageController {
 		sos.write(buf);
 		bos.close();
 		sos.close();
+	}
+
+	@RequestMapping(value = "/subtitle")
+	@ResponseBody
+	public String saveSubtitleImages(@RequestParam(name = "filename") String filename) throws Exception {
+
+		String filePath = System.getProperty("user.dir") + "/" + filename;// "1.srt";
+		System.out.println(filePath);
+		int number = subtitleImageService.saveSubtitleToImageFile(filePath, 768, 512);
+		String strResult = "解析字幕文件错误!";
+		if (number > 0) {
+			strResult = "字幕文件解析成功，已在服务器端生成字幕图片，可在浏览器访问localhost:8080/numberofpicture.jpg查看图片，生成的图片总数:" + number;
+		}
+		return strResult;
+
 	}
 
 	private void verifyParameter(String time) throws Exception {
