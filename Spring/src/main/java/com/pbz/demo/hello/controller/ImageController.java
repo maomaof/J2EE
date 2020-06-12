@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pbz.demo.hello.service.ClockImageService;
 import com.pbz.demo.hello.service.SubtitleImageService;
+import com.pbz.demo.hello.util.ExecuteCommand;
 
 @RestController
 @RequestMapping(value = "/image")
@@ -36,6 +37,7 @@ public class ImageController {
 
 	private static int IMAGE_WIDTH = 450;
 	private static int IMAGE_HEIGHT = 390;
+	private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
 
 	@RequestMapping(value = "/clock")
 	@ResponseBody
@@ -77,7 +79,19 @@ public class ImageController {
 		int number = subtitleImageService.saveSubtitleToImageFile(filePath, 768, 512);
 		String strResult = "解析字幕文件错误!";
 		if (number > 0) {
-			strResult = "字幕文件解析成功，已在服务器端生成字幕图片，可在浏览器访问localhost:8080/numberofpicture.jpg查看图片，生成的图片总数:" + number;
+			strResult = "字幕文件解析成功，已在服务器端生成字幕图片，访问http://localhost:8080/NumberOfPicture.jpg查看图片，生成的图片总数:" + number;
+
+			String command = System.getProperty("user.dir") + "/" + "jpg2video";
+			String[] args = { "360" };
+			if (isWindows) {
+				command += ".bat";
+			} else {
+				command += ".sh";
+			}
+			boolean bRunScript = ExecuteCommand.executeCommand(command, args);
+			if (bRunScript) {
+				strResult += ". \"jpg2video\"脚本调用成功！已合成MP4，访问http://localhost:8080/vSubtitle.mp4查看视频";
+			}
 		}
 		return strResult;
 
