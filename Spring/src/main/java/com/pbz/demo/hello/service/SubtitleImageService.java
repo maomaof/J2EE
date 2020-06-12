@@ -37,7 +37,7 @@ public class SubtitleImageService {
 		} else
 			return 0;
 
-		int index = 1;
+		int index = 0;
 		for (int i = 0; i < ls.size(); i++) {
 			SubtitleModel info = ls.get(i);
 			String strSubtitle = info.contextEng;
@@ -46,7 +46,7 @@ public class SubtitleImageService {
 			int green = (int) (Math.random() * 255);
 			int blue = (int) (Math.random() * 255);
 			for (int j = 0; j < nSecondsOfSubtitle; j++) {
-				String destImageFile = System.getProperty("user.dir") + "/" + Integer.toString(index) + ".jpg";
+				String destImageFile = System.getProperty("user.dir") + "/" + Integer.toString(index + 1) + ".jpg";
 				BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 				Graphics2D g = image.createGraphics();
 				g.setColor(colorBackground);
@@ -55,7 +55,7 @@ public class SubtitleImageService {
 				g.setFont(font);
 				g.drawString(strSubtitle, 50, height - 50);
 				g.setColor(new Color(0, 0, 0));
-				g.drawString(Integer.toString(index), width/2, height/2);
+				g.drawString(Integer.toString(index+1), width / 2, height / 2);
 				g.dispose();
 				ImageIO.write((BufferedImage) image, "JPEG", new File(destImageFile));
 				index++;
