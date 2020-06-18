@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.pbz.demo.hello.service.ClockImageService;
 import com.pbz.demo.hello.service.SubtitleImageService;
@@ -80,7 +81,6 @@ public class ImageController {
 		String strResult = "解析字幕文件错误!";
 		if (number > 0) {
 			strResult = "字幕文件解析成功，已在服务器端生成字幕图片，访问http://localhost:8080/NumberOfPicture.jpg查看图片，生成的图片总数:" + number;
-
 			String command = System.getProperty("user.dir") + "/" + "jpg2video";
 			String[] args = { "360" };
 			if (isWindows) {
@@ -95,6 +95,30 @@ public class ImageController {
 		}
 		return strResult;
 
+	}
+
+	@RequestMapping(value = "/combine")
+	public ModelAndView combineSubtiteAndVideo2MP4(@RequestParam(name = "subtitlefile") String subtitleFile,
+			@RequestParam(name = "audiofile") String audioFile) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		String path = System.getProperty("user.dir") + "/" + subtitleFile;
+		int number = subtitleImageService.saveSubtitleToImageFile(path, 800, 600);
+		// String strResult = "将字幕文件与音频文件合成视频文件出错！";
+		if (number > 0) {
+			String suffix = isWindows ? ".bat" : ".sh";
+			String cmd1 = System.getProperty("user.dir") + "/" + "jpg2video" + suffix;
+			String[] args1 = { "360" };
+			ExecuteCommand.executeCommand(cmd1, args1);
+			String cmd2 = "ffmpeg";
+			String[] args2 = { "-y", "-i", "vSubtitle.mp4", "-i", "1.mp3", "final.mp4" };
+			boolean b = ExecuteCommand.executeCommand(cmd2, args2);
+			if (b) {
+				// strResult = "已为您合成视频文件，访问http://localhost:8080/final.mp4";
+				mv.setViewName("video.html");
+				mv.addObject("message", "OK");
+			}
+		}
+		return mv;
 	}
 
 	private void verifyParameter(String time) throws Exception {
