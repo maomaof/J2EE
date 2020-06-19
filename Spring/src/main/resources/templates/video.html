@@ -1,7 +1,6 @@
-
 <html>
   <head>
-    <title>camera</title>
+    <title>video</title>
     <script type="text/javascript">
       function play() {
         var video = document.getElementById("video");
@@ -10,10 +9,11 @@
     </script>
   </head>
   <body>
-	<h1>合成视频:${aaa}</h1><br>
-    <video id="video" width="640" height="360" src="http://localhost:8080/final.mp4" autobuffer onclick="play()"> 
-      <div class="fallback"> <p>You must have an HTML5 capable browser.</p> </div> 
-    </video>
+   <p>Hello, <span th:text="${message}"></span></p>
+    <video controls="controls" width="50%">
+	  <source src="http://localhost:8080/vFinal.mp4" type="video/mp4">
+	     Your browser does not support the video tag.
+	</video>
     
   </body>
 </html>
