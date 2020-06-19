@@ -3,6 +3,7 @@ package com.pbz.demo.hello.controller;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -38,6 +39,9 @@ public class ImageController {
 
 	private static int IMAGE_WIDTH = 450;
 	private static int IMAGE_HEIGHT = 390;
+	private static final String subtitle_video_name="vSubtitle.mp4";
+	private static final String final_video_name="vFinal.mp4";
+
 	private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
 
 	@RequestMapping(value = "/clock")
@@ -90,7 +94,7 @@ public class ImageController {
 			}
 			boolean bRunScript = ExecuteCommand.executeCommand(command, args);
 			if (bRunScript) {
-				strResult += ". \"jpg2video\"脚本调用成功！已合成MP4，访问http://localhost:8080/vSubtitle.mp4查看视频";
+				strResult += ". \"jpg2video\"脚本调用成功！已合成MP4，访问http://localhost:8080/" + subtitle_video_name + "4查看视频";
 			}
 		}
 		return strResult;
@@ -101,23 +105,30 @@ public class ImageController {
 	public ModelAndView combineSubtiteAndVideo2MP4(@RequestParam(name = "subtitlefile") String subtitleFile,
 			@RequestParam(name = "audiofile") String audioFile) throws Exception {
 		ModelAndView mv = new ModelAndView();
+		mv.setViewName("video.html");
+		String strResultMsg = "将字幕文件与音频文件合成视频文件出错！";
 		String path = System.getProperty("user.dir") + "/" + subtitleFile;
 		int number = subtitleImageService.saveSubtitleToImageFile(path, 800, 600);
-		// String strResult = "将字幕文件与音频文件合成视频文件出错！";
 		if (number > 0) {
 			String suffix = isWindows ? ".bat" : ".sh";
-			String cmd1 = System.getProperty("user.dir") + "/" + "jpg2video" + suffix;
-			String[] args1 = { "360" };
-			ExecuteCommand.executeCommand(cmd1, args1);
-			String cmd2 = "ffmpeg";
-			String[] args2 = { "-y", "-i", "vSubtitle.mp4", "-i", "1.mp3", "final.mp4" };
-			boolean b = ExecuteCommand.executeCommand(cmd2, args2);
+			String cmd = System.getProperty("user.dir") + "/" + "jpg2video" + suffix;
+			String[] args = { "360" };
+			ExecuteCommand.executeCommand(cmd, args);
+			String ffmpegPath = "ffmpeg";
+			if (!isWindows) {
+				ffmpegPath = "/usr/bin/ffmpeg";
+				if (!new File(ffmpegPath).exists()) {
+					ffmpegPath = "/usr/local/bin/ffmpeg";
+				}
+			}
+			String[] cmds = { ffmpegPath, "-y", "-i", subtitle_video_name, "-i", audioFile, final_video_name };
+			boolean b = ExecuteCommand.executeCommand(cmds, null, new File("."), null);
 			if (b) {
-				// strResult = "已为您合成视频文件，访问http://localhost:8080/final.mp4";
-				mv.setViewName("video.html");
-				mv.addObject("message", "OK");
+				strResultMsg = "已为您合成视频文件，点击即可播放视频";
 			}
 		}
+		mv.addObject("message", strResultMsg);
+
 		return mv;
 	}
 
