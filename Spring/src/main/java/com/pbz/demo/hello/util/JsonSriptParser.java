@@ -59,7 +59,7 @@ public final class JsonSriptParser {
 						g.setColor(colorBackground);
 						g.fillRect(0, 0, width, height);
 						g.setColor(new Color(0, 0, 0));
-						g.setFont(new Font("微软雅黑", Font.BOLD, 30));
+						g.setFont(new Font("黑体", Font.BOLD, 30));
 						g.drawString(Integer.toString(index + 1), width - 50, 50);// 显示帧号
 						JSONArray objectArray = frameObj.getJSONArray("objects");
 						for (Object object : objectArray) {
@@ -75,7 +75,7 @@ public final class JsonSriptParser {
 							int b = Integer.parseInt(co[2]);
 							System.out.println(text);
 							g.setColor(new Color(r, gr, b));
-							Font font = new Font("微软雅黑", Font.BOLD, size);
+							Font font = new Font("黑体", Font.BOLD, size);
 							g.setFont(font);
 							g.drawString(text, x, y);
 						}
