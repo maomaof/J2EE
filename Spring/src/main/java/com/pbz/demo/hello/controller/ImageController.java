@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pbz.demo.hello.service.ClockImageService;
 import com.pbz.demo.hello.service.SubtitleImageService;
 import com.pbz.demo.hello.util.ExecuteCommand;
+import com.pbz.demo.hello.util.JsonSriptParser;
 
 @RestController
 @RequestMapping(value = "/image")
@@ -102,7 +106,7 @@ public class ImageController {
 	}
 
 	@RequestMapping(value = "/combine")
-	public ModelAndView combineSubtiteAndVideo2MP4(@RequestParam(name = "subtitlefile") String subtitleFile,
+	public ModelAndView combineSubtiteAndAudio2MP4(@RequestParam(name = "subtitlefile") String subtitleFile,
 			@RequestParam(name = "audiofile") String audioFile) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("video.html");
@@ -131,7 +135,20 @@ public class ImageController {
 
 		return mv;
 	}
-
+	
+	@RequestMapping(value = "/video")
+	public ModelAndView generateVideoByscenario(@RequestParam(name = "script") String scriptFile) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("video.html");
+		String strResultMsg = "根据剧本生成视频粗错啦！";
+		boolean b = JsonSriptParser.generateVideoByScriptFile(scriptFile);
+		if (b) {
+			strResultMsg = "已为您合成视频文件，点击即可播放视频";
+		}
+		mv.addObject("message", strResultMsg);
+		return mv;
+	}
+	
 	private void verifyParameter(String time) throws Exception {
 		if (time == null || time.trim().length() == 0) {
 			throw new Exception("The time parameter is not specified.");
