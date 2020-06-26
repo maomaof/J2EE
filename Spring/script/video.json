@@ -1,9 +1,10 @@
 {
     "request": {
-        "version": "0.0.1",
+        "version": "0.0.2",
         "width": 1024,
         "height": 768,
         "music": "1.mp3",
+        "rate": "1",
         "frames": [
             {
                 "number": "1", 
@@ -46,7 +47,7 @@
                         "color": "0,255,0"
                     }
                 ],
-                "backgroundColor": "255,182,193"
+                "backgroundPicture": "bgpic.jpg"
             },
             {
                 "number": "3", 
@@ -235,7 +236,7 @@
                         "color": "0,100,255"
                     }
                 ],
-                "backgroundColor": "200,100,200"
+                "backgroundPicture": "bgpic.jpg"
             },
             {
                 "number": "10", 
@@ -298,7 +299,7 @@
                         "color": "0,100,200"
                     }
                 ],
-                "backgroundColor": "200,182,200"
+                "backgroundPicture": "bgpic.jpg"
             },
             {
                 "number": "13", 
@@ -354,7 +355,7 @@
                         "color": "0,100,200"
                     }
                 ],
-                "backgroundColor": "200,182,200"
+                "backgroundPicture": "bgpic.jpg"
             },
             {
                 "number": "15", 

@@ -3,6 +3,7 @@ package com.pbz.demo.hello.util;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
@@ -32,6 +33,7 @@ public final class JsonSriptParser {
 		int width = requestObj.getInt("width");
 		int height = requestObj.getInt("height");
 		String audioFile = requestObj.getString("music");
+		String rate = requestObj.getString("rate");
 
 		Iterator<String> keys = requestObj.keys();
 		while (keys.hasNext()) {
@@ -45,26 +47,40 @@ public final class JsonSriptParser {
 					}
 					JSONObject frameObj = (JSONObject) frame;
 					int times = frameObj.getInt("time");
-					String color = frameObj.getString("backgroundColor");
-					String[] colors = color.split(",");
-					int red = Integer.parseInt(colors[0]);
-					int green = Integer.parseInt(colors[1]);
-					int blue = Integer.parseInt(colors[2]);
-					Color colorBackground = new Color(red, green, blue);
+					Color colorBackground = null;
+					if (frameObj.has("backgroundColor")) {
+						String color = frameObj.getString("backgroundColor");
+						String[] colors = color.split(",");
+						int red = Integer.parseInt(colors[0]);
+						int green = Integer.parseInt(colors[1]);
+						int blue = Integer.parseInt(colors[2]);
+						colorBackground = new Color(red, green, blue);
+					}
+					Image bgImg = null;
+					if (frameObj.has("backgroundPicture")) {
+						String srcImageFile = frameObj.getString("backgroundPicture");
+						File img = new File(srcImageFile);
+						bgImg = ImageIO.read(img);
+					}
 					for (int j = 0; j < times; j++) {
 						String destImageFile = System.getProperty("user.dir") + "/" + Integer.toString(index + 1)
 								+ ".jpg";
 						BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 						Graphics2D g = image.createGraphics();
-						g.setColor(colorBackground);
-						g.fillRect(0, 0, width, height);
+						if (colorBackground != null) {
+							g.setColor(colorBackground);
+							g.fillRect(0, 0, width, height);
+						}
+						if (bgImg != null) {
+							g.drawImage(bgImg, 0, 0, width, height, null);
+						}
 						g.setColor(new Color(0, 0, 0));
 						g.setFont(new Font("黑体", Font.BOLD, 30));
 						g.drawString(Integer.toString(index + 1), width - 50, 50);// 显示帧号
 						JSONArray objectArray = frameObj.getJSONArray("objects");
 						for (Object object : objectArray) {
 							JSONObject obj = (JSONObject) object;
-							String text = obj.optString("text");
+							String text = obj.getString("text");
 							int x = obj.getInt("x");
 							int y = obj.getInt("y");
 							int size = obj.getInt("size");
@@ -88,7 +104,7 @@ public final class JsonSriptParser {
 		}
 		String suffix = isWindows ? ".bat" : ".sh";
 		String cmd = System.getProperty("user.dir") + "/" + "jpg2video" + suffix;
-		String[] args = { "360" };
+		String[] args = { "360", rate };
 		ExecuteCommand.executeCommand(cmd, args);
 		String ffmpegPath = "ffmpeg";
 		if (!isWindows) {
