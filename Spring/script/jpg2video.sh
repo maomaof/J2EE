@@ -4,7 +4,7 @@ readonly MY_NAME=$(basename "$0")
 readonly MY_WIDTH=$(basename "$1")
 readonly RATE=$(basename "$2")
 readonly THISDIR=$(cd "$(dirname "$0")" ; pwd)
-readonly FFMPEGDIR=/usr/local/bin
+readonly FFMPEGDIR=/usr/bin
 
 echo "------------------------------jpg2video.sh v0.0.3------------------------------"
 if [ -z $RATE ] ; then
