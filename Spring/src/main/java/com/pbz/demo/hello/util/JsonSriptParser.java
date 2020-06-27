@@ -74,27 +74,42 @@ public final class JsonSriptParser {
 						if (bgImg != null) {
 							g.drawImage(bgImg, 0, 0, width, height, null);
 						}
-						g.setColor(new Color(0, 0, 0));
-						g.setFont(new Font("黑体", Font.BOLD, 30));
-						g.drawString(Integer.toString(index + 1), width - 50, 50);// 显示帧号
+
 						JSONArray objectArray = frameObj.getJSONArray("objects");
 						for (Object object : objectArray) {
 							JSONObject obj = (JSONObject) object;
-							String text = obj.getString("text");
-							int x = obj.getInt("x");
-							int y = obj.getInt("y");
-							int size = obj.getInt("size");
-							String c = obj.getString("color");
-							String[] co = c.split(",");
-							int r = Integer.parseInt(co[0]);
-							int gr = Integer.parseInt(co[1]);
-							int b = Integer.parseInt(co[2]);
-							System.out.println(text);
-							g.setColor(new Color(r, gr, b));
-							Font font = new Font("黑体", Font.BOLD, size);
-							g.setFont(font);
-							g.drawString(text, x, y);
+							// Picture
+							if (obj.has("picture")) {
+								String picFile = obj.getString("picture");
+								File imgFile = new File(picFile);
+								Image img = ImageIO.read(imgFile);
+								int left = obj.getInt("x");
+								int top = obj.getInt("y");
+								int w = obj.getInt("width");
+								int h = obj.getInt("heigth");
+								g.drawImage(img, left, top, w, h, null);
+							}
+							// Text
+							if (obj.has("text")) {
+								String text = obj.getString("text");
+								int x = obj.getInt("x");
+								int y = obj.getInt("y");
+								int size = obj.getInt("size");
+								String c = obj.getString("color");
+								String[] co = c.split(",");
+								int r = Integer.parseInt(co[0]);
+								int gr = Integer.parseInt(co[1]);
+								int b = Integer.parseInt(co[2]);
+								System.out.println(text);
+								g.setColor(new Color(r, gr, b));
+								Font font = new Font("黑体", Font.BOLD, size);
+								g.setFont(font);
+								g.drawString(text, x, y);
+							}
 						}
+						g.setColor(new Color(0, 0, 255));// 帧号颜色
+						g.setFont(new Font("黑体", Font.BOLD, 40));
+						g.drawString(Integer.toString(index + 1), width - 100, 50);// 显示帧号
 						g.dispose();
 						ImageIO.write((BufferedImage) image, "JPEG", new File(destImageFile));
 						index++;
