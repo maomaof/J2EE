@@ -137,6 +137,16 @@ public class ImageController {
 	public ModelAndView generateVideoByscenario(@RequestParam(name = "script") String scriptFile) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("video.html");
+		int index = 1;
+		while (true) {
+			String jpgFile = System.getProperty("user.dir") + "/" + Integer.toString(index) + ".jpg";
+			File file = new File(jpgFile);
+			if (file.exists()) {
+				file.delete();
+			} else
+				break;
+			index++;
+		}
 		String strResultMsg = "根据剧本生成视频粗错啦！";
 		boolean b = JsonSriptParser.generateVideoByScriptFile(scriptFile);
 		if (b) {

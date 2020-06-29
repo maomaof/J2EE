@@ -34,13 +34,13 @@ public final class JsonSriptParser {
 		int height = requestObj.getInt("height");
 		String audioFile = requestObj.getString("music");
 		String rate = requestObj.getString("rate");
+		int index = 0;
 
 		Iterator<String> keys = requestObj.keys();
 		while (keys.hasNext()) {
 			String key = keys.next();
 			if (key.equalsIgnoreCase("frames")) {
 				JSONArray frameArray = (JSONArray) requestObj.get(key);
-				int index = 0;
 				for (Object frame : frameArray) {
 					if (!(frame instanceof JSONObject)) {
 						continue;
@@ -128,11 +128,33 @@ public final class JsonSriptParser {
 				ffmpegPath = "/usr/local/bin/ffmpeg";
 			}
 		}
-		String[] cmds = { ffmpegPath, "-y", "-i", subtitle_video_name, "-i", audioFile, final_video_name };
+		// Cut the audio
+		String tmpAudioFile = "tmpAudio.mp3";
+		double dRate = Double.parseDouble(rate);
+		long secondOfAudio = (long) ((double) index / dRate);
+		secondOfAudio+=2;
+		String endTime = milliSecondToTime(secondOfAudio * 1000);
+		String[] cutAudioCmd = { ffmpegPath, "-y", "-i", audioFile, "-ss", "0:0:0", "-to", endTime, "-c", "copy",
+				tmpAudioFile };
+		ExecuteCommand.executeCommand(cutAudioCmd, null, new File("."), null);
+
+		// Combine silent video and audio to final video
+		String[] cmds = { ffmpegPath, "-y", "-i", subtitle_video_name, "-i", tmpAudioFile, final_video_name };
 		boolean bRunScript = ExecuteCommand.executeCommand(cmds, null, new File("."), null);
 		return bRunScript;
 	}
 
+	private static String milliSecondToTime(long millSecond) {
+		long second = millSecond / 1000;
+		second = second % 86400;
+		long hours = second / 3600;
+		second = second % 3600;
+		long minutes = second / 60;
+		second = second % 60;
+		String s = String.format("%01d:%01d:%01d", hours, minutes, second);
+		return s;
+	}
+	
 	private static JSONObject getJsonObjectbyName(JSONObject jsonObj, String name) {
 		if (jsonObj == null) {
 			return null;
