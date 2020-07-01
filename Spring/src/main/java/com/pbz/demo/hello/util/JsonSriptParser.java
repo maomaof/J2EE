@@ -60,7 +60,12 @@ public final class JsonSriptParser {
 					if (frameObj.has("backgroundPicture")) {
 						String srcImageFile = frameObj.getString("backgroundPicture");
 						File img = new File(srcImageFile);
-						bgImg = ImageIO.read(img);
+						if(img.exists()) {
+							bgImg = ImageIO.read(img);
+						}else {
+							System.out.println("WARNING: The file "+img.getName()+" doesn't exist!");
+						}
+						
 					}
 					for (int j = 0; j < times; j++) {
 						String destImageFile = System.getProperty("user.dir") + "/" + Integer.toString(index + 1)
@@ -82,12 +87,16 @@ public final class JsonSriptParser {
 							if (obj.has("picture")) {
 								String picFile = obj.getString("picture");
 								File imgFile = new File(picFile);
-								Image img = ImageIO.read(imgFile);
-								int left = obj.getInt("x");
-								int top = obj.getInt("y");
-								int w = obj.getInt("width");
-								int h = obj.getInt("heigth");
-								g.drawImage(img, left, top, w, h, null);
+								if (imgFile.exists()) {
+									Image img = ImageIO.read(imgFile);
+									int left = obj.getInt("x");
+									int top = obj.getInt("y");
+									int w = obj.getInt("width");
+									int h = obj.getInt("heigth");
+									g.drawImage(img, left, top, w, h, null);
+								} else {
+									System.out.println("WARNING: The file " + imgFile.getName() + " doesn't exist!");
+								}
 							}
 							// Text
 							if (obj.has("text")) {
@@ -129,6 +138,9 @@ public final class JsonSriptParser {
 			}
 		}
 		// Cut the audio
+		if (!new File(audioFile).exists()) {
+			throw new Exception("The audio file " + audioFile + " doesn't exist!");
+		}
 		String tmpAudioFile = "tmpAudio.mp3";
 		double dRate = Double.parseDouble(rate);
 		long secondOfAudio = (long) ((double) index / dRate);
