@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+</style> 
+</head>
+<body>
+    <script src="https://littleflute.github.io/JavaScript/w3.js" ></script>
+    <script src="https://littleflute.github.io/JavaScript/blclass.js" ></script>
+    <script src="https://littleflute.github.io/JavaScript/blApp.js"></script>
+
+<div class="topnav">
+  <a class="active" href="http://localhost:8080/">Home</a>
+  <a href="http://localhost:8080/uploadpage">uploadpage</a>
+  <a href="http://localhost:8080/image/video?script=video.json">video.json</a>
+  <a href="http://localhost:8080/image/video?script=v1.json">v1.json</a>
+</div>
+
+<div style="padding-left:16px">
+  <h2>script Editor v0. 32 </h2>
+  <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
+</div>
+<script>
+	var btnPlx = bl$( "id_4_plxScriptEditor" );
+	btnPlx.onclick = function(){
+		var d = blo0.blMD( "id_mdiv_plx_script_editor" , "plxScriptEditor",300,100,500,400, blGrey[5]); 
+		if(!d.loadPlx){
+			d.loadPlx = blo0.blScript( "id_js_plx_script_editor" ,"plxScriptEditor.js");
+		}
+		_on_off_div(null,d);
+	}
+</script>
+
+</body>
+</html>
