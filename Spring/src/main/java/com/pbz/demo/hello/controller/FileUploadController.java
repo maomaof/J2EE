@@ -1,16 +1,24 @@
 package com.pbz.demo.hello.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -62,4 +70,39 @@ public class FileUploadController {
 		}
 		return resMap;
 	}
+
+	@PostMapping(value = "/json", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String saveJson2File(@RequestParam(name = "filename") String filename, @RequestBody String jsonString)
+			throws Exception {
+		jsonString = URLDecoder.decode(jsonString, "UTF-8");
+		System.out.println(jsonString);
+
+		String file = System.getProperty("user.dir") + "/" + filename;
+		OutputStreamWriter ops = null;
+		ops = new OutputStreamWriter(new FileOutputStream(file));
+		ops.write(jsonString.substring(1, jsonString.length() - 1));// Remove the '
+		ops.close();
+		return jsonString;
+	}
+
+	@RequestMapping("/getResourceOnServer")
+	public static Object uploadFil11e(@RequestParam(name = "format") String format) {
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+
+		List<String> list = new ArrayList<String>();
+		String curDir = System.getProperty("user.dir");
+		File f = new File(curDir);
+		File[] fs = f.listFiles();
+		for (int i = 0; i < fs.length; ++i) {
+			File file = fs[i];
+			String name = file.getName();
+			if (name.endsWith(format)) {
+				list.add(name);
+			}
+		}
+		responseMap.put("resource", list);
+		return responseMap;
+	}
+
 }
