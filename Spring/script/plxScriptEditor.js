@@ -1,9 +1,10 @@
 var d = bl$( "id_mdiv_plx_script_editor" );
-d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 42 ]", blGrey[0]);
+d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 44 ]", blGrey[0]);
 
-d.tb.b1 	= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
-d.tb.b2 	= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
-d.tb.b3_upload 	= blo0.blBtn(d.tb, d.tb.id+ "b3", "b3_upload", blGrey[2]); 
+d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
+d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
+d.tb.b3_upload 		= blo0.blBtn(d.tb, d.tb.id+ "b3", "b3_uploadFile", blGrey[2]); 
+d.tb.b4_uploadJson 	= blo0.blBtn(d.tb, d.tb.id+ "b4", "b4_uploadJson", blGrey[2]); 
 
 d.tb.b1.onclick = function(){
 	if(!d.v0){
@@ -22,9 +23,9 @@ d.tb.b1.onclick = function(){
 			blo0.blAjx(w, _url );
 		}	
 		btnV1.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/v1.json");		}
-		btnV2.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/video.json");	}	
+		btnV2.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/v2.json");	}	
 		btnV3.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/v1.json");		}
-		btnV4.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/video.json");	}			 
+		btnV4.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/v2.json");	}			 
 	}
 	_on_off_div(this,d.v0);
 	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
@@ -59,5 +60,18 @@ d.tb.b3_upload.onclick = function(){
 		}
 	}
 	_on_off_div(this,d.v3);
+	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
+}
+d.tb.b4_uploadJson.onclick = function(){
+	if(!d.v4){
+		d.v4 = blo0.blDiv(d, d.id + "v3", "v3", blGrey[1]); 
+		var b1 = blo0.blBtn(d.v4, d.v4.id+ "b1", "b1", blGrey[2]);
+		var v = blo0.blDiv(d.v4, d.v4.id + "v", "v", blGrey[1]); 		 
+	
+		b1.onclick = function(){ 
+			 alert(4);
+		}
+	}
+	_on_off_div(this,d.v4);
 	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
 }
