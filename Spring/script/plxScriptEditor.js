@@ -1,5 +1,5 @@
 var d = bl$( "id_mdiv_plx_script_editor" );
-d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 44 ]", blGrey[0]);
+d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 52 ]", blGrey[0]);
 
 d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
 d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
@@ -14,7 +14,7 @@ d.tb.b1.onclick = function(){
 		var btnV3 = blo0.blBtn(d.v0, d.v0.id+ "b3", "lh.V1", blGrey[2]);
 		var btnV4 = blo0.blBtn(d.v0, d.v0.id+ "b4", "lh.V2", blGrey[2]);
 		var v = blo0.blDiv(d.v0, d.v0.id + "v", "", blGrey[1]); 
-		var ta = blo0.blTextarea(v, v.id + "ta", "xd", blGrey[2]);  
+		var ta = blo0.blTextarea(v, "id_ta_4_script_editor" , "xd", blGrey[2]);  
 		ta.style.width = "98%";
 		ta.style.height = "300px";
 
@@ -64,12 +64,22 @@ d.tb.b3_upload.onclick = function(){
 }
 d.tb.b4_uploadJson.onclick = function(){
 	if(!d.v4){
-		d.v4 = blo0.blDiv(d, d.id + "v3", "v3", blGrey[1]); 
+		d.v4 = blo0.blDiv(d, d.id + "v4", "v4", blGrey[1]); 
 		var b1 = blo0.blBtn(d.v4, d.v4.id+ "b1", "b1", blGrey[2]);
 		var v = blo0.blDiv(d.v4, d.v4.id + "v", "v", blGrey[1]); 		 
 	
 		b1.onclick = function(){ 
-			 alert(4);
+			var data = bl$("id_ta_4_script_editor" ).value;
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+			xhr.addEventListener("readystatechange", function() {
+			  if(this.readyState === 4) {
+			    alert(this.responseText);
+			  }	
+			});
+			xhr.open("POST", "http://localhost:8080/json?filename=v3.json");
+			xhr.setRequestHeader("Content-Type", "text/plain");
+			xhr.send(data);
 		}
 	}
 	_on_off_div(this,d.v4);
