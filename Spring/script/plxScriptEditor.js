@@ -1,9 +1,10 @@
 var d = bl$( "id_mdiv_plx_script_editor" );
-d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 42 ]", blGrey[0]);
+d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 134 ]", blGrey[0]);
 
-d.tb.b1 	= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
-d.tb.b2 	= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
-d.tb.b3_upload 	= blo0.blBtn(d.tb, d.tb.id+ "b3", "b3_upload", blGrey[2]); 
+d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
+d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
+d.tb.b3_upload 		= blo0.blBtn(d.tb, d.tb.id+ "b3", "b3_uploadFile", blGrey[2]); 
+d.tb.b4_uploadJson 	= blo0.blBtn(d.tb, d.tb.id+ "b4", "b4_uploadJson", blGrey[2]); 
 
 d.tb.b1.onclick = function(){
 	if(!d.v0){
@@ -13,7 +14,7 @@ d.tb.b1.onclick = function(){
 		var btnV3 = blo0.blBtn(d.v0, d.v0.id+ "b3", "lh.V1", blGrey[2]);
 		var btnV4 = blo0.blBtn(d.v0, d.v0.id+ "b4", "lh.V2", blGrey[2]);
 		var v = blo0.blDiv(d.v0, d.v0.id + "v", "", blGrey[1]); 
-		var ta = blo0.blTextarea(v, v.id + "ta", "xd", blGrey[2]);  
+		var ta = blo0.blTextarea(v, "id_ta_4_script_editor" , "xd", blGrey[2]);  
 		ta.style.width = "98%";
 		ta.style.height = "300px";
 
@@ -22,9 +23,9 @@ d.tb.b1.onclick = function(){
 			blo0.blAjx(w, _url );
 		}	
 		btnV1.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/v1.json");		}
-		btnV2.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/video.json");	}	
+		btnV2.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/v2.json");	}	
 		btnV3.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/v1.json");		}
-		btnV4.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/video.json");	}			 
+		btnV4.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/v2.json");	}			 
 	}
 	_on_off_div(this,d.v0);
 	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
@@ -32,14 +33,41 @@ d.tb.b1.onclick = function(){
 
 d.tb.b2.onclick = function(){
 	if(!d.v2){
-		d.v2 = blo0.blDiv(d, d.id + "v2", "v2", blGrey[1]); 
-		var b1 = blo0.blBtn(d.v2, d.v2.id+ "b1", "b1", blGrey[2]);
-		var v = blo0.blDiv(d.v2, d.v2.id + "v", "v", blGrey[1]); 		 
+		d.v2 = blo0.blDiv(d, d.id + "v2", "jsonFiles", blGrey[1]); 
+		var b1 = blo0.blBtn(d.v2, d.v2.id+ "b1", "getAllJsonFiles", blGrey[2]);
+		var v = blo0.blDiv(d.v2, d.v2.id + "v", "v", blGrey[5]); 	
+		var v0 = blo0.blDiv(v, v.id + "v0", "v0", blGrey[0]);  
+		var v1 = blo0.blDiv(v, v.id + "v1", "v1", blGrey[1]);	
+		var v2 = blo0.blDiv(v, v.id + "v2", "v2", blGrey[2]);  
 	
 		b1.onclick = function(){ 
 			var w = {};
-			w._2do = function(txt){ v.innerHTML = txt;}
-			blo0.blAjx(w, "http://localhost:8080/image/video?script=v1.json" );
+			w._2do = function(txt){ 
+				v0.innerHTML = "";
+				eval("var o=" + txt);
+				for(i in o.resource){
+					var b = blo0.blBtn(v0,v0.id+i,i,blGrey[2]);
+					b.onclick = function(_this,_jsf){						
+						return function(){
+							 v1.innerHTML = _this.id;
+							 var btnMP4 = blo0.blBtn(v1, v1.id+ "b1", "createMP4", blGrey[2]);
+							 v2.innerHTML = _jsf;
+							 var vMP4 = blo0.blDiv(v2, v2.id + "vMP4", "vMP4", blGrey[2]);  
+
+							 btnMP4.onclick = function(){
+								var url = "http://localhost:8080/image/video?script="+_jsf; 
+								var w1 = {};
+								w1._2do = function(txt){ 
+									vMP4.innerHTML = txt;	
+								}
+								blo0.blAjx(w1,url);							
+							}
+						}
+					}(b,o.resource[i]);
+
+				} 
+			}
+			blo0.blAjx(w, "http://localhost:8080/getResourceOnServer?format=json" );			
 		}
 	}
 	_on_off_div(this,d.v2);
@@ -59,5 +87,28 @@ d.tb.b3_upload.onclick = function(){
 		}
 	}
 	_on_off_div(this,d.v3);
+	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
+}
+d.tb.b4_uploadJson.onclick = function(){
+	if(!d.v4){
+		d.v4 = blo0.blDiv(d, d.id + "v4", "v4", blGrey[1]); 
+		var b1 = blo0.blBtn(d.v4, d.v4.id+ "b1", "b1", blGrey[2]);
+		var v = blo0.blDiv(d.v4, d.v4.id + "v", "v", blGrey[1]); 		 
+	
+		b1.onclick = function(){ 
+			var data = bl$("id_ta_4_script_editor" ).value;
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+			xhr.addEventListener("readystatechange", function() {
+			  if(this.readyState === 4) {
+			    alert(this.responseText);
+			  }	
+			});
+			xhr.open("POST", "http://localhost:8080/json?filename=v3.json");
+			xhr.setRequestHeader("Content-Type", "text/plain");
+			xhr.send(data);
+		}
+	}
+	_on_off_div(this,d.v4);
 	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
 }
