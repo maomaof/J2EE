@@ -76,13 +76,16 @@ public class FileUploadController {
 	public String saveJson2File(@RequestParam(name = "filename") String filename, @RequestBody String jsonString)
 			throws Exception {
 		jsonString = URLDecoder.decode(jsonString, "UTF-8");
-		System.out.println(jsonString);
 
 		String file = System.getProperty("user.dir") + "/" + filename;
 		OutputStreamWriter ops = null;
 		ops = new OutputStreamWriter(new FileOutputStream(file));
-		ops.write(jsonString.substring(1, jsonString.length() - 1));// Remove the '
+		if (!jsonString.startsWith("{") && !jsonString.endsWith("}")) {
+			jsonString = jsonString.substring(1, jsonString.length() - 1);
+		}
+		ops.write(jsonString);
 		ops.close();
+		System.out.println(jsonString);
 		return jsonString;
 	}
 

@@ -21,6 +21,17 @@ public final class JsonSriptParser {
 
 	public static boolean generateVideoByScriptFile(String scriptFilePath) throws Exception {
 		String jsonString = new String(Files.readAllBytes(new File(scriptFilePath).toPath()));
+
+		// Fix JSON string
+		int s = jsonString.indexOf("{");
+		if (s > 0) {
+			jsonString = jsonString.substring(s);
+			int e = jsonString.lastIndexOf("}");
+			jsonString = jsonString.substring(s - 1, e + 1);
+			jsonString = jsonString.replaceAll("\\\\", "");
+			System.out.println("Fix for this input JSON string");
+		}
+
 		return generateVideo(jsonString);
 	}
 
