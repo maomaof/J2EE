@@ -1,5 +1,5 @@
 var d = bl$( "id_mdiv_plx_script_editor" );
-d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 141 ]", blGrey[0]);
+d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 143 ]", blGrey[0]);
 
 d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
 d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
@@ -31,7 +31,7 @@ d.tb.b1.onclick = function(){
 			if(!btnPlx1.v)
 			{
 				btnPlx1.v = blo0.blMDiv(d.v0,"id_div_4_Plx1","plx.v",200,100,800,600,blGrey[0]);
-				blo0.blScrip("id_js_pl1","plx1.js");
+				blo0.blScript("id_js_pl1","plx1.js");
 			} 
 			_on_off_div(this,btnPlx1.v);
 			var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];   

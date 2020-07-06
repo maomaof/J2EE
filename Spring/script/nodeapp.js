@@ -2,8 +2,9 @@
 var formidable = require('formidable');
 var fs = require('fs');
 var url = require('url');
+const tag = "[nodeapp.js_v0.13]";
 
-console.log("__dirname = " + __dirname + Date() );
+console.log(tag + " __dirname = " + __dirname + Date() );
 
 http.createServer(function (req, res) {
   if (req.url == '/fileupload') {
@@ -23,7 +24,11 @@ http.createServer(function (req, res) {
       });
     });
   }
-  else if (req.url == '/1.html'|| req.url == '/plxScriptEditor.js') {
+  else if (req.url == '/1.html'
+    || req.url == '/plxScriptEditor.js'
+    || req.url == '/plx1.js'
+    || req.url == '/v1.json'
+  ) {
     var q = url.parse(req.url, true);
     var filename = "." + q.pathname;
     fs.readFile(filename, function(err, data) {
