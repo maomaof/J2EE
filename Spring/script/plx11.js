@@ -22,6 +22,14 @@ function classGame(){
           this.canvas.height = 270;
           this.context = this.canvas.getContext("2d");      
           v1.appendChild(this.canvas);
+          var b1 = blo0.blBtn(v1,v1.id+"b1","b1",blGrey[1]);
+          b1.onmousedown = function(){
+            accelerate(-0.2);
+          }  
+          b1.onmouseup = function(){
+            accelerate(0.05);
+          }  
+          
         }
           this.frameNo = 0;
           this.interval = setInterval(updateGameArea, 20);

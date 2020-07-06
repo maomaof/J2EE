@@ -1,18 +1,18 @@
-﻿const tag = "[plx1_v0.0.24]";
+﻿const tag = "[plx1_v0.0.32]";
 var d = bl$("id_div_4_Plx1");
 //*
     d.tb = blo0.blDiv(d,d.id+"tb", "tb",blGrey[1]);
     d.v1 = blo0.blDiv(d, "id_div_4_Plx1_v1", tag+"v1", blGrey[0]);
-    d.tb.b1 = blo0.blBtn(d.tb,d.tb.id+"b1","b1",blGrey[2]);
-    d.tb.b2 = blo0.blBtn(d.tb,d.tb.id+"bb21","b2",blGrey[2]);
+    d.tb.plx11 = blo0.blBtn(d.tb,d.tb.id+"b11","plx11",blGrey[2]);
+    d.tb.plx12 = blo0.blBtn(d.tb,d.tb.id+"b12","plx12",blGrey[2]);
+    d.tb.b2 = blo0.blBtn(d.tb,d.tb.id+"bb21","v1.json",blGrey[2]);
 
     var w = {};
     w._2do = function(txt){
         eval(txt);
     } 
-    d.tb.b1.onclick = function(){
-      blo0.blAjx(w,"plx11.js");
-    }
+    d.tb.plx11.onclick = function(){      blo0.blAjx(w,"plx11.js");    }
+    d.tb.plx12.onclick = function(){      blo0.blAjx(w,"plx12.js");    }
     d.tb.b2.onclick = function(){ 
       var vj = new _vjClass;
       vj.loadUrl("http://localhost:8080/v1.json");

@@ -2,7 +2,7 @@
 var formidable = require('formidable');
 var fs = require('fs');
 var url = require('url');
-const tag = "[nodeapp.js_v0.14]";
+const tag = "[nodeapp.js_v0.15]";
 
 console.log(tag + " __dirname = " + __dirname + Date() );
 
@@ -28,6 +28,7 @@ http.createServer(function (req, res) {
     || req.url == '/plxScriptEditor.js'
     || req.url == '/plx1.js'
     || req.url == '/plx11.js'
+    || req.url == '/plx12.js'
     || req.url == '/v1.json'
     || req.url == '/v2.json'
   ) {
