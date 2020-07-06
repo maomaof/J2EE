@@ -1,17 +1,17 @@
-﻿const tag = "[plx1_v0.0.21]";
+﻿const tag = "[plx1_v0.0.24]";
 var d = bl$("id_div_4_Plx1");
 //*
     d.tb = blo0.blDiv(d,d.id+"tb", "tb",blGrey[1]);
-    d.v1 = blo0.blDiv(d,d.id+"v1", tag+"v1", blGrey[0]);
+    d.v1 = blo0.blDiv(d, "id_div_4_Plx1_v1", tag+"v1", blGrey[0]);
     d.tb.b1 = blo0.blBtn(d.tb,d.tb.id+"b1","b1",blGrey[2]);
     d.tb.b2 = blo0.blBtn(d.tb,d.tb.id+"bb21","b2",blGrey[2]);
 
     var w = {};
     w._2do = function(txt){
-        d.v1.innerHTML = txt;
+        eval(txt);
     } 
     d.tb.b1.onclick = function(){
-      blo0.blAjx(w,"https://littleflute.github.io/english/NewConceptEnglish/Book2/1.lrc");
+      blo0.blAjx(w,"plx11.js");
     }
     d.tb.b2.onclick = function(){ 
       var vj = new _vjClass;
