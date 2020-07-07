@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,6 +90,31 @@ public class FileUploadController {
 		return jsonString;
 	}
 
+	@RequestMapping("/download")
+	public static Object downLoadFileToServer(@RequestParam("url") String url) throws Exception {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		URL httpUrl = new URL(url);
+		int index = url.lastIndexOf("/");
+		String fileName = "";
+		if (index > 0) {
+			fileName = url.substring(index + 1);
+		}
+		if (fileName.trim().length() == 0 || fileName.indexOf(".") == -1) {
+			resMap.put("error", "The url " + url + " is not correct!");
+			return resMap;
+		}
+		String downloadFilePath = System.getProperty("user.dir") + "/" + fileName;
+		long s = System.currentTimeMillis();
+		FileUtils.copyURLToFile(httpUrl, new File(downloadFilePath));
+		long e = System.currentTimeMillis();
+		resMap.put("code", 200);
+		resMap.put("message", "文件下载成功, 花费时间:" + (e - s) + "ms");
+		resMap.put("filename", fileName);
+		resMap.put("pathOnServer", downloadFilePath);
+
+		return resMap;
+	}
+	
 	@RequestMapping("/getResourceOnServer")
 	public static Object uploadFil11e(@RequestParam(name = "format") String format) {
 		Map<String, Object> responseMap = new HashMap<String, Object>();
