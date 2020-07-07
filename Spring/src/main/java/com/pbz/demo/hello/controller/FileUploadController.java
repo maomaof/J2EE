@@ -37,9 +37,9 @@ public class FileUploadController {
 	public static Object uploadFile(@RequestParam("file") MultipartFile myfile, HttpServletRequest request,
 			HttpServletResponse response) {
 		Map<String, Object> resMap = new HashMap<String, Object>();
-		if (myfile.getSize() > 1024 * 1024 * 10) {
+		if (myfile.getSize() > 1024 * 1024 * 100) {
 			resMap.put("code", 500);
-			resMap.put("message", "文件过大，请上传10M以内的图片");
+			resMap.put("message", "文件过大，请上传100M以内的图片");
 			System.out.println("文件上传失败");
 			return resMap;
 		}
