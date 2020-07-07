@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.52]";
+﻿const tag = "[plx12.js_v0.53]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
@@ -68,11 +68,11 @@ function classFrame(){
       var r = {};
       var fs = [];
       o.request = r;
-      r.version = "v0. 14";
+      r.version = "v0. 21";
       r.width   = 480;
       r.height  = 270;
       r.music   = "1.mp3";
-      r.rate    = 1;
+      r.rate    = "1";
       r.frames  = fs; 
 
       var f={};
