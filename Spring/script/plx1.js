@@ -1,7 +1,8 @@
-﻿const tag = "[plx1_v0.0.32]";
+﻿const tag = "[plx1_v0.0.43]";
 var d = bl$("id_div_4_Plx1");
+ 
 //*
-    d.tb = blo0.blDiv(d,d.id+"tb", "tb",blGrey[1]);
+    d.tb = blo0.blDiv(d,d.id+"tbPlx1", "tbPlx1",blGrey[1]);
     d.v1 = blo0.blDiv(d, "id_div_4_Plx1_v1", tag+"v1", blGrey[0]);
     d.tb.plx11 = blo0.blBtn(d.tb,d.tb.id+"b11","plx11",blGrey[2]);
     d.tb.plx12 = blo0.blBtn(d.tb,d.tb.id+"b12","plx12",blGrey[2]);
