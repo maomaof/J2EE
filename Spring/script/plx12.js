@@ -1,9 +1,9 @@
-﻿const tag = "[plx12.js_v0.53]";
+﻿const tag = "[plx12.js_v0.111]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
 v1.g = null; 
-v1.g = new classFrame();
+v1.g = new classFrame( );
 v1.g.initGame();
 v1.g.startGame();
 //*/
@@ -50,9 +50,13 @@ function classFrame(){
   }
 
   this.initGame = function () { 
+    var w = 1280;
+    var h = 1024;
     var tb = blo0.blDiv(v1, v1.id + "tb","tb",blGrey[1]);
     var b1 = blo0.blBtn(tb,tb.id + "b1","b1",blGrey[2]);
-    var b2 = blo0.blBtn(tb,tb.id + "b2","b2",blGrey[2]);
+    var btn_760x480 = blo0.blBtn(tb,tb.id + "btn_760x480","760x480",blGrey[2]);
+    var btn_1280x1024 = blo0.blBtn(tb,tb.id + "btn_1280x1024","1280x1024",blGrey[2]);
+    var btn_createJSON = blo0.blBtn(tb,tb.id + "btn_createJSON","createJSON",blGrey[2]);
     var d1 = blo0.blDiv(v1, v1.id + "d1","d1",blGrey[3]);
     b1.onclick = function(){
       var d = new Date;
@@ -62,15 +66,17 @@ function classFrame(){
       var sp = new sprite(20, 20, "green", x, y);
       spList.push(sp);
     }
-    b2.onclick = function(){
+    btn_760x480.onclick = function(){     w = 760;       h = 480;    }
+    btn_1280x1024.onclick = function(){     w = 1280;      h = 1024;    }
+    btn_createJSON.onclick = function(){
       var s = "2";
       var o = {};
       var r = {};
       var fs = [];
       o.request = r;
       r.version = "v0. 21";
-      r.width   = 480;
-      r.height  = 270;
+      r.width   = w;
+      r.height  = h;
       r.music   = "1.mp3";
       r.rate    = "1";
       r.frames  = fs; 
