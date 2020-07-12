@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +94,6 @@ public class FileUploadController {
 	@RequestMapping("/download")
 	public static Object downLoadFileToServer(@RequestParam("url") String url) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
-		URL httpUrl = new URL(url);
 		int index = url.lastIndexOf("/");
 		String fileName = "";
 		if (index > 0) {
@@ -105,6 +105,8 @@ public class FileUploadController {
 		}
 		String downloadFilePath = System.getProperty("user.dir") + "/" + fileName;
 		long s = System.currentTimeMillis();
+		url = url.replaceAll(" ", "%20");
+		URL httpUrl = new URL(url);
 		FileUtils.copyURLToFile(httpUrl, new File(downloadFilePath));
 		long e = System.currentTimeMillis();
 		resMap.put("code", 200);
