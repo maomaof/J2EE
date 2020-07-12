@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.pbz.demo.hello.util.FileUtil;
 
@@ -15,9 +16,12 @@ import com.pbz.demo.hello.util.FileUtil;
 @EnableAutoConfiguration
 @SpringBootApplication
 public class HelloApplication {
+	
 	@RequestMapping("/")
-	String home() {
-		return "Hello JeremyJia!";
+	public ModelAndView index() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("homepage.html");
+		return mv;
 	}
 
 	public static void main(String[] args) throws Exception {

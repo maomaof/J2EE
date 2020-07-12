@@ -1,5 +1,5 @@
 var d = bl$( "id_mdiv_plx_script_editor" );
-d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 134 ]", blGrey[0]);
+d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 211 ]", blGrey[0]);
 
 d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
 d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
@@ -13,6 +13,7 @@ d.tb.b1.onclick = function(){
 		var btnV2 = blo0.blBtn(d.v0, d.v0.id+ "b2", "gh.V2", blGrey[2]);
 		var btnV3 = blo0.blBtn(d.v0, d.v0.id+ "b3", "lh.V1", blGrey[2]);
 		var btnV4 = blo0.blBtn(d.v0, d.v0.id+ "b4", "lh.V2", blGrey[2]);
+		var btnPlx1 = blo0.blBtn(d.v0, d.v0.id+ "b5", "plx1", blGrey[2]);
 		var v = blo0.blDiv(d.v0, d.v0.id + "v", "", blGrey[1]); 
 		var ta = blo0.blTextarea(v, "id_ta_4_script_editor" , "xd", blGrey[2]);  
 		ta.style.width = "98%";
@@ -25,7 +26,19 @@ d.tb.b1.onclick = function(){
 		btnV1.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/v1.json");		}
 		btnV2.onclick = function(){ _loadUrl_2_Ta (ta,"https://littleflute.github.io/J2EE/Spring/script/v2.json");	}	
 		btnV3.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/v1.json");		}
-		btnV4.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/v2.json");	}			 
+		btnV4.onclick = function(){ _loadUrl_2_Ta (ta,"http://localhost:8080/v2.json");	}
+		btnPlx1.onclick = function(){
+			if(!btnPlx1.v)
+			{
+				btnPlx1.v = blo0.blMDiv(d.v0,"id_div_4_Plx1","plx1.v0.13",200,100,800,600,blGrey[0]);
+				//blo0.blScript( "id_js_plx1_script_editor" ,"plx1.js");
+				var w = {};	w._2do = function(txt){		eval(txt);}
+				blo0.blAjx(w, "plx1.js" );
+
+			} 
+			_on_off_div(this,btnPlx1.v);
+			var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];   
+		}			 
 	}
 	_on_off_div(this,d.v0);
 	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
