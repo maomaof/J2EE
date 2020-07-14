@@ -1,5 +1,6 @@
 package com.pbz.demo.hello.util;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -71,12 +72,12 @@ public final class JsonSriptParser {
 					if (frameObj.has("backgroundPicture")) {
 						String srcImageFile = frameObj.getString("backgroundPicture");
 						File img = new File(srcImageFile);
-						if(img.exists()) {
+						if (img.exists()) {
 							bgImg = ImageIO.read(img);
-						}else {
-							System.out.println("WARNING: The file "+img.getName()+" doesn't exist!");
+						} else {
+							System.out.println("WARNING: The file " + img.getName() + " doesn't exist!");
 						}
-						
+
 					}
 					for (int j = 0; j < times; j++) {
 						String destImageFile = System.getProperty("user.dir") + "/" + Integer.toString(index + 1)
@@ -126,6 +127,10 @@ public final class JsonSriptParser {
 								g.setFont(font);
 								g.drawString(text, x, y);
 							}
+							//Graphic
+							if(obj.has("graphic")) {
+								drawGraphic(obj,g);
+							}
 						}
 						g.setColor(new Color(0, 0, 255));// 帧号颜色
 						g.setFont(new Font("黑体", Font.BOLD, 40));
@@ -155,7 +160,7 @@ public final class JsonSriptParser {
 		String tmpAudioFile = "tmpAudio.mp3";
 		double dRate = Double.parseDouble(rate);
 		long secondOfAudio = (long) ((double) index / dRate);
-		secondOfAudio+=2;
+		secondOfAudio += 2;
 		String endTime = milliSecondToTime(secondOfAudio * 1000);
 		String[] cutAudioCmd = { ffmpegPath, "-y", "-i", audioFile, "-ss", "0:0:0", "-to", endTime, "-c", "copy",
 				tmpAudioFile };
@@ -165,6 +170,44 @@ public final class JsonSriptParser {
 		String[] cmds = { ffmpegPath, "-y", "-i", subtitle_video_name, "-i", tmpAudioFile, final_video_name };
 		boolean bRunScript = ExecuteCommand.executeCommand(cmds, null, new File("."), null);
 		return bRunScript;
+	}
+
+	private static void drawGraphic(JSONObject jObj, Graphics2D gp2d) {
+		String graphicType = jObj.getString("graphic");
+		JSONObject attrObj = jObj.getJSONObject("attribute");
+		int left = attrObj.getInt("left");
+		int top = attrObj.getInt("top");
+		String c = attrObj.getString("color");
+		Color color = getColor(c);
+		if ("line".equalsIgnoreCase(graphicType)) {
+			int right = attrObj.getInt("right");
+			int bottom = attrObj.getInt("bottom");
+			if (attrObj.has("size")) {
+				float fSize = attrObj.getFloat("size");
+				BasicStroke bs = new BasicStroke(fSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
+				gp2d.setStroke(bs);
+			}
+			gp2d.setColor(color);
+			gp2d.drawLine(left, top, right, bottom);
+		} else if ("circle".equalsIgnoreCase(graphicType)) {
+			int width = attrObj.getInt("width");
+			int height = attrObj.getInt("height");
+			gp2d.setColor(color);
+			gp2d.fillOval(left, top, width, height);
+		} else if ("rect".equalsIgnoreCase(graphicType)) {
+			int width = attrObj.getInt("width");
+			int height = attrObj.getInt("height");
+			gp2d.setColor(color);
+			gp2d.fill3DRect(left, top, width, height, false);
+		}
+	}
+
+	private static Color getColor(String color) {
+		String[] colors = color.split(",");
+		int red = Integer.parseInt(colors[0]);
+		int green = Integer.parseInt(colors[1]);
+		int blue = Integer.parseInt(colors[2]);
+		return new Color(red, green, blue);
 	}
 
 	private static String milliSecondToTime(long millSecond) {
