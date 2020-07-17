@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.StringTokenizer;
 
 public class FileUtil {
@@ -51,6 +53,17 @@ public class FileUtil {
 		}
 	}
 
+	public static String readAllBytes(String filePath) {
+		String content = "";
+		try {
+			content = new String(Files.readAllBytes(Paths.get(filePath)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return content;
+	}
+	
 	public static int chmod(String args) throws Exception {
 		int result = -1;
 
