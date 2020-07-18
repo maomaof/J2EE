@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.111]";
+﻿const tag = "[plx12.js_v0.112]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
@@ -32,6 +32,8 @@ function classFrame(){
     this.y = y;    
     this.size = 50;
     this.color= "222,123,50";
+    this.speedX = 0;
+    this.speedY = 0;
 
     var _width = width;
     var _height = height;
@@ -40,10 +42,18 @@ function classFrame(){
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, _width, _height);
     }
+    
+    this.newPos = function() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+    }
   }
   function updateGameArea() {
     myGameArea.clear();
+    
+    myGamePiece.newPos();
     myGamePiece.update();
+    
     for(i in spList){
       spList[i].update();
     }
@@ -57,6 +67,16 @@ function classFrame(){
     var btn_760x480 = blo0.blBtn(tb,tb.id + "btn_760x480","760x480",blGrey[2]);
     var btn_1280x1024 = blo0.blBtn(tb,tb.id + "btn_1280x1024","1280x1024",blGrey[2]);
     var btn_createJSON = blo0.blBtn(tb,tb.id + "btn_createJSON","createJSON",blGrey[2]);
+    
+    var btn_R = blo0.blBtn(tb,tb.id + "btn_R","r",blGrey[2]);
+    
+    btn_R.onmousedown = function(){
+      myGamePiece.speedX += 1;
+    }
+    btn_R.onmouseup = function(){
+      myGamePiece.speedX = 0;
+    }
+
     var d1 = blo0.blDiv(v1, v1.id + "d1","d1",blGrey[3]);
     b1.onclick = function(){
       var d = new Date;
