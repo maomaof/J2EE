@@ -8,19 +8,29 @@ import java.util.concurrent.Semaphore;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pbz.demo.hello.util.ExecuteCommand;
 import com.pbz.demo.hello.util.FileUtil;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
+@Api(tags = "通用功能接口")
 public class CommonController {
 	private static Semaphore semaphore = new Semaphore(1);
 
-	@RequestMapping("/command")
+	@ApiOperation(value = "执行服务器端命令", notes = "执行服务器端命令")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "cmd", value = "Dos/Shell Command. More format refer java Runtime.getRuntime().exec usage but need use comma instead of space. Example: sh,-c,ls%20*.jpg  mkdir,dir1", paramType = "query", required = true, dataType = "string", defaultValue="cmd,/c,dir")})
+	@RequestMapping(value = "/command", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> processCommandOnServer(String[] cmd) throws Exception {
 		Map<String, Object> status = new HashMap<String, Object>();
@@ -31,6 +41,7 @@ public class CommonController {
 		logFile.createNewFile();
 
 		ExecuteCommand.executeCommand(cmd, null, new File("."), logFile.getAbsolutePath());
+		Thread.sleep(100);
 		String strOut = FileUtil.readAllBytes(logFile.getAbsolutePath());
 		status.put("Status", "OK!");
 		status.put("Message", strOut);

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,18 +15,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-@RestController
-public class FileUploadController {
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
+@RestController
+@Api(tags = "文件操作接口")
+public class FileController {
+
+	@ApiIgnore
 	@RequestMapping("/uploadpage")
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView();
@@ -35,8 +42,12 @@ public class FileUploadController {
 		return mv;
 	}
 
-	@RequestMapping("/upload")
-	public static Object uploadFile(@RequestParam("file") MultipartFile myfile, HttpServletRequest request,
+	@ApiOperation(value = "上传文件", notes = "上传文件接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "file", value = "file size less 100M", paramType = "form", required = true, dataType = "__file")})
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	@ResponseBody
+	public Object uploadFile(@RequestParam("file") MultipartFile myfile, HttpServletRequest request,
 			HttpServletResponse response) {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		if (myfile.getSize() > 1024 * 1024 * 100) {
@@ -73,13 +84,17 @@ public class FileUploadController {
 		return resMap;
 	}
 
-	@PostMapping(value = "/json", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "保存JSON到文件", notes = "保存JSON到指定文件")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "fileName", value = "xx.json", paramType = "query", required = true, dataType = "string", defaultValue="example.json"),
+		@ApiImplicitParam(name = "jsonString", value = "json string", paramType = "body", required = true, dataType = "string")})
+	@RequestMapping(value = "/json", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String saveJson2File(@RequestParam(name = "filename") String filename, @RequestBody String jsonString)
+	public String saveJson2File(@RequestParam("fileName") String fileName, @RequestBody String jsonString)
 			throws Exception {
 		jsonString = URLDecoder.decode(jsonString, "UTF-8");
 
-		String file = System.getProperty("user.dir") + "/" + filename;
+		String file = System.getProperty("user.dir") + "/" + fileName;
 		OutputStreamWriter ops = null;
 		ops = new OutputStreamWriter(new FileOutputStream(file));
 		if (!jsonString.startsWith("{") && !jsonString.endsWith("}")) {
@@ -91,8 +106,12 @@ public class FileUploadController {
 		return jsonString;
 	}
 
-	@RequestMapping("/download")
-	public static Object downLoadFileToServer(@RequestParam("url") String url) throws Exception {
+	@ApiOperation(value = "下载文件", notes = "下载文件接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "url", value = "source url", paramType = "query", required = true, dataType = "string", defaultValue="https://littleflute.github.io/english/NewConceptEnglish/Book2/5.mp3")})
+	@RequestMapping(value = "/download", method = RequestMethod.GET)
+	@ResponseBody
+	public Object downLoadFileToServer(@RequestParam("url") String url) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		int index = url.lastIndexOf("/");
 		String fileName = "";
@@ -116,9 +135,14 @@ public class FileUploadController {
 
 		return resMap;
 	}
+
 	
-	@RequestMapping("/getResourceOnServer")
-	public static Object uploadFil11e(@RequestParam(name = "format") String format) {
+	@ApiOperation(value = "获取文件资源列表", notes = "获取指定文件类型列表")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "filetype", value = "json/mp3/...", paramType = "query", required = true, dataType = "string", defaultValue="json")})
+	@RequestMapping(value = "/getResourceOnServer", method = RequestMethod.GET)
+	@ResponseBody
+	public Object getResourceOnServer(@RequestParam("filetype") String filetype) {
 		Map<String, Object> responseMap = new HashMap<String, Object>();
 
 		List<String> list = new ArrayList<String>();
@@ -128,7 +152,7 @@ public class FileUploadController {
 		for (int i = 0; i < fs.length; ++i) {
 			File file = fs[i];
 			String name = file.getName();
-			if (name.endsWith(format)) {
+			if (name.endsWith(filetype)) {
 				list.add(name);
 			}
 		}
