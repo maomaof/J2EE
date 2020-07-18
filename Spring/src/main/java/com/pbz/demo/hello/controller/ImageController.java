@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,14 @@ import com.pbz.demo.hello.service.SubtitleImageService;
 import com.pbz.demo.hello.util.ExecuteCommand;
 import com.pbz.demo.hello.util.JsonSriptParser;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
+
 @RestController
+@Api(tags = "视频操作接口")
 @RequestMapping(value = "/image")
 public class ImageController {
 
@@ -45,6 +53,7 @@ public class ImageController {
 
 	private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
 
+	@ApiIgnore
 	@RequestMapping(value = "/clock")
 	@ResponseBody
 	public void getClockImage(@RequestParam(name = "time") String time) throws Exception {
@@ -76,6 +85,8 @@ public class ImageController {
 		sos.close();
 	}
 
+
+	@ApiIgnore
 	@RequestMapping(value = "/subtitle")
 	@ResponseBody
 	public String saveSubtitleImages(@RequestParam(name = "filename") String filename) throws Exception {
@@ -102,7 +113,11 @@ public class ImageController {
 
 	}
 
-	@RequestMapping(value = "/combine")
+	@ApiOperation(value = "音频合成字幕生成视频", notes = "将音频合成字幕生成视频")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "subtitlefile", value = "subtitle file (*.srt)", paramType = "query", required = true, dataType = "string", defaultValue="example.srt"),
+		@ApiImplicitParam(name = "audiofile", value = "audio file (*.mp3)", paramType = "query", required = true, dataType = "string", defaultValue="example.mp3")})
+	@RequestMapping(value = "/combine", method = RequestMethod.GET)
 	public ModelAndView combineSubtiteAndAudio2MP4(@RequestParam(name = "subtitlefile") String subtitleFile,
 			@RequestParam(name = "audiofile") String audioFile) throws Exception {
 		ModelAndView mv = new ModelAndView();
@@ -113,7 +128,7 @@ public class ImageController {
 		if (number > 0) {
 			String suffix = isWindows ? ".bat" : ".sh";
 			String cmd = System.getProperty("user.dir") + "/" + "jpg2video" + suffix;
-			String[] args = { "360" };
+			String[] args = { "360", "1" };
 			ExecuteCommand.executeCommand(cmd, args);
 			String ffmpegPath = "ffmpeg";
 			if (!isWindows) {
@@ -133,7 +148,10 @@ public class ImageController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/video")
+	@ApiOperation(value = "通过剧本协议生成视频", notes = "通过剧本协议生成视频")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "script", value = "script file (*.json)", paramType = "query", required = true, dataType = "string", defaultValue="example.json")})
+	@RequestMapping(value = "/video", method = RequestMethod.GET)
 	public ModelAndView generateVideoByscenario(@RequestParam(name = "script") String scriptFile) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("video.html");

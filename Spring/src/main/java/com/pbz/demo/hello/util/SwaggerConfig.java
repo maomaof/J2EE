@@ -28,11 +28,11 @@ public class SwaggerConfig {
     
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("日历API接口说明")
-                .description("用于描述日历API接口")
+                .title("API接口说明")
+                .description("用于描述已有API接口")
                 .termsOfServiceUrl("No term of service")
                 .contact(new Contact("Maomaof", "", "lalaxy87@hotmail.com"))
-                .version("1.0")
+                .version("1.01")
                 .build();
     }
 }
