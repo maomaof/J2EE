@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.112]";
+﻿const tag = "[plx12.js_v0.113]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
@@ -21,6 +21,25 @@ function classFrame(){
 
         v1.appendChild(this.canvas);
         this.interval = setInterval(updateGameArea, 20);
+
+        window.addEventListener('mousedown', function (e) {
+          myGameArea.x = e.offsetX;//e.pageX;
+          myGameArea.y = e.offsetY;// e.pageY;
+
+          var s = "[" + e.clientX + "]";
+          s += "[" + e.clientX + "]";
+          s += "[" + e.offsetX + "]";
+          s += "[" + e.offsetY + "]";
+          s += myGamePiece.x;
+          s += myGamePiece.clicked();
+          var d = bl$("id_4_debug");
+          d.innerHTML = s;
+          
+        })
+        window.addEventListener('mouseup', function (e) {
+          myGameArea.x = false;
+          myGameArea.y = false;
+        })
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -42,7 +61,17 @@ function classFrame(){
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, _width, _height);
     }
-    
+    this.clicked = function() {
+      var myleft = this.x;
+      var myright = this.x + (this.width);
+      var mytop = this.y;
+      var mybottom = this.y + (this.height);
+      var clicked = true;
+      if ((mybottom < myGameArea.y) || (mytop > myGameArea.y) || (myright < myGameArea.x) || (myleft > myGameArea.x)) {
+        clicked = false;
+      }
+      return clicked;
+    }
     this.newPos = function() {
       this.x += this.speedX;
       this.y += this.speedY;
@@ -77,7 +106,7 @@ function classFrame(){
       myGamePiece.speedX = 0;
     }
 
-    var d1 = blo0.blDiv(v1, v1.id + "d1","d1",blGrey[3]);
+    var d1 = blo0.blDiv(v1, "id_4_debug","d1",blGrey[3]);
     b1.onclick = function(){
       var d = new Date;
       d1.innerHTML = d.getMilliseconds();
