@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.111]";
+﻿const tag = "[plx12.js_v0.135]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
@@ -9,8 +9,7 @@ v1.g.startGame();
 //*/
 
 function classFrame(){   
-  var spList = [];
-  var myGamePiece = null;
+  var spList = []; 
   var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
@@ -21,6 +20,20 @@ function classFrame(){
 
         v1.appendChild(this.canvas);
         this.interval = setInterval(updateGameArea, 20);
+
+        window.addEventListener('mousedown', function (e) {
+          myGameArea.x = e.offsetX;//e.pageX;
+          myGameArea.y = e.offsetY;// e.pageY; 
+          for(i in spList){
+           var b = spList[i].clicked(myGameArea,bl$("id_4_debug"));
+          }
+
+        })
+
+        window.addEventListener('mouseup', function (e) { 
+          myGameArea.x = e.offsetX;//e.pageX;
+          myGameArea.y = e.offsetY;// e.pageY;
+        })
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -31,19 +44,43 @@ function classFrame(){
     this.x = x;
     this.y = y;    
     this.size = 50;
-    this.color= "222,123,50";
+    this.color= color;
+    this.speedX = 0;
+    this.speedY = 0;
 
     var _width = width;
     var _height = height;
     this.update = function(){ 
         ctx = myGameArea.context;
-        ctx.fillStyle = color;
+        ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, _width, _height);
     }
+    this.clicked = function(a,dbgDiv) {
+      var myleft = this.x;
+      var myright = this.x + _width;
+      var mytop = this.y;
+      var mybottom = this.y + _height;
+      var rClick = true;
+      if ((mybottom < a.y) || (mytop > a.y) ||
+          (myright < a.x) || (myleft > a.x)) {
+            rClick = false;
+        if(this.color == "yellow"){
+          this.x = a.x;
+          this.y = a.y;          
+        }
+        this.color = "red";
+      }
+      else{
+        rClick = true;
+        this.color = "yellow";
+      }
+      dbgDiv.innerHTML = rClick;
+      return rClick;
+    } 
   }
   function updateGameArea() {
-    myGameArea.clear();
-    myGamePiece.update();
+    myGameArea.clear();    
+    
     for(i in spList){
       spList[i].update();
     }
@@ -57,7 +94,9 @@ function classFrame(){
     var btn_760x480 = blo0.blBtn(tb,tb.id + "btn_760x480","760x480",blGrey[2]);
     var btn_1280x1024 = blo0.blBtn(tb,tb.id + "btn_1280x1024","1280x1024",blGrey[2]);
     var btn_createJSON = blo0.blBtn(tb,tb.id + "btn_createJSON","createJSON",blGrey[2]);
-    var d1 = blo0.blDiv(v1, v1.id + "d1","d1",blGrey[3]);
+    
+   
+    var d1 = blo0.blDiv(v1, "id_4_debug","d1",blGrey[3]);
     b1.onclick = function(){
       var d = new Date;
       d1.innerHTML = d.getMilliseconds();
@@ -94,11 +133,8 @@ function classFrame(){
     }
   };
 
-  this.startGame = function () { 
-    myGamePiece = new sprite(30, 30, "red", 10, 120);
-    var s = new sprite(11, 30, "blue", 110, 120);
-    spList.push(s);
-    myGameArea.start();  
+  this.startGame = function () {   
+      myGameArea.start();  
   };  
 }
 
