@@ -1,6 +1,7 @@
 package com.pbz.demo.hello.Unit;
 
 import java.io.File;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,51 +12,46 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.pbz.demo.hello.controller.FileController;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class FileTest {
 
 	@Autowired
-	private FileController fileOpreation =null;
+	private FileController fileOpreation = null;
 
 	@Test
-	public void TESTsaveJson2File() throws Exception {
-		
-		String fileName="xiyu.json";
+	public void TEST_saveJson2File() throws Exception {
+
+		String fileName = "xiyu.json";
 		String filePath = System.getProperty("user.dir") + "/" + fileName;
 		File file = new File(filePath);
 		file.delete();
-		
-		String JsonString="{\"a\": NULL}";
-		String respJson=fileOpreation.saveJson2File(fileName, JsonString);
-		
-		Assert.assertEquals(JsonString,respJson);
-		if (!file.exists())
-		{
+
+		String JsonString = "{\"a\": NULL}";
+		String respJson = fileOpreation.saveJson2File(fileName, JsonString);
+
+		Assert.assertEquals(JsonString, respJson);
+		if (!file.exists()) {
 			Assert.fail("generate file not exist");
 		}
-
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@Test
-	public void TESTdownLoadFileToServer() throws Exception {
-		
-		String fileName="5.mp3";
+	public void TEST_downLoadFileToServer() throws Exception {
+
+		String fileName = "5.mp3";
 		String filePath = System.getProperty("user.dir") + "/" + fileName;
 		File file = new File(filePath);
 		file.delete();
-		
-		String url= "https://littleflute.github.io/english/NewConceptEnglish/Book2/"+fileName;
-		Object respObject = fileOpreation.downLoadFileToServer(url);
-		
-		//??如何检查返回的object???
+
+		String url = "https://littleflute.github.io/english/NewConceptEnglish/Book2/" + fileName;
+		Map<String, Object> respObject = (Map<String, Object>) fileOpreation.downLoadFileToServer(url);
+
 		System.out.println(respObject.toString());
-		//Assert.assertEquals(JsonString,respObject.toString(););
-		if (!file.exists())
-		{
+		Assert.assertEquals(200, respObject.get("code"));
+		if (!file.exists()) {
 			Assert.fail("generate file not exist");
 		}
-		
 	}
 }
