@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.35] ";
+﻿const tag = "[nodelib/l1.js_v0.0.41] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -30,7 +30,8 @@ exports.f1 = function(req,res){
     res.write(myJSON);
     res.end();
   }
-  else if (r1 == '/json'){    
+  else if (r1 == '/json'){  
+    console.log(tag + n + ":" + a.length  + " " + a[1]);  
     res.write(myJSON);
     res.end();
   }
