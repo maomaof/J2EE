@@ -1,9 +1,21 @@
-﻿const tag = "[nodelib/l1.js_v0.0.33] ";
+﻿const tag = "[nodelib/l1.js_v0.0.35] ";
 
 var url = require('url');
 var formidable = require('formidable');
 var fs = require('fs');
 var n = 0;
+var o = {};
+o.resource = [
+      "video2.json",
+      "video1.json",
+      "package-lock.json",
+      "video.json",
+      "v2.json",
+      "v1.json"
+    ];
+
+var myJSON = JSON.stringify(o);
+    
 
 exports.f1 = function(req,res){
   console.log(tag + req.url);
@@ -14,18 +26,11 @@ exports.f1 = function(req,res){
   var r1 = a[0];
   if (r1 == '/getResourceOnServer') {
     n++;
-    var o = {};
-    o.resource = [
-      "video2.json",
-      "video1.json",
-      "package-lock.json",
-      "video.json",
-      "v2.json",
-      "v1.json"
-    ];
-
-    var myJSON = JSON.stringify(o);
     
+    res.write(myJSON);
+    res.end();
+  }
+  else if (r1 == '/json'){    
     res.write(myJSON);
     res.end();
   }
