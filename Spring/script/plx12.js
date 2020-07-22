@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.143]";
+﻿const tag = "[plx12.js_v0.145]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
@@ -54,6 +54,7 @@ function classFrame(){
         ctx = myGameArea.context;
         ctx.fillStyle = this.color;
         ctx.fillRect(_x, _y, _width, _height);
+        ctx.fillText(this.text, _x, _y);
     }
     this.clicked = function(a,dbgDiv) {
       var myleft = _x;
