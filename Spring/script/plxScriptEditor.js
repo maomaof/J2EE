@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.221]";
+const tag = "[plxScriptEditor.js_v0.0.222]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
@@ -115,7 +115,7 @@ d.tb.b4_uploadJson.onclick = function(){
 			xhr.withCredentials = true;
 			xhr.addEventListener("readystatechange", function() {
 			  if(this.readyState === 4) {
-			    alert(this.responseText);
+			    v.innerHTML = this.responseText;
 			  }	
 			});
 			xhr.open("POST", "http://localhost:8080/json?fileName=v3.json");

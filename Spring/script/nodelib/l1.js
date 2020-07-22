@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.41] ";
+﻿const tag = "[nodelib/l1.js_v0.0.44] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -31,9 +31,18 @@ exports.f1 = function(req,res){
     res.end();
   }
   else if (r1 == '/json'){  
-    console.log(tag + n + ":" + a.length  + " " + a[1]);  
-    res.write(myJSON);
-    res.end();
+    console.log(tag + n + ":" + a.length  + " " + a[1]  + ": body=" + req.body);  
+    var s = "var o=";
+    req.on('data', chunk => {
+      console.log(`Data chunk available: ${chunk}`);
+      s+=chunk;
+    });
+    req.on('end', () => {
+      //end of data
+      console.log(s);  
+      res.write(s);
+      res.end();    
+    })
   }
   else if (r1 == '/fileupload') {
     var form = new formidable.IncomingForm();
