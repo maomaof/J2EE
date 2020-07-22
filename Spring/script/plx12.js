@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.135]";
+﻿const tag = "[plx12.js_v0.143]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
@@ -44,29 +44,29 @@ function classFrame(){
     this.x = x;
     this.y = y;    
     this.size = 50;
-    this.color= color;
-    this.speedX = 0;
-    this.speedY = 0;
+    this.color= color; 
 
+    var _x = x;
+    var _y = y;
     var _width = width;
     var _height = height;
     this.update = function(){ 
         ctx = myGameArea.context;
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, _width, _height);
+        ctx.fillRect(_x, _y, _width, _height);
     }
     this.clicked = function(a,dbgDiv) {
-      var myleft = this.x;
-      var myright = this.x + _width;
-      var mytop = this.y;
-      var mybottom = this.y + _height;
+      var myleft = _x;
+      var myright = _x + _width;
+      var mytop = _y;
+      var mybottom = _y + _height;
       var rClick = true;
       if ((mybottom < a.y) || (mytop > a.y) ||
           (myright < a.x) || (myleft > a.x)) {
             rClick = false;
         if(this.color == "yellow"){
-          this.x = a.x;
-          this.y = a.y;          
+          _x = a.x;
+          _y = a.y;          
         }
         this.color = "red";
       }
@@ -74,7 +74,11 @@ function classFrame(){
         rClick = true;
         this.color = "yellow";
       }
-      dbgDiv.innerHTML = rClick;
+      var ds = this.text;
+      ds += "[" + _x + "," + _y + "]";
+      ds += "[" + this.x + "," + this.y + "] ";
+      ds += rClick;
+      dbgDiv.innerHTML = ds;
       return rClick;
     } 
   }
