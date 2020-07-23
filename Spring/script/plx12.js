@@ -1,15 +1,14 @@
-﻿const tag = "[plx12.js_v0.151]";
+﻿const tag = "[plx12.js_v0.232]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
-//*
-v1.g = null; 
+//* 
 v1.g = new classFrame( );
 v1.g.initGame();
 v1.g.startGame();
 //*/
 
-function classFrame(){   
-  var spList = []; 
+function classFrame(){    
+  var curFrame = new CFrame(0,1);
   var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
@@ -24,8 +23,9 @@ function classFrame(){
         window.addEventListener('mousedown', function (e) {
           myGameArea.x = e.offsetX;//e.pageX;
           myGameArea.y = e.offsetY;// e.pageY; 
-          for(i in spList){
-           var b = spList[i].clicked(myGameArea,bl$("id_4_debug"));
+
+          for(i in curFrame.objects){
+           var b = curFrame.objects[i].clicked(myGameArea,bl$("id_4_debug"));
           }
 
         })
@@ -35,10 +35,40 @@ function classFrame(){
           myGameArea.y = e.offsetY;// e.pageY;
         })
     },
-    clear : function() {
+    redrawStage : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        var ctx = this.context;
+        ctx.fillStyle = "lightblue";
+        ctx.fillRect(0,0,this.canvas.width, this.canvas.height);
     }
   } 
+  
+  function CFrame(number,time){
+      this.number = number;
+      this.time   = time;
+      this.objects = [];
+      this.backgroundColor = "123,45,200";
+
+      this.onDraw = function(){
+        var ctx = myGameArea.context;
+        ctx.fillStyle = "brown";
+        ctx.fillRect(0,0,20,20);
+        ctx.fillText(number, 30,10);
+        for(i in this.objects){
+          this.objects[i].update();
+        }
+
+      }
+      this.toDo = function(){
+        this.number++;
+        for(i in this.objects){
+          this.objects[i].x++;
+          this.objects[i].text = "number="+this.number;
+        }
+
+      }
+  }
+
   function sprite(width, height, clr, x, y) {
     this.text = "spriteText.";
     this.x = x;
@@ -52,7 +82,7 @@ function classFrame(){
     var _width = width;
     var _height = height;
     this.update = function(){ 
-        ctx = myGameArea.context;
+        var ctx = myGameArea.context;
         ctx.fillStyle = _c;
         ctx.fillRect(_x, _y, _width, _height);
         ctx.fillText(this.text, _x, _y);
@@ -85,11 +115,9 @@ function classFrame(){
     } 
   }
   function updateGameArea() {
-    myGameArea.clear();    
+    myGameArea.redrawStage();    
+    curFrame.onDraw();
     
-    for(i in spList){
-      spList[i].update();
-    }
   }
 
   this.initGame = function () { 
@@ -109,7 +137,7 @@ function classFrame(){
       var x = d.getMilliseconds()/3;
       var y = d.getMilliseconds()%100;
       var sp = new sprite(20, 20, "green", x, y);
-      spList.push(sp);
+      curFrame.objects.push(sp);
     }
     btn_760x480.onclick = function(){     w = 760;       h = 480;    }
     btn_1280x1024.onclick = function(){     w = 1280;      h = 1024;    }
@@ -119,20 +147,28 @@ function classFrame(){
       var r = {};
       var fs = [];
       o.request = r;
-      r.version = "v0. 21";
+      r.version = "v0. 22";
       r.width   = w;
       r.height  = h;
       r.music   = "1.mp3";
       r.rate    = "1";
       r.frames  = fs; 
+ 
+      for(var i=0;i<121;i++){
+        var f = new CFrame(i+1,1);
+        
+        //* 
+        for(j in curFrame.objects){
+          var sp = new sprite(20, 20, "green", 
+                    curFrame.objects[j].x+1, curFrame.objects[j].y);
+          sp.text = "spite " + i + "=text!";
+          f.objects.push(sp);  
+        }
+        //*/
 
-      var f={};
-      f.number = 1;
-      f.time = 60;
-      f.objects = spList;
-      fs.push(f);
-
-      f.backgroundColor = "123,45,200";
+        fs.push(f);
+        curFrame.toDo();         
+      }     
       
       s =   JSON.stringify(o);
       bl$("id_ta_4_script_editor").value = s;
