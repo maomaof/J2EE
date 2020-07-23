@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.145]";
+﻿const tag = "[plx12.js_v0.151]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //*
@@ -39,20 +39,21 @@ function classFrame(){
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
   } 
-  function sprite(width, height, color, x, y) {
+  function sprite(width, height, clr, x, y) {
     this.text = "spriteText.";
     this.x = x;
     this.y = y;    
     this.size = 50;
-    this.color= color; 
+    this.color= "125,1,1"; 
 
+    var _c = clr;
     var _x = x;
     var _y = y;
     var _width = width;
     var _height = height;
     this.update = function(){ 
         ctx = myGameArea.context;
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = _c;
         ctx.fillRect(_x, _y, _width, _height);
         ctx.fillText(this.text, _x, _y);
     }
@@ -65,15 +66,15 @@ function classFrame(){
       if ((mybottom < a.y) || (mytop > a.y) ||
           (myright < a.x) || (myleft > a.x)) {
             rClick = false;
-        if(this.color == "yellow"){
+        if(_c == "yellow"){
           _x = a.x;
           _y = a.y;          
         }
-        this.color = "red";
+        _c = "red";
       }
       else{
         rClick = true;
-        this.color = "yellow";
+        _c = "yellow";
       }
       var ds = this.text;
       ds += "[" + _x + "," + _y + "]";
