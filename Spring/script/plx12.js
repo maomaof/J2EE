@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.233]";
+﻿const tag = "[plx12.js_v0.234]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -160,7 +160,7 @@ function classFrame(){
         //* 
         for(j in curFrame.objects){
           var sp = new sprite(20, 20, "green", 
-                    curFrame.objects[j].x+10, curFrame.objects[j].y+10);
+                    curFrame.objects[j].x+10*i, curFrame.objects[j].y+10*i);
           sp.text = "spite " + i + "=text!";
           f.objects.push(sp);  
         }
