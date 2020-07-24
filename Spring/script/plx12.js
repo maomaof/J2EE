@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.235]";
+﻿const tag = "[plx12.js_v0.242]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -20,26 +20,35 @@ function classFrame(){
         v1.appendChild(this.canvas);
         this.interval = setInterval(updateGameArea, 20);
 
-        window.addEventListener('mousedown', function (e) {
+        this.canvas.addEventListener('mousedown', function (e) {
           myGameArea.x = e.offsetX;//e.pageX;
-          myGameArea.y = e.offsetY;// e.pageY; 
+          myGameArea.y = e.offsetY;// e.pageY;  
 
           for(i in curFrame.objects){
-           var b = curFrame.objects[i].clicked(myGameArea,bl$("id_4_debug"));
+           var b = curFrame.objects[i].clicked(myGameArea,bl$("id_4_debug"),e);
           }
 
         })
 
-        window.addEventListener('mouseup', function (e) { 
+        this.canvas.addEventListener('mouseup', function (e) { 
           myGameArea.x = e.offsetX;//e.pageX;
           myGameArea.y = e.offsetY;// e.pageY;
-        })
+        });
+
+        this.canvas.addEventListener('contextmenu', function(e) {
+          //alert("You've tried to open context menu"); //here you draw your own menu
+          e.preventDefault();
+        }, false);
     },
     redrawStage : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         var ctx = this.context;
         ctx.fillStyle = "lightblue";
         ctx.fillRect(0,0,this.canvas.width, this.canvas.height);
+    },
+    setWH: function(_w,_h){
+      this.canvas.width = _w;
+      this.canvas.height = _h;
     }
   } 
   
@@ -87,33 +96,42 @@ function classFrame(){
         ctx.fillRect(_x, _y, _width, _height);
         ctx.fillText(this.text, _x, _y);
     }
-    this.clicked = function(a,dbgDiv) {
+    this.clicked = function(a,dbgDiv,e) {
       var myleft = _x;
       var myright = _x + _width;
       var mytop = _y;
       var mybottom = _y + _height;
       var rClick = true;
+      
+      if(e.button==2){
+         _c = "red"; return rClick;
+      }
+
       if ((mybottom < a.y) || (mytop > a.y) ||
-          (myright < a.x) || (myleft > a.x)) {
-            rClick = false;
+          (myright < a.x) || (myleft > a.x)) 
+      {
+        rClick = false;
         if(_c == "yellow"){
           _x = a.x;
           _y = a.y;          
         }
         _c = "red";
+        
+        var ds = this.text;
+        ds += "[" + _x + "," + _y + "]";
+        ds += "[" + this.x + "," + this.y + "] ";
+        ds += rClick;
+        dbgDiv.innerHTML = ds;
       }
       else{
         rClick = true;
         _c = "yellow";
+          
       }
-      var ds = this.text;
-      ds += "[" + _x + "," + _y + "]";
-      ds += "[" + this.x + "," + this.y + "] ";
-      ds += rClick;
-      dbgDiv.innerHTML = ds;
       return rClick;
     } 
   }
+
   function updateGameArea() {
     myGameArea.redrawStage();    
     curFrame.onDraw();
@@ -139,8 +157,12 @@ function classFrame(){
       var sp = new sprite(20, 20, "green", x, y);
       curFrame.objects.push(sp);
     }
-    btn_760x480.onclick = function(){     w = 760;       h = 480;    }
-    btn_1280x1024.onclick = function(){     w = 1280;      h = 1024;    }
+    btn_760x480.onclick = function(){     
+      myGameArea.setWH(760,480);
+    }
+    btn_1280x1024.onclick = function(){    
+      myGameArea.setWH(1280,1024);
+    }
     btn_createJSON.onclick = function(){
       var s = "2";
       var o = {};
