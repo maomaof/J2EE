@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.234]";
+﻿const tag = "[plx12.js_v0.235]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
