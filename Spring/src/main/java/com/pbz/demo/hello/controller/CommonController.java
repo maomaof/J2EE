@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +28,7 @@ public class CommonController {
 
 	@ApiOperation(value = "执行服务器端命令", notes = "执行服务器端命令")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "cmd", value = "Dos/Shell Command. More format refer java Runtime.getRuntime().exec usage but need use comma instead of space. Example: sh,-c,ls%20*.jpg  mkdir,dir1", paramType = "query", required = true, dataType = "string", defaultValue="cmd,/c,dir")})
+			@ApiImplicitParam(name = "cmd", value = "Dos/Shell Command. More format refer java Runtime.getRuntime().exec usage but need use comma instead of space. Example: sh,-c,ls%20*.jpg  mkdir,dir1", paramType = "query", required = true, dataType = "string", defaultValue = "cmd,/c,dir") })
 	@RequestMapping(value = "/command", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> processCommandOnServer(String[] cmd) throws Exception {
