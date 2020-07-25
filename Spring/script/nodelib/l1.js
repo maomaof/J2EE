@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.44] ";
+﻿const tag = "[nodelib/l1.js_v0.0.45] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -66,6 +66,7 @@ exports.f1 = function(req,res){
     || req.url == '/plx1.js'
     || req.url == '/plx11.js'
     || req.url == '/plx12.js'
+    || req.url == '/plx/mng.js'
     || req.url == '/v1.json'
     || req.url == '/v2.json'
   ) {
@@ -80,7 +81,7 @@ exports.f1 = function(req,res){
       res.write(data);
       return res.end();
     });
-  } 
+  }  
   else if ( r1 == '/plxScriptEditor.js') {
     console.log("xd...");
     res.end("xd");
