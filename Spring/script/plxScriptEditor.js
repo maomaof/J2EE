@@ -1,5 +1,6 @@
+const tag = "[plxScriptEditor.js_v0.0.222]";
 var d = bl$( "id_mdiv_plx_script_editor" );
-d.tb = blo0.blDiv(d, d.id + "tb", "[v0.0. 211 ]", blGrey[0]);
+d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
 d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
 d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
@@ -57,6 +58,7 @@ d.tb.b2.onclick = function(){
 			var w = {};
 			w._2do = function(txt){ 
 				v0.innerHTML = "";
+				//*
 				eval("var o=" + txt);
 				for(i in o.resource){
 					var b = blo0.blBtn(v0,v0.id+i,i,blGrey[2]);
@@ -76,11 +78,10 @@ d.tb.b2.onclick = function(){
 								blo0.blAjx(w1,url);							
 							}
 						}
-					}(b,o.resource[i]);
-
-				} 
+					}(b,o.resource[i]);					
+				} //*/
 			}
-			blo0.blAjx(w, "http://localhost:8080/getResourceOnServer?format=json" );			
+			blo0.blAjx(w, "http://localhost:8080/getResourceOnServer?filetype=json" ); 
 		}
 	}
 	_on_off_div(this,d.v2);
@@ -114,10 +115,10 @@ d.tb.b4_uploadJson.onclick = function(){
 			xhr.withCredentials = true;
 			xhr.addEventListener("readystatechange", function() {
 			  if(this.readyState === 4) {
-			    alert(this.responseText);
+			    v.innerHTML = this.responseText;
 			  }	
 			});
-			xhr.open("POST", "http://localhost:8080/json?filename=v3.json");
+			xhr.open("POST", "http://localhost:8080/json?fileName=v3.json");
 			xhr.setRequestHeader("Content-Type", "text/plain");
 			xhr.send(data);
 		}
