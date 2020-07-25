@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.242]";
+﻿const tag = "[plx12.js_v0.312]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -8,8 +8,11 @@ v1.g.startGame();
 //*/
 
 function classFrame(){    
+  const _tag = "[classFrame]";
+  var   xx = 0;
+  var   yy = 0;
   var curFrame = new CFrame(0,1);
-  var myGameArea = {
+  var myGameArea = { 
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 480;
@@ -21,20 +24,34 @@ function classFrame(){
         this.interval = setInterval(updateGameArea, 20);
 
         this.canvas.addEventListener('mousedown', function (e) {
-          myGameArea.x = e.offsetX;//e.pageX;
-          myGameArea.y = e.offsetY;// e.pageY;  
+              myGameArea.x = e.offsetX;//e.pageX;
+              myGameArea.y = e.offsetY;// e.pageY;  
 
-          for(i in curFrame.objects){
-           var b = curFrame.objects[i].clicked(myGameArea,bl$("id_4_debug"),e);
-          }
-
-        })
+              if(e.button==2){                          
+                    for(i in curFrame.objects){                   
+                      curFrame.objects[i].reset();                  
+                    }     
+              }
+              else{
+                    for(i in curFrame.objects){
+                      var b = curFrame.objects[i].clicked(myGameArea);
+                      if(b){
+                        curFrame.objects[i].dbgShow();
+                        break;
+                      } 
+                    }
+              }              
+        });
 
         this.canvas.addEventListener('mouseup', function (e) { 
           myGameArea.x = e.offsetX;//e.pageX;
           myGameArea.y = e.offsetY;// e.pageY;
         });
 
+        this.canvas.addEventListener('mousemove', function (e) { 
+          xx = e.offsetX;//e.pageX;
+          yy = e.offsetY;// e.pageY;
+        });
         this.canvas.addEventListener('contextmenu', function(e) {
           //alert("You've tried to open context menu"); //here you draw your own menu
           e.preventDefault();
@@ -43,8 +60,11 @@ function classFrame(){
     redrawStage : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         var ctx = this.context;
-        ctx.fillStyle = "lightblue";
+        ctx.fillStyle = "grey";
         ctx.fillRect(0,0,this.canvas.width, this.canvas.height);
+        
+        ctx.fillStyle = "brown";
+        ctx.fillText(_tag +"[" + xx + ","+yy + "]", 40,20);
     },
     setWH: function(_w,_h){
       this.canvas.width = _w;
@@ -78,8 +98,8 @@ function classFrame(){
       }
   }
 
-  function sprite(width, height, clr, x, y) {
-    this.text = "spriteText.";
+  function sprite(txt,width, height, clr, x, y) {
+    this.text = txt;
     this.x = x;
     this.y = y;    
     this.size = 50;
@@ -90,46 +110,44 @@ function classFrame(){
     var _y = y;
     var _width = width;
     var _height = height;
+    this.reset = function(){ 
+        _c= "red";
+    }
+    this.dbgShow = function(){ 
+      var ds = this.text;
+      ds += "[" + _x + "," + _y + "]";
+      ds += "[" + this.x + "," + this.y + "] "; 
+      bl$("id_4_debug").innerHTML = ds;
+    }
     this.update = function(){ 
         var ctx = myGameArea.context;
         ctx.fillStyle = _c;
         ctx.fillRect(_x, _y, _width, _height);
         ctx.fillText(this.text, _x, _y);
     }
-    this.clicked = function(a,dbgDiv,e) {
+    this.clicked = function(a) {
       var myleft = _x;
       var myright = _x + _width;
       var mytop = _y;
       var mybottom = _y + _height;
       var rClick = true;
-      
-      if(e.button==2){
-         _c = "red"; return rClick;
-      }
-
+            
       if ((mybottom < a.y) || (mytop > a.y) ||
           (myright < a.x) || (myleft > a.x)) 
       {
         rClick = false;
         if(_c == "yellow"){
-          _x = a.x;
-          _y = a.y;          
+          this.x = _x = a.x;
+          this.y = _y = a.y;      
         }
-        _c = "red";
-        
-        var ds = this.text;
-        ds += "[" + _x + "," + _y + "]";
-        ds += "[" + this.x + "," + this.y + "] ";
-        ds += rClick;
-        dbgDiv.innerHTML = ds;
+        _c = "red";        
       }
       else{
         rClick = true;
-        _c = "yellow";
-          
-      }
+        _c = "yellow";          
+      } 
       return rClick;
-    } 
+    }; 
   }
 
   function updateGameArea() {
@@ -150,11 +168,13 @@ function classFrame(){
    
     var d1 = blo0.blDiv(v1, "id_4_debug","d1",blGrey[3]);
     b1.onclick = function(){
+      if(!b1.i) b1.i = 0;
+      b1.i++;
       var d = new Date;
       d1.innerHTML = d.getMilliseconds();
       var x = d.getMilliseconds()/3;
       var y = d.getMilliseconds()%100;
-      var sp = new sprite(20, 20, "green", x, y);
+      var sp = new sprite("sp" + b1.i, 20, 20, "green", x, y);
       curFrame.objects.push(sp);
     }
     btn_760x480.onclick = function(){     
