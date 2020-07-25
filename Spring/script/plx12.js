@@ -1,15 +1,14 @@
-﻿const tag = "[plx12.js_v0.135]";
+﻿const tag = "[plx12.js_v0.242]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
-//*
-v1.g = null; 
+//* 
 v1.g = new classFrame( );
 v1.g.initGame();
 v1.g.startGame();
 //*/
 
-function classFrame(){   
-  var spList = []; 
+function classFrame(){    
+  var curFrame = new CFrame(0,1);
   var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
@@ -21,69 +20,122 @@ function classFrame(){
         v1.appendChild(this.canvas);
         this.interval = setInterval(updateGameArea, 20);
 
-        window.addEventListener('mousedown', function (e) {
+        this.canvas.addEventListener('mousedown', function (e) {
           myGameArea.x = e.offsetX;//e.pageX;
-          myGameArea.y = e.offsetY;// e.pageY; 
-          for(i in spList){
-           var b = spList[i].clicked(myGameArea,bl$("id_4_debug"));
+          myGameArea.y = e.offsetY;// e.pageY;  
+
+          for(i in curFrame.objects){
+           var b = curFrame.objects[i].clicked(myGameArea,bl$("id_4_debug"),e);
           }
 
         })
 
-        window.addEventListener('mouseup', function (e) { 
+        this.canvas.addEventListener('mouseup', function (e) { 
           myGameArea.x = e.offsetX;//e.pageX;
           myGameArea.y = e.offsetY;// e.pageY;
-        })
+        });
+
+        this.canvas.addEventListener('contextmenu', function(e) {
+          //alert("You've tried to open context menu"); //here you draw your own menu
+          e.preventDefault();
+        }, false);
     },
-    clear : function() {
+    redrawStage : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        var ctx = this.context;
+        ctx.fillStyle = "lightblue";
+        ctx.fillRect(0,0,this.canvas.width, this.canvas.height);
+    },
+    setWH: function(_w,_h){
+      this.canvas.width = _w;
+      this.canvas.height = _h;
     }
   } 
-  function sprite(width, height, color, x, y) {
+  
+  function CFrame(number,time){
+      this.number = number;
+      this.time   = time;
+      this.objects = [];
+      this.backgroundColor = "123,45,200";
+
+      this.onDraw = function(){
+        var ctx = myGameArea.context;
+        ctx.fillStyle = "brown";
+        ctx.fillRect(0,0,20,20);
+        ctx.fillText(number, 30,10);
+        for(i in this.objects){
+          this.objects[i].update();
+        }
+
+      }
+      this.toDo = function(){
+        this.number++;
+        for(i in this.objects){
+          this.objects[i].x++;
+          this.objects[i].text = "number="+this.number;
+        }
+
+      }
+  }
+
+  function sprite(width, height, clr, x, y) {
     this.text = "spriteText.";
     this.x = x;
     this.y = y;    
     this.size = 50;
-    this.color= color;
-    this.speedX = 0;
-    this.speedY = 0;
+    this.color= "125,1,1"; 
 
+    var _c = clr;
+    var _x = x;
+    var _y = y;
     var _width = width;
     var _height = height;
     this.update = function(){ 
-        ctx = myGameArea.context;
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, _width, _height);
+        var ctx = myGameArea.context;
+        ctx.fillStyle = _c;
+        ctx.fillRect(_x, _y, _width, _height);
+        ctx.fillText(this.text, _x, _y);
     }
-    this.clicked = function(a,dbgDiv) {
-      var myleft = this.x;
-      var myright = this.x + _width;
-      var mytop = this.y;
-      var mybottom = this.y + _height;
+    this.clicked = function(a,dbgDiv,e) {
+      var myleft = _x;
+      var myright = _x + _width;
+      var mytop = _y;
+      var mybottom = _y + _height;
       var rClick = true;
+      
+      if(e.button==2){
+         _c = "red"; return rClick;
+      }
+
       if ((mybottom < a.y) || (mytop > a.y) ||
-          (myright < a.x) || (myleft > a.x)) {
-            rClick = false;
-        if(this.color == "yellow"){
-          this.x = a.x;
-          this.y = a.y;          
+          (myright < a.x) || (myleft > a.x)) 
+      {
+        rClick = false;
+        if(_c == "yellow"){
+          _x = a.x;
+          _y = a.y;          
         }
-        this.color = "red";
+        _c = "red";
+        
+        var ds = this.text;
+        ds += "[" + _x + "," + _y + "]";
+        ds += "[" + this.x + "," + this.y + "] ";
+        ds += rClick;
+        dbgDiv.innerHTML = ds;
       }
       else{
         rClick = true;
-        this.color = "yellow";
+        _c = "yellow";
+          
       }
-      dbgDiv.innerHTML = rClick;
       return rClick;
     } 
   }
+
   function updateGameArea() {
-    myGameArea.clear();    
+    myGameArea.redrawStage();    
+    curFrame.onDraw();
     
-    for(i in spList){
-      spList[i].update();
-    }
   }
 
   this.initGame = function () { 
@@ -103,30 +155,42 @@ function classFrame(){
       var x = d.getMilliseconds()/3;
       var y = d.getMilliseconds()%100;
       var sp = new sprite(20, 20, "green", x, y);
-      spList.push(sp);
+      curFrame.objects.push(sp);
     }
-    btn_760x480.onclick = function(){     w = 760;       h = 480;    }
-    btn_1280x1024.onclick = function(){     w = 1280;      h = 1024;    }
+    btn_760x480.onclick = function(){     
+      myGameArea.setWH(760,480);
+    }
+    btn_1280x1024.onclick = function(){    
+      myGameArea.setWH(1280,1024);
+    }
     btn_createJSON.onclick = function(){
       var s = "2";
       var o = {};
       var r = {};
       var fs = [];
       o.request = r;
-      r.version = "v0. 21";
+      r.version = "v0. 22";
       r.width   = w;
       r.height  = h;
       r.music   = "1.mp3";
       r.rate    = "1";
       r.frames  = fs; 
+ 
+      for(var i=0;i<121;i++){
+        var f = new CFrame(i+1,1);
+        
+        //* 
+        for(j in curFrame.objects){
+          var sp = new sprite(20, 20, "green", 
+                    curFrame.objects[j].x+10*i, curFrame.objects[j].y+10*i);
+          sp.text = "spite " + i + "=text!";
+          f.objects.push(sp);  
+        }
+        //*/
 
-      var f={};
-      f.number = 1;
-      f.time = 60;
-      f.objects = spList;
-      fs.push(f);
-
-      f.backgroundColor = "123,45,200";
+        fs.push(f);
+        curFrame.toDo();         
+      }     
       
       s =   JSON.stringify(o);
       bl$("id_ta_4_script_editor").value = s;

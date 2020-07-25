@@ -1,17 +1,19 @@
-﻿const tag = "[plx1_v0.0.43]";
+﻿const tag = "[plx1.js_v0.0.45]";
 var d = bl$("id_div_4_Plx1");
  
 //*
-    d.tb = blo0.blDiv(d,d.id+"tbPlx1", "tbPlx1",blGrey[1]);
+    d.tb = blo0.blDiv(d,d.id+"tbPlx1", tag,blGrey[1]);
     d.v1 = blo0.blDiv(d, "id_div_4_Plx1_v1", tag+"v1", blGrey[0]);
     d.tb.plx11 = blo0.blBtn(d.tb,d.tb.id+"b11","plx11",blGrey[2]);
     d.tb.plx12 = blo0.blBtn(d.tb,d.tb.id+"b12","plx12",blGrey[2]);
     d.tb.b2 = blo0.blBtn(d.tb,d.tb.id+"bb21","v1.json",blGrey[2]);
+    d.tb.btnLoadPlxMng = blo0.blBtn(d.tb,d.tb.id+"btnLoadPlxMng","plxMng",blGrey[2]);
 
     var w = {};
     w._2do = function(txt){
         eval(txt);
     } 
+    d.tb.btnLoadPlxMng.onclick = function(){   blo0.blAjx(w,"plx/mng.js");    }
     d.tb.plx11.onclick = function(){      blo0.blAjx(w,"plx11.js");    }
     d.tb.plx12.onclick = function(){      blo0.blAjx(w,"plx12.js");    }
     d.tb.b2.onclick = function(){ 
