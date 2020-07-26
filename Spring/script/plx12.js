@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.313]";
+﻿const tag = "[plx12.js_v0.321]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -110,26 +110,30 @@ function classFrame(){
     var _y = y;
     var _width = width;
     var _height = height;
+    this.tellPlxMng = function(){ 
+        if(blo0.tellPlxMng){
+          blo0.tellPlxMng(this);
+        }
+    }
     this.reset = function(){ 
         _c= "red";
     }
     this.dbgShow = function(){ 
-      var ds = this.text;
-      ds += "[" + _x + "," + _y + "]";
+      var ds = this.text; 
       ds += "[" + this.x + "," + this.y + "] "; 
       bl$("id_4_debug").innerHTML = ds;
     }
     this.update = function(){ 
         var ctx = myGameArea.context;
         ctx.fillStyle = _c;
-        ctx.fillRect(_x, _y, _width, _height);
-        ctx.fillText(this.text, _x, _y);
+        ctx.fillRect(this.x, this.y, _width, _height);
+        ctx.fillText(this.text, this.x, this.y);
     }
     this.clicked = function(a) {
-      var myleft = _x;
-      var myright = _x + _width;
-      var mytop = _y;
-      var mybottom = _y + _height;
+      var myleft = this.x;
+      var myright = this.x + _width;
+      var mytop = this.y;
+      var mybottom = this.y + _height;
       var rClick = true;
             
       if ((mybottom < a.y) || (mytop > a.y) ||
@@ -144,7 +148,8 @@ function classFrame(){
       }
       else{
         rClick = true;
-        _c = "yellow";          
+        _c = "yellow";     
+        this.tellPlxMng();     
       } 
       return rClick;
     }; 
