@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.321]";
+﻿const tag = "[plx12.js_v0.331]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -105,11 +105,23 @@ function classFrame(){
     this.size = 50;
     this.color= "125,1,1"; 
 
-    var _c = clr;
-    var _x = x;
-    var _y = y;
+    var _c = clr; 
     var _width = width;
-    var _height = height;
+    var _height = height; 
+    this.test = function(_this,_oBass){ 
+      var dd = blo0.blDiv(_oBass,_oBass.id+"id_mdiv_test_in_sprite", "[Editor]", blGrey[5]);
+      dd.tb = blo0.blDiv(dd,dd.id+"tb","tb",blGrey[0]);
+      dd.v = blo0.blDiv(dd,dd.id+"v","",blGrey[0]);
+      const ta = blo0.blTextarea(dd.v,dd.v.id+"ta",_this.text,blGrey[1]);
+      ta.style.width = "95%";
+      ta.style.height = "95px";
+      var b1 = blo0.blBtn(dd.tb,dd.tb.id+"b1","[set: text]",blGrey[1]);
+      b1.onclick = function(){
+        _this.text = ta.value;
+      }
+
+      _on_off_div(null,dd);       
+    }
     this.tellPlxMng = function(){ 
         if(blo0.tellPlxMng){
           blo0.tellPlxMng(this);
@@ -141,8 +153,8 @@ function classFrame(){
       {
         rClick = false;
         if(_c == "yellow"){
-          this.x = _x = a.x;
-          this.y = _y = a.y;      
+          this.x =  a.x;
+          this.y =  a.y;      
         }
         _c = "red";        
       }
