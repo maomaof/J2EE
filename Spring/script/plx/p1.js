@@ -33,9 +33,9 @@
 		}
     }    
 
-const tag = "[plx/p1.js_v0.51]";
+const tag = "[plx/p1.js_v0.53]";
 const b = bl$("plx_p1_btn");
-b.v = blo0.blMDiv(b.parentElement,b.id+"v",tag,10,10,222,100,blGrey[0]);
+b.v = blo0.blMDiv(b.parentElement,b.id+tag,tag,10,88,55,150,blGrey[0]);
 if(!b.v.parent){
     b.v.parent = bl$("id_mdiv_load_plxMng");
     b.v.parent.list.push(b.v);

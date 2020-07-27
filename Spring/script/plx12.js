@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.331]";
+﻿const tag = "[plx12.js_v0.334]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -11,6 +11,7 @@ function classFrame(){
   const _tag = "[classFrame]";
   var   xx = 0;
   var   yy = 0;
+  var _curNO = 0;
   var curFrame = new CFrame(0,1);
   var myGameArea = { 
     canvas : document.createElement("canvas"),
@@ -73,16 +74,18 @@ function classFrame(){
   } 
   
   function CFrame(number,time){
+      var _NO = 0;
       this.number = number;
       this.time   = time;
       this.objects = [];
       this.backgroundColor = "123,45,200";
 
-      this.onDraw = function(){
+      this.onDraw = function(){        
+
         var ctx = myGameArea.context;
         ctx.fillStyle = "brown";
         ctx.fillRect(0,0,20,20);
-        ctx.fillText(number, 30,10);
+        ctx.fillText( this.number++, 30,10);
         for(i in this.objects){
           this.objects[i].update();
         }
@@ -94,7 +97,6 @@ function classFrame(){
           this.objects[i].x++;
           this.objects[i].text = "number="+this.number;
         }
-
       }
   }
 
@@ -170,6 +172,11 @@ function classFrame(){
   function updateGameArea() {
     myGameArea.redrawStage();    
     curFrame.onDraw();
+    _curNO++;
+    var go = blo0.showFrame2PlxMng; 
+    if(go){   
+             go(_curNO);        
+    } 
     
   }
 

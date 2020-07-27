@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.51] ";
+﻿const tag = "[nodelib/l1.js_v0.0.53] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -68,6 +68,7 @@ exports.f1 = function(req,res){
     || req.url == '/plx12.js'
     || req.url == '/plx/mng.js'
     || req.url == '/plx/p1.js'
+    || req.url == '/plx/p2.js'
     || req.url == '/v1.json'
     || req.url == '/v2.json'
   ) {
@@ -83,9 +84,20 @@ exports.f1 = function(req,res){
       return res.end();
     });
   }  
-  else if ( r1 == '/plxScriptEditor.js') {
-    console.log("xd...");
-    res.end("xd");
+  else if ( r1 == '/1.mp3'
+        || r1 == '/2.mp3'  
+  ) {
+    var q = url.parse(req.url, true);
+    var filename = "." + q.pathname;
+    fs.readFile(filename, function(err, data) {
+      if (err) {
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        return res.end("404 Not Found");
+      } 
+      res.writeHead(200, {'Content-Type': 'audio/mp3'});
+      res.write(data);
+      return res.end();
+    });
   } 
   else {
     res.writeHead(200, {'Content-Type': 'text/html'});
