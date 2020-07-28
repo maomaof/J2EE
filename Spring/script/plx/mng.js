@@ -5,11 +5,11 @@ blo0.tellPlxMng = function(me){
         var dm = bl$("id_mdiv_load_plxMng");       
         dm.tellList(me);
 }
-blo0.showFrame2PlxMng = function(frame){       
+blo0.showFrame2PlxMng = function(frame,ga){       
     var dm = bl$("id_mdiv_load_plxMng");   
     dm.frameDbg = blo0.blDiv(dm, dm.id+"frameDbg","frameDbg","lightblue");     
-    dm.frameDbg.innerHTML = Date();
-    dm.showFrame2List(frame);
+    dm.frameDbg.innerHTML = ga.x + "_" + frame + "_" + Date();
+    dm.showFrame2List(frame,ga);
 }
 
 var d = blo0.blMD("id_mdiv_load_plxMng", tag,  300,100,400,100, blGrey[5]);
@@ -20,9 +20,9 @@ d.tellList = function(_o){
     }
 }
 d.listDivFrameMsg = [];
-d.showFrame2List = function(_o){
+d.showFrame2List = function(_o,_ga){
     for(i in d.listDivFrameMsg){
-        if(d.listDivFrameMsg[i].showFrame)     d.listDivFrameMsg[i].showFrame(_o);
+        if(d.listDivFrameMsg[i].showFrame)     d.listDivFrameMsg[i].showFrame(_o,_ga);
     }
 }
 if(!d.n) {d.n=0;} 
