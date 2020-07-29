@@ -46,23 +46,24 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0. 52 </h2>
+  <h2>script Editor v0. 54 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
   <p>mvn clean install</p>
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
   blo0.myInit = function(){
-    var v = "v0.12";
+    var v = "v0.13";
     var x = 10;
     var y = 20;
     var listCtxMousedown = [];
     blo0.checkMyInit = function(){ alert(v);}
     blo0.regCtxMousedown = function(or){  
-      listCtxMousedown.push(or);
-      alert(listCtxMousedown);
+      listCtxMousedown.push(or); 
     }
-    blo0.toCtxMousedown = function(){
+    blo0.toCtxMousedown = function(_x,_y){
+      x = _x;
+      y = _y;
       for(i in listCtxMousedown){
         listCtxMousedown[i].toCtxMousedown(x,y);
       }

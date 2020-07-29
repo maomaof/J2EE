@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.341]";
+﻿const tag = "[plx12.js_v0.343]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -25,8 +25,9 @@ function classFrame(){
         this.interval = setInterval(updateGameArea, 20);
 
         this.canvas.addEventListener('mousedown', function (e) {
-              myGameArea.x = e.offsetX;//e.pageX;
-              myGameArea.y = e.offsetY;// e.pageY;  
+              var x = myGameArea.x = e.offsetX;//e.pageX;
+              var y = myGameArea.y = e.offsetY;// e.pageY;  
+              blo0.toCtxMousedown(x,y);
 
               if(e.button==2){                          
                     for(i in curFrame.objects){                   

@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.225]";
+const tag = "[plxScriptEditor.js_v0.0.231]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
@@ -11,7 +11,7 @@ d.tb.btnTestMyInit 	= blo0.blBtn(d.tb, d.tb.id+ "btnTestMyInit", "btnTestMyInit"
 d.tb.btnTestMyInit.onclick = function(){
 	if(!this.v)
 	{
-		this.v = blo0.blMDiv(this.parentElement,this.parentElement.id+"v","v",200,100,222,111,blGrey[0]);
+		this.v = blo0.blMDiv(this.parentElement,this.parentElement.id+"v","blo0.TestMyInit",511,1,222,111,blGrey[0]);
 		this.v.tb = blo0.blDiv(this.v, this.v.id+"tb","tb",blGrey[1]);
 		this.v.v = blo0.blDiv(this.v, this.v.id+"v","v",blGrey[2]);
 		var b1 = blo0.blBtn(this.v.tb,this.v.tb.id+"b1","b1",blGrey[2]);
