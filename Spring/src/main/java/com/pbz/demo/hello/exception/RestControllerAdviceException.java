@@ -1,5 +1,7 @@
 package com.pbz.demo.hello.exception;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,7 @@ public class RestControllerAdviceException extends ResponseEntityExceptionHandle
 	public ModelAndView processHtmlRequestException(HtmlRequestException e) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("message", e.getMessage());
-		mv.setViewName("error.html");
+		mv.setViewName("innerErr.html");
 		return mv;
 	}
 
