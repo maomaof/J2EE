@@ -1,4 +1,4 @@
-const tag = "[nodelib/CPlay.js_v0.53]";
+const tag = "[nodelib/CPlay.js_v0.54]";
 
 function CPlay (){
     var f = 2;
@@ -20,6 +20,11 @@ function CPlay (){
         ctx.fillRect(50,50,x,y);
         ctx.fillText( tag, x,y);
     };
+    this.toCtxMousedown = function(_x,_y){
+        x = _x;
+        y = _y;
+    }
+    blo0.regCtxMousedown(this);
 }
 
 blo0.p = new CPlay();   
