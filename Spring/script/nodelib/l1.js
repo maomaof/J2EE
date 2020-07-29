@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.53] ";
+﻿const tag = "[nodelib/l1.js_v0.0.54] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -62,6 +62,7 @@ exports.f1 = function(req,res){
     });
   }
   else if (r1 == '/1.html'
+  || req.url == '/nodelib/CPlay.js'
     || req.url == '/plxScriptEditor.js'
     || req.url == '/plx1.js'
     || req.url == '/plx11.js'
