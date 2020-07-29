@@ -46,18 +46,34 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0. 45 </h2>
+  <h2>script Editor v0. 52 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
   <p>mvn clean install</p>
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
+  blo0.myInit = function(){
+    var v = "v0.12";
+    var x = 10;
+    var y = 20;
+    var listCtxMousedown = [];
+    blo0.checkMyInit = function(){ alert(v);}
+    blo0.regCtxMousedown = function(or){  
+      listCtxMousedown.push(or);
+      alert(listCtxMousedown);
+    }
+    blo0.toCtxMousedown = function(){
+      for(i in listCtxMousedown){
+        listCtxMousedown[i].toCtxMousedown(x,y);
+      }
+    }
+  }
 	var btnPlx = bl$( "id_4_plxScriptEditor" );
 	btnPlx.onclick = function(){
 		var d = blo0.blMD( "id_mdiv_plx_script_editor" , "plxScriptEditor",300,100,500,400, blGrey[5]); 
 		if(!d.loadPlx){
-      d.loadPlx = blo0.blScript( "id_js_plx_script_editor" ,"plxScriptEditor.js");      
-      
+      blo0.myInit();
+      d.loadPlx = blo0.blScript( "id_js_plx_script_editor" ,"plxScriptEditor.js");            
 		}
 		_on_off_div(null,d);
 	}

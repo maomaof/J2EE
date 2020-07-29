@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.222]";
+const tag = "[plxScriptEditor.js_v0.0.225]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
@@ -7,6 +7,40 @@ d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]);
 d.tb.b3_upload 		= blo0.blBtn(d.tb, d.tb.id+ "b3", "b3_uploadFile", blGrey[2]); 
 d.tb.b4_uploadJson 	= blo0.blBtn(d.tb, d.tb.id+ "b4", "b4_uploadJson", blGrey[2]); 
 
+d.tb.btnTestMyInit 	= blo0.blBtn(d.tb, d.tb.id+ "btnTestMyInit", "btnTestMyInit", blGrey[2]); 
+d.tb.btnTestMyInit.onclick = function(){
+	if(!this.v)
+	{
+		this.v = blo0.blMDiv(this.parentElement,this.parentElement.id+"v","v",200,100,222,111,blGrey[0]);
+		this.v.tb = blo0.blDiv(this.v, this.v.id+"tb","tb",blGrey[1]);
+		this.v.v = blo0.blDiv(this.v, this.v.id+"v","v",blGrey[2]);
+		var b1 = blo0.blBtn(this.v.tb,this.v.tb.id+"b1","b1",blGrey[2]);
+		b1.onclick = function(){
+			blo0.checkMyInit();
+		}
+		var b2 = blo0.blBtn(this.v.tb,this.v.tb.id+"b2","b2_reg",blGrey[2]);
+		b2.onclick = function(_v){
+			return function(){
+				blo0.regCtxMousedown(_v);
+			}
+		}(this.v);
+
+		var b3 = blo0.blBtn(this.v.tb,this.v.tb.id+"b3","b3_regTest",blGrey[2]);
+		b3.onclick = function(_v){
+			return function(){
+				blo0.toCtxMousedown();
+			}
+		}(this.v);
+
+		this.v.toCtxMousedown = function(_v){
+			return function(x,y){
+				_v.v.innerHTML = "[" + x+ ","+y+"] "+Date();
+			} 
+		}(this.v);
+	}
+	_on_off_div(this,this.v);
+	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];  
+}
 d.tb.b1.onclick = function(){
 	if(!d.v0){
 		d.v0 = blo0.blDiv(d, d.id + "v0", "v0", blGrey[1]);
