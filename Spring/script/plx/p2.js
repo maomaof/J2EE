@@ -1,9 +1,9 @@
 ﻿ 
 blo0.blAjx(w,"nodelib/CPlay.js");    
 
-const tag = "[plx/p2.js_v0.125]";
+const tag = "[plx/p2.js_v0.131]";
 const b = bl$("plx_p2_btn"); 
-b.v = blo0.blMDiv(b.parentElement,tag,tag,234,88,55,55,blGrey[0]);
+b.v = blo0.blMDiv(b.parentElement,tag,tag,333,1,55,55,blGrey[0]);
 if(!b.v.parent){
     b.v.parent = bl$("id_mdiv_load_plxMng");
     b.v.parent.list.push(b.v);
