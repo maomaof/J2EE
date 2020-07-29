@@ -1,9 +1,11 @@
-const tag = "[nodelib/CPlay.js_v0.54]";
+const tag = "[nodelib/CPlay.js_v0.55]";
 
 function CPlay (){
     var f = 2;
-    var x = 50;
-    var y = 50;
+    var x = 10;
+    var y = 10;
+    var w = 50;
+    var h = 50;
     this.getCurFameNO = function(){
         return f;
     };
@@ -17,7 +19,7 @@ function CPlay (){
     this.toShowCurFrame = function(ctx){    
         ctx.fillStyle = "red";
         ctx.font = "20px Arial";
-        ctx.fillRect(50,50,x,y);
+        ctx.fillRect(x,y,w,h);
         ctx.fillText( tag, x,y);
     };
     this.toCtxMousedown = function(_x,_y){
