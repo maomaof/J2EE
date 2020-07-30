@@ -1,7 +1,9 @@
 ﻿ 
-const tag = "[plx/p2.js_v0.54]";
+blo0.blAjx(w,"nodelib/CPlay.js");    
+
+const tag = "[plx/p2.js_v0.131]";
 const b = bl$("plx_p2_btn"); 
-b.v = blo0.blMDiv(b.parentElement,tag,tag,234,88,55,55,blGrey[0]);
+b.v = blo0.blMDiv(b.parentElement,tag,tag,333,1,55,55,blGrey[0]);
 if(!b.v.parent){
     b.v.parent = bl$("id_mdiv_load_plxMng");
     b.v.parent.list.push(b.v);
@@ -11,9 +13,10 @@ if(!b.v.parent){
         //b.v.tb.b1.onclick();
     }
     b.v.parent.listDivFrameMsg.push(b.v);
-    b.v.showFrame = function(_f){ 
+    b.v.showFrame = function(_f,_ga){ 
         var dd = bl$("id_4_plx2_dbg2"); 
-        dd.innerHTML = _f;
+        dd.innerHTML = _f  + ":" + _ga.x;
+        dd.showCurFrame(_ga);
     }
 }
 b.v.style.width = "300px";
@@ -28,11 +31,40 @@ s+='</video>';
 
 b.v.v1 = blo0.blDiv(b.v,b.v.id+"v1",s,blGrey[1]);
 b.v.v2 = blo0.blDiv(b.v,"id_4_plx2_dbg2","v2",blGrey[2]);
- 
+b.v.v2.showCurFrame = function(_ga){
+    var ctx = _ga.context;
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(0,0,20,20);
+    ctx.fillText( tag + "_" + Date(), 230,10);
+
+    if(b.v.sf) b.v.sf(ctx);
+    
+};
 
 b.v.tb.b1 = blo0.blBtn(b.v.tb,b.v.tb.id+"b1","b1",blGrey[2]);
 b.v.tb.b1.onclick = function(){
     _on_off_div(null,b.v.v2);
+}  
+
+b.v.tb.bPlay  = blo0.blBtn(b.v.tb,b.v.tb.id+"bPlay","Play",blGrey[2]);
+b.v.tb.bPlay.onclick = function(){
+    if(!this.loadClass){
+        this.loadClass = true;
+        this.b=false;  
+                 
+    }
+    if(this.b){
+        this.b = false;
+        this.innerHTML = "Play";
+        blo0.p.toStop();        
+        b.v.sf = null;
+    }
+    else{
+        this.b = true;
+        this.innerHTML = "Stop"; 
+        blo0.p.toPlay();       
+        b.v.sf = blo0.p.toShowCurFrame; 
+    }
 }  
 
 

@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.334]";
+﻿const tag = "[plx12.js_v0.343]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -25,8 +25,9 @@ function classFrame(){
         this.interval = setInterval(updateGameArea, 20);
 
         this.canvas.addEventListener('mousedown', function (e) {
-              myGameArea.x = e.offsetX;//e.pageX;
-              myGameArea.y = e.offsetY;// e.pageY;  
+              var x = myGameArea.x = e.offsetX;//e.pageX;
+              var y = myGameArea.y = e.offsetY;// e.pageY;  
+              blo0.toCtxMousedown(x,y);
 
               if(e.button==2){                          
                     for(i in curFrame.objects){                   
@@ -80,12 +81,14 @@ function classFrame(){
       this.objects = [];
       this.backgroundColor = "123,45,200";
 
-      this.onDraw = function(){        
+      this.onDraw = function(ga){        
 
-        var ctx = myGameArea.context;
-        ctx.fillStyle = "brown";
+        var ctx = ga.context;
+        ctx.fillStyle = "white";
         ctx.fillRect(0,0,20,20);
         ctx.fillText( this.number++, 30,10);
+        ctx.fillText( ga.x, 130,10);
+
         for(i in this.objects){
           this.objects[i].update();
         }
@@ -171,11 +174,11 @@ function classFrame(){
 
   function updateGameArea() {
     myGameArea.redrawStage();    
-    curFrame.onDraw();
+    curFrame.onDraw(myGameArea);
     _curNO++;
     var go = blo0.showFrame2PlxMng; 
     if(go){   
-             go(_curNO);        
+             go(_curNO,myGameArea);        
     } 
     
   }
