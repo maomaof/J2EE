@@ -1,4 +1,4 @@
-﻿const tag = "[plx/mng.js_v0.113]";
+﻿const tag = "[plx/mng.js_v0.122]";
 blo0.tellPlxMng = function(me){
         var d0 = bl$("id_div_4_PlxMng_dbg");       
         d0.innerHTML = "["+ me.x + ","+me.y+"]";//blo0.blShowObj2Div(d0,me);    
@@ -37,6 +37,16 @@ d.tb.b2 = blo0.blBtn(d.tb,"plx_p2_btn","plx2",blGrey[1]);
 d.tb.b2.onclick = function(){ 
     blo0.blAjx(w,"plx/p2.js");       
 }
+
+d.tb.b3 = blo0.blBtn(d.tb,"plx_p3_btn","plx3",blGrey[1]); 
+d.tb.b3.onclick = function(){     
+     blo0.blAjx(w,"plx/p3.js");       
+}
+d.tb.b4 = blo0.blBtn(d.tb,"plx_p4_btn","plx4",blGrey[1]); 
+d.tb.b4.onclick = function(){     
+     blo0.blAjx(w,"plx/p4.js");       
+}
+
 d.vDbg = blo0.blDiv(d, "id_div_4_PlxMng_dbg","dbg",blGrey[2]);
 d.vDbg2 = blo0.blDiv(d, "id_div_4_PlxMng_dbg2","dbg2", "lightgreen");
 _on_off_div(null,d);

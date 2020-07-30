@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.53] ";
+﻿const tag = "[nodelib/l1.js_v0.0.111] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -25,10 +25,31 @@ exports.f1 = function(req,res){
 
   var r1 = a[0];
   if (r1 == '/getResourceOnServer') {
-    n++;
-    
+    n++;    
     res.write(myJSON);
     res.end();
+  }
+  else if(r1 == '/command'){
+    s = req.url;    
+    const { exec } = require("child_process");
+
+    exec("ls -la", (error, stdout, stderr) => {
+        if (error) {
+            var s = `error: ${error.message}`;
+            console.log(s);
+            res.write(s);
+            res.end();    
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            res.write(s +  ${stderr});
+            res.end();    
+        }
+        console.log(`stdout: ${stdout}`);
+        res.write(s +  ${stdout});
+        res.end();    
+    });
+  
   }
   else if (r1 == '/json'){  
     console.log(tag + n + ":" + a.length  + " " + a[1]  + ": body=" + req.body);  
@@ -69,6 +90,8 @@ exports.f1 = function(req,res){
     || req.url == '/plx/mng.js'
     || req.url == '/plx/p1.js'
     || req.url == '/plx/p2.js'
+    || req.url == '/plx/p3.js'
+    || req.url == '/plx/p4.js'
     || req.url == '/v1.json'
     || req.url == '/v2.json'
   ) {
