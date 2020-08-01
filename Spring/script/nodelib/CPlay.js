@@ -1,4 +1,4 @@
-const tag = "[nodelib/CPlay.js_v0.124]";
+const tag = "[nodelib/CPlay.js_v0.134]";
 
 function CPlay (){
     var c = "lightgreen";
@@ -9,7 +9,9 @@ function CPlay (){
     var h = 50;
     var ms0 = 0;
     var dms = 0; 
-    var o = {};
+    var img = new Image();
+    var o = { 
+    };
     o.getFrameNo = function(){
         var dt = 1000/fps;
         return dms/dt;
@@ -21,6 +23,14 @@ function CPlay (){
         s+= " fps=" + fps;
         s+= " FrameNo=" + o.getFrameNo();
         return s;
+    }
+    o.showImg = function(ctx,x,y,w,h,iUrl){ 
+        img.src = iUrl;
+        ctx.drawImage(img, x,y,w,h);
+
+        ctx.fillStyle = "yellow";
+        ctx.font = "20px Arial"; 
+        ctx.fillText(iUrl, x,y);
     }
     this.getCurFameNO = function(){
         return f;
@@ -40,6 +50,12 @@ function CPlay (){
         ctx.font = "20px Arial";
         ctx.fillRect(x,y,w,h);
         ctx.fillText( o.getMsg(), x,y);
+        if(x%2==0 ){
+            o.showImg(ctx,x,y,50,50,"https://www.w3schools.com/graphics/smiley.gif");  
+        }
+        else{
+            o.showImg(ctx,x,y,50,50,"https://www.w3schools.com/graphics/angry.gif"); 
+        }
     };
     this.toCtxMousedown = function(_x,_y){
         x = _x;
