@@ -144,7 +144,7 @@ public final class JsonSriptParser {
 		}
 		String suffix = isWindows ? ".bat" : ".sh";
 		String cmd = System.getProperty("user.dir") + "/" + "jpg2video" + suffix;
-		String[] args = { "360", rate };
+		String[] args = { Integer.toString(width), Integer.toString(height), rate };
 		ExecuteCommand.executeCommand(cmd, args);
 		String ffmpegPath = "ffmpeg";
 		if (!isWindows) {
