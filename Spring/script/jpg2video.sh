@@ -13,7 +13,7 @@ if [ -z $RATE ] ; then
  echo "The rate is:" $RATE
 fi
 
-if [ -z $MY_WIDTH ] or [ -z $MY_HEIGHT ] ; then
+if [ -z $MY_WIDTH ] || [ -z $MY_HEIGHT ] ; then
  echo "param error"
  echo "param 1 size-width"
  echo "param 2 size-height"
