@@ -32,7 +32,9 @@ public class SwaggerConfig {
                 .description("用于描述已有API接口")
                 .termsOfServiceUrl("No term of service")
                 .contact(new Contact("Maomaof", "", "lalaxy87@hotmail.com"))
-                .version("1.01")
+                .version("1.02")
+                .license("Back to Homepage")
+                .licenseUrl("http://localhost:8080")
                 .build();
     }
 }

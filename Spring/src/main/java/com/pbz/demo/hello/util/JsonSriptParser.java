@@ -22,8 +22,7 @@ public final class JsonSriptParser {
 
 	public static boolean generateVideoByScriptFile(String scriptFilePath) throws Exception {
 		String jsonString = new String(Files.readAllBytes(new File(scriptFilePath).toPath()));
-
-		// Fix JSON string
+		// Fix input JSON string
 		int s = jsonString.indexOf("{");
 		if (s > 0) {
 			jsonString = jsonString.substring(s);
@@ -32,7 +31,6 @@ public final class JsonSriptParser {
 			jsonString = jsonString.replaceAll("\\\\", "");
 			System.out.println("Fix for this input JSON string");
 		}
-
 		return generateVideo(jsonString);
 	}
 
@@ -62,11 +60,7 @@ public final class JsonSriptParser {
 					Color colorBackground = null;
 					if (frameObj.has("backgroundColor")) {
 						String color = frameObj.getString("backgroundColor");
-						String[] colors = color.split(",");
-						int red = Integer.parseInt(colors[0]);
-						int green = Integer.parseInt(colors[1]);
-						int blue = Integer.parseInt(colors[2]);
-						colorBackground = new Color(red, green, blue);
+						colorBackground = getColor(color);
 					}
 					Image bgImg = null;
 					if (frameObj.has("backgroundPicture")) {
@@ -77,7 +71,6 @@ public final class JsonSriptParser {
 						} else {
 							System.out.println("WARNING: The file " + img.getName() + " doesn't exist!");
 						}
-
 					}
 					for (int j = 0; j < times; j++) {
 						String destImageFile = System.getProperty("user.dir") + "/" + Integer.toString(index + 1)
@@ -117,19 +110,16 @@ public final class JsonSriptParser {
 								int y = obj.getInt("y");
 								int size = obj.getInt("size");
 								String c = obj.getString("color");
-								String[] co = c.split(",");
-								int r = Integer.parseInt(co[0]);
-								int gr = Integer.parseInt(co[1]);
-								int b = Integer.parseInt(co[2]);
+								Color color = getColor(c);
 								System.out.println(text);
-								g.setColor(new Color(r, gr, b));
+								g.setColor(color);
 								Font font = new Font("黑体", Font.BOLD, size);
 								g.setFont(font);
 								g.drawString(text, x, y);
 							}
-							//Graphic
-							if(obj.has("graphic")) {
-								drawGraphic(obj,g);
+							// Graphic
+							if (obj.has("graphic")) {
+								drawGraphic(obj, g);
 							}
 						}
 						g.setColor(new Color(0, 0, 255));// 帧号颜色
@@ -166,7 +156,7 @@ public final class JsonSriptParser {
 				tmpAudioFile };
 		ExecuteCommand.executeCommand(cutAudioCmd, null, new File("."), null);
 
-		// Combine silent video and audio to final video
+		// Combine silent video and audio to a final video
 		String[] cmds = { ffmpegPath, "-y", "-i", subtitle_video_name, "-i", tmpAudioFile, final_video_name };
 		boolean bRunScript = ExecuteCommand.executeCommand(cmds, null, new File("."), null);
 		return bRunScript;
@@ -220,7 +210,7 @@ public final class JsonSriptParser {
 		String s = String.format("%01d:%01d:%01d", hours, minutes, second);
 		return s;
 	}
-	
+
 	private static JSONObject getJsonObjectbyName(JSONObject jsonObj, String name) {
 		if (jsonObj == null) {
 			return null;

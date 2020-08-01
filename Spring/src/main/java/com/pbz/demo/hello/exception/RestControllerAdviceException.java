@@ -1,11 +1,14 @@
 package com.pbz.demo.hello.exception;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,6 +31,14 @@ public class RestControllerAdviceException extends ResponseEntityExceptionHandle
 		}
 		LOGGER.error("Handle unexpected Exception", e);
 		return status;
+	}
+
+	@ExceptionHandler(HtmlRequestException.class)
+	public ModelAndView processHtmlRequestException(HtmlRequestException e) {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("message", e.getMessage());
+		mv.setViewName("innerErr.html");
+		return mv;
 	}
 
 	public static class ReturnStatus {

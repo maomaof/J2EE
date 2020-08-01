@@ -16,7 +16,7 @@ import com.pbz.demo.hello.util.FileUtil;
 @EnableAutoConfiguration
 @SpringBootApplication
 public class HelloApplication {
-	
+
 	@RequestMapping("/")
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView();
@@ -39,6 +39,7 @@ public class HelloApplication {
 		if (rescourceFolder != "") {
 			System.out.println("Copy resource files");
 			FileUtil.copyDirectory(new File(rescourceFolder), new File(applicationDir));
+			FileUtil.copyDirectory(new File(rescourceFolder + "/" + "plx"), new File(applicationDir));
 			boolean isWindows = System.getProperty("os.name").startsWith("Windows");
 			if (!isWindows) {
 				String scriptPath = applicationDir + "/" + "jpg2video.sh";
@@ -46,6 +47,7 @@ public class HelloApplication {
 				System.out.println("Chmod file " + scriptPath);
 			}
 		}
+		System.out.println("I am ready!");
 
 	}
 

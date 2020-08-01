@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pbz.demo.hello.exception.HtmlRequestException;
 import com.pbz.demo.hello.service.ClockImageService;
 import com.pbz.demo.hello.service.SubtitleImageService;
 import com.pbz.demo.hello.util.ExecuteCommand;
@@ -48,8 +49,8 @@ public class ImageController {
 
 	private static int IMAGE_WIDTH = 450;
 	private static int IMAGE_HEIGHT = 390;
-	private static final String subtitle_video_name="vSubtitle.mp4";
-	private static final String final_video_name="vFinal.mp4";
+	private static final String subtitle_video_name = "vSubtitle.mp4";
+	private static final String final_video_name = "vFinal.mp4";
 
 	private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
 
@@ -85,7 +86,6 @@ public class ImageController {
 		sos.close();
 	}
 
-
 	@ApiIgnore
 	@RequestMapping(value = "/subtitle")
 	@ResponseBody
@@ -115,8 +115,8 @@ public class ImageController {
 
 	@ApiOperation(value = "音频合成字幕生成视频", notes = "将音频合成字幕生成视频")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "subtitlefile", value = "subtitle file (*.srt)", paramType = "query", required = true, dataType = "string", defaultValue="example.srt"),
-		@ApiImplicitParam(name = "audiofile", value = "audio file (*.mp3)", paramType = "query", required = true, dataType = "string", defaultValue="example.mp3")})
+			@ApiImplicitParam(name = "subtitlefile", value = "subtitle file (*.srt)", paramType = "query", required = true, dataType = "string", defaultValue = "example.srt"),
+			@ApiImplicitParam(name = "audiofile", value = "audio file (*.mp3)", paramType = "query", required = true, dataType = "string", defaultValue = "example.mp3") })
 	@RequestMapping(value = "/combine", method = RequestMethod.GET)
 	public ModelAndView combineSubtiteAndAudio2MP4(@RequestParam(name = "subtitlefile") String subtitleFile,
 			@RequestParam(name = "audiofile") String audioFile) throws Exception {
@@ -147,12 +147,13 @@ public class ImageController {
 
 		return mv;
 	}
-	
+
 	@ApiOperation(value = "通过剧本协议生成视频", notes = "通过剧本协议生成视频")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "script", value = "script file (*.json)", paramType = "query", required = true, dataType = "string", defaultValue="example.json")})
+			@ApiImplicitParam(name = "script", value = "script file (*.json)", paramType = "query", required = true, dataType = "string", defaultValue = "example.json") })
 	@RequestMapping(value = "/video", method = RequestMethod.GET)
-	public ModelAndView generateVideoByscenario(@RequestParam(name = "script") String scriptFile) throws Exception {
+	public ModelAndView generateVideoByscenario(@RequestParam(name = "script") String scriptFile)
+			throws HtmlRequestException {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("video.html");
 		int index = 1;
@@ -166,14 +167,19 @@ public class ImageController {
 			index++;
 		}
 		String strResultMsg = "根据剧本生成视频粗错啦！";
-		boolean b = JsonSriptParser.generateVideoByScriptFile(scriptFile);
+		boolean b = false;
+		try {
+			b = JsonSriptParser.generateVideoByScriptFile(scriptFile);
+		} catch (Exception e) {
+			throw new HtmlRequestException("请检查剧本文件是否正确. " + e.getMessage());
+		}
 		if (b) {
 			strResultMsg = "已为您合成视频文件，点击即可播放视频";
 		}
 		mv.addObject("message", strResultMsg);
 		return mv;
 	}
-	
+
 	private void verifyParameter(String time) throws Exception {
 		if (time == null || time.trim().length() == 0) {
 			throw new Exception("The time parameter is not specified.");
