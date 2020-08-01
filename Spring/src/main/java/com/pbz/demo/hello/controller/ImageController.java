@@ -98,7 +98,7 @@ public class ImageController {
 		if (number > 0) {
 			strResult = "字幕文件解析成功，已在服务器端生成字幕图片，访问http://localhost:8080/NumberOfPicture.jpg查看图片，生成的图片总数:" + number;
 			String command = System.getProperty("user.dir") + "/" + "jpg2video";
-			String[] args = { "360" };
+			String[] args = { "768", "512", "1" };
 			if (isWindows) {
 				command += ".bat";
 			} else {
@@ -128,7 +128,7 @@ public class ImageController {
 		if (number > 0) {
 			String suffix = isWindows ? ".bat" : ".sh";
 			String cmd = System.getProperty("user.dir") + "/" + "jpg2video" + suffix;
-			String[] args = { "360", "1" };
+			String[] args = { "800", "600", "1" };
 			ExecuteCommand.executeCommand(cmd, args);
 			String ffmpegPath = "ffmpeg";
 			if (!isWindows) {
