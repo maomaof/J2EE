@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.313]";
+﻿const tag = "[plx12.js_v0.343]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -11,6 +11,7 @@ function classFrame(){
   const _tag = "[classFrame]";
   var   xx = 0;
   var   yy = 0;
+  var _curNO = 0;
   var curFrame = new CFrame(0,1);
   var myGameArea = { 
     canvas : document.createElement("canvas"),
@@ -24,8 +25,9 @@ function classFrame(){
         this.interval = setInterval(updateGameArea, 20);
 
         this.canvas.addEventListener('mousedown', function (e) {
-              myGameArea.x = e.offsetX;//e.pageX;
-              myGameArea.y = e.offsetY;// e.pageY;  
+              var x = myGameArea.x = e.offsetX;//e.pageX;
+              var y = myGameArea.y = e.offsetY;// e.pageY;  
+              blo0.toCtxMousedown(x,y);
 
               if(e.button==2){                          
                     for(i in curFrame.objects){                   
@@ -73,16 +75,20 @@ function classFrame(){
   } 
   
   function CFrame(number,time){
+      var _NO = 0;
       this.number = number;
       this.time   = time;
       this.objects = [];
       this.backgroundColor = "123,45,200";
 
-      this.onDraw = function(){
-        var ctx = myGameArea.context;
-        ctx.fillStyle = "brown";
+      this.onDraw = function(ga){        
+
+        var ctx = ga.context;
+        ctx.fillStyle = "white";
         ctx.fillRect(0,0,20,20);
-        ctx.fillText(number, 30,10);
+        ctx.fillText( this.number++, 30,10);
+        ctx.fillText( ga.x, 130,10);
+
         for(i in this.objects){
           this.objects[i].update();
         }
@@ -94,7 +100,6 @@ function classFrame(){
           this.objects[i].x++;
           this.objects[i].text = "number="+this.number;
         }
-
       }
   }
 
@@ -105,31 +110,47 @@ function classFrame(){
     this.size = 50;
     this.color= "125,1,1"; 
 
-    var _c = clr;
-    var _x = x;
-    var _y = y;
+    var _c = clr; 
     var _width = width;
-    var _height = height;
+    var _height = height; 
+    this.test = function(_this,_oBass){ 
+      var dd = blo0.blDiv(_oBass,_oBass.id+"id_mdiv_test_in_sprite", "[Editor]", blGrey[5]);
+      dd.tb = blo0.blDiv(dd,dd.id+"tb","tb",blGrey[0]);
+      dd.v = blo0.blDiv(dd,dd.id+"v","",blGrey[0]);
+      const ta = blo0.blTextarea(dd.v,dd.v.id+"ta",_this.text,blGrey[1]);
+      ta.style.width = "95%";
+      ta.style.height = "95px";
+      var b1 = blo0.blBtn(dd.tb,dd.tb.id+"b1","[set: text]",blGrey[1]);
+      b1.onclick = function(){
+        _this.text = ta.value;
+      }
+
+      _on_off_div(null,dd);       
+    }
+    this.tellPlxMng = function(){ 
+        if(blo0.tellPlxMng){
+          blo0.tellPlxMng(this);
+        }
+    }
     this.reset = function(){ 
         _c= "red";
     }
     this.dbgShow = function(){ 
-      var ds = this.text;
-      ds += "[" + _x + "," + _y + "]";
+      var ds = this.text; 
       ds += "[" + this.x + "," + this.y + "] "; 
       bl$("id_4_debug").innerHTML = ds;
     }
     this.update = function(){ 
         var ctx = myGameArea.context;
         ctx.fillStyle = _c;
-        ctx.fillRect(_x, _y, _width, _height);
-        ctx.fillText(this.text, _x, _y);
+        ctx.fillRect(this.x, this.y, _width, _height);
+        ctx.fillText(this.text, this.x, this.y);
     }
     this.clicked = function(a) {
-      var myleft = _x;
-      var myright = _x + _width;
-      var mytop = _y;
-      var mybottom = _y + _height;
+      var myleft = this.x;
+      var myright = this.x + _width;
+      var mytop = this.y;
+      var mybottom = this.y + _height;
       var rClick = true;
             
       if ((mybottom < a.y) || (mytop > a.y) ||
@@ -137,14 +158,15 @@ function classFrame(){
       {
         rClick = false;
         if(_c == "yellow"){
-          this.x = _x = a.x;
-          this.y = _y = a.y;      
+          this.x =  a.x;
+          this.y =  a.y;      
         }
         _c = "red";        
       }
       else{
         rClick = true;
-        _c = "yellow";          
+        _c = "yellow";     
+        this.tellPlxMng();     
       } 
       return rClick;
     }; 
@@ -152,7 +174,12 @@ function classFrame(){
 
   function updateGameArea() {
     myGameArea.redrawStage();    
-    curFrame.onDraw();
+    curFrame.onDraw(myGameArea);
+    _curNO++;
+    var go = blo0.showFrame2PlxMng; 
+    if(go){   
+             go(_curNO,myGameArea);        
+    } 
     
   }
 
