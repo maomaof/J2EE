@@ -1,9 +1,10 @@
 ﻿ 
 blo0.blAjx(w,"nodelib/CPlay.js");    
 
-const tag = "[plx/p2.js_v0.132]";
+const tag = "[plx/p2.js_v0.143]";
 const b = bl$("plx_p2_btn"); 
-b.v = blo0.blMDiv(b.parentElement,tag,tag,333,1,55,55,blGrey[0]);
+b.v = blo0.blMDiv(b.parentElement,"id_4_MDiv_CPlay",tag,333,1,55,55,blGrey[0]);
+
 if(!b.v.parent){
     b.v.parent = bl$("id_mdiv_load_plxMng");
     b.v.parent.list.push(b.v);
@@ -29,6 +30,7 @@ s+='Your browser does not support HTML5 video. '
 s+='</video>';
 //*/
 
+b.v.v0 = blo0.blDiv(b.v,b.v.id+"v0","v0",blGrey[1]);
 b.v.v1 = blo0.blDiv(b.v,b.v.id+"v1",s,blGrey[1]);
 b.v.v2 = blo0.blDiv(b.v,"id_4_plx2_dbg2","v2",blGrey[2]);
 b.v.v2.showCurFrame = function(_ga){

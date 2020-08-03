@@ -1,6 +1,45 @@
-const tag = "[nodelib/CPlay.js_v0.134]";
+const tag = "[nodelib/CPlay.js_v0.155]";
+
+function CToolbar (){
+    var ui = bl$("id_4_MDiv_CPlay");
+    var x = 50;
+    var y = 50;
+    var w = 100;
+    var h = 20;
+    var listLayer = [];
+    this.show = function(ctx){
+        ctx.fillStyle = "yellow";
+        ctx.font = "20px Arial";
+        ctx.fillRect(x,y,w,h);
+        ctx.fillText(listLayer.length,x,y+55);
+        for(i in listLayer){
+            listLayer[i].show(ctx);
+        }
+    }
+    this.toCtxMousedown = function(_x,_y){
+        x = _x;
+        y = _y;
+    }
+    ui.b1 = blo0.blBtn(ui.tb,ui.tb+"plB1","plB1",blGrey[1]);
+    ui.b1.onclick = function(){    
+        var n = listLayer.length + 1;
+        var vl = blo0.blDiv(ui.v0,ui.v0.id+"vl"+n,"vl"+n,blGrey[3]);
+        vl.show = function(_n){
+            return function(ctx){
+                ctx.fillStyle = "brown";
+                ctx.font = "20px Arial";
+                var d = 60;
+                var x0 = 20;
+                ctx.fillRect(x0+x+d,y+d*_n,w,h);
+                ctx.fillText(_n,x0+x,y+d*_n);
+            }
+        }(n);
+        listLayer.push(vl);
+    }
+}
 
 function CPlay (){
+    var tb = new CToolbar();
     var c = "lightgreen";
     var fps = 30;
     var x = 10;
@@ -49,19 +88,21 @@ function CPlay (){
         ctx.fillStyle = c;
         ctx.font = "20px Arial";
         ctx.fillRect(x,y,w,h);
-        ctx.fillText( o.getMsg(), x,y);
+        ctx.fillText( o.getMsg(), x,y+10);
         if(x%2==0 ){
             o.showImg(ctx,x,y,50,50,"https://www.w3schools.com/graphics/smiley.gif");  
         }
         else{
             o.showImg(ctx,x,y,50,50,"https://www.w3schools.com/graphics/angry.gif"); 
         }
+        tb.show(ctx);
     };
     this.toCtxMousedown = function(_x,_y){
         x = _x;
         y = _y;
     }
-    blo0.regCtxMousedown(this);
+    //blo0.regCtxMousedown(this);
+    blo0.regCtxMousedown(tb);
 }
 
 blo0.p = new CPlay();   
