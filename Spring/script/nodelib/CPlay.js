@@ -1,5 +1,14 @@
-const tag = "[nodelib/CPlay.js_v0.155]";
+const tag = "[nodelib/CPlay.js_v0.211]";
 
+function CSprite (_x,_y,_w,_h){
+    var x=_x,y=_y,w=_w,h=_h;
+    this.show = function(ctx){
+        ctx.fillStyle = "blue";
+        ctx.font = "20px Arial";
+        ctx.fillRect(x,y,w,h);
+    }
+
+}
 function CToolbar (){
     var ui = bl$("id_4_MDiv_CPlay");
     var x = 50;
@@ -28,7 +37,8 @@ function CToolbar (){
         vl.b1 = blo0.blBtn(vl,vl.id+"b1","b1",blGrey[0]);
         vl.b1.onclick = function(){
             var p = this.parentElement;
-            p.listSprite.push(this);
+            var s = new CSprite(x+100+w+p.listSprite.length*60,y+n*60,20,20);
+            p.listSprite.push(s);
         }
 
         vl.show = function(_n,_vl){
@@ -40,6 +50,9 @@ function CToolbar (){
                 ctx.fillRect(x0+x+d,y+d*_n,w,h);
                 ctx.fillText(_n,x0+x,y+d*_n);
                 ctx.fillText(_vl.listSprite.length,100+ x0+x,y+d*_n);
+                for(i in _vl.listSprite){
+                    _vl.listSprite[i].show(ctx);
+                }
             }
         }(n,vl);
         listLayer.push(vl);
