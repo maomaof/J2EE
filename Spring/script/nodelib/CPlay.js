@@ -24,6 +24,11 @@ function CToolbar (){
     ui.b1.onclick = function(){    
         var n = listLayer.length + 1;
         var vl = blo0.blDiv(ui.v0,ui.v0.id+"vl"+n,"vl"+n,blGrey[3]);
+        vl.b1 = blo0.blBtn(vl,vl.id+"b1","b1",blGrey[0]);
+        vl.b1.onclick = function(){
+            alert(this.id);
+        }
+
         vl.show = function(_n){
             return function(ctx){
                 ctx.fillStyle = "brown";
