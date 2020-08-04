@@ -24,12 +24,14 @@ function CToolbar (){
     ui.b1.onclick = function(){    
         var n = listLayer.length + 1;
         var vl = blo0.blDiv(ui.v0,ui.v0.id+"vl"+n,"vl"+n,blGrey[3]);
+        vl.listSprite = [];
         vl.b1 = blo0.blBtn(vl,vl.id+"b1","b1",blGrey[0]);
         vl.b1.onclick = function(){
-            alert(this.id);
+            var p = this.parentElement;
+            p.listSprite.push(this);
         }
 
-        vl.show = function(_n){
+        vl.show = function(_n,_vl){
             return function(ctx){
                 ctx.fillStyle = "brown";
                 ctx.font = "20px Arial";
@@ -37,8 +39,9 @@ function CToolbar (){
                 var x0 = 20;
                 ctx.fillRect(x0+x+d,y+d*_n,w,h);
                 ctx.fillText(_n,x0+x,y+d*_n);
+                ctx.fillText(_vl.listSprite.length,100+ x0+x,y+d*_n);
             }
-        }(n);
+        }(n,vl);
         listLayer.push(vl);
     }
 }
