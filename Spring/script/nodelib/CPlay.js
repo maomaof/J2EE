@@ -1,15 +1,24 @@
-const tag = "[nodelib/CPlay.js_v0.212]";
+const tag = "[nodelib/CPlay.js_v0.223]";
 
 function CSprite (_x,_y,_w,_h){
     var x=_x,y=_y,w=_w,h=_h;
+	var clr = "blue";
+	var s = "[]";
     this.show = function(ctx){
-        ctx.fillStyle = "blue";
+        ctx.fillStyle = clr;
         ctx.font = "20px Arial";
         ctx.fillRect(x,y,w,h);
+	ctx.fillText(s,x,y);
     }
     this.toCtxMousedown = function(_x,_y){
-        x = _x;
-        y = _y;
+
+	    s = "["+_x+","+_y+"]";	    
+	    if(_x<x || _x>x+w || _y<y || _y>y+w){
+		    clr = "blue";
+	    }
+	    else{
+		    clr = "yellow";
+	    }
     }
 }
 function CToolbar (){
@@ -40,7 +49,7 @@ function CToolbar (){
         vl.b1 = blo0.blBtn(vl,vl.id+"b1","b1",blGrey[0]);
         vl.b1.onclick = function(){
             var p = this.parentElement;
-            var s = new CSprite(x+100+w+p.listSprite.length*60,y+n*60,20,20);
+            var s = new CSprite(x+100+w+p.listSprite.length*90,y+n*60,20,20);
             blo0.regCtxMousedown(s);
             p.listSprite.push(s);
         }
@@ -49,8 +58,9 @@ function CToolbar (){
             return function(ctx){
                 ctx.fillStyle = "brown";
                 ctx.font = "20px Arial";
-                var d = 60;
-                var x0 = 20;
+
+		    var d = 80;
+		    var x0 = 20;
                 ctx.fillRect(x0+x+d,y+d*_n,w,h);
                 ctx.fillText(_n,x0+x,y+d*_n);
                 ctx.fillText(_vl.listSprite.length,100+ x0+x,y+d*_n);
