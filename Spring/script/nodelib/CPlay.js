@@ -1,9 +1,10 @@
-const tag = "[nodelib/CPlay.js_v0.223]";
+const tag = "[nodelib/CPlay.js_v0.225]";
 
 function CSprite (_x,_y,_w,_h){
     var x=_x,y=_y,w=_w,h=_h;
 	var clr = "blue";
 	var s = "[]";
+	var n = 0;
     this.show = function(ctx){
         ctx.fillStyle = clr;
         ctx.font = "20px Arial";
@@ -12,12 +13,18 @@ function CSprite (_x,_y,_w,_h){
     }
     this.toCtxMousedown = function(_x,_y){
 
-	    s = "["+_x+","+_y+"]";	    
+	    s = "["+_x+","+_y+"] n=" + n;	    
 	    if(_x<x || _x>x+w || _y<y || _y>y+w){
 		    clr = "blue";
+		    if(n==1){
+			    n = 0;
+			    x=_x;
+			    y=_y;
+		    }
 	    }
 	    else{
 		    clr = "yellow";
+		    if(n==0) n=1;		    
 	    }
     }
 }
