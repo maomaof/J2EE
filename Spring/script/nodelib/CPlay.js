@@ -1,34 +1,6 @@
-const tag = "[nodelib/CPlay.js_v0.231]";
+const tag = "[nodelib/CPlay.js_v0.233]";
 
-function CSprite (_x,_y,_w,_h){
-    var x=_x,y=_y,w=_w,h=_h;
-	var clr = "blue";
-	var s = "[]";
-	var n = 0;
-    this.show = function(ctx){
-        ctx.fillStyle = clr;
-        ctx.font = "20px Arial";
-        ctx.fillRect(x,y,w,h);
-        
-	    s = "["+x+","+y+"] n=" + n;	 
-	    ctx.fillText(s,x,y);
-    }
-    this.toCtxMousedown = function(_x,_y){
-   
-	    if(_x<x || _x>x+w || _y<y || _y>y+w){
-		    clr = "blue";
-		    if(n==1){
-			    n = 0;
-			    x=_x;
-			    y=_y;
-		    }
-	    }
-	    else{
-		    clr = "yellow";
-		    if(n==0) n=1;		    
-	    }
-    }
-}
+
 function CToolbar (){
     var ui = bl$("id_4_MDiv_CPlay");
     var x = 50;
@@ -57,7 +29,7 @@ function CToolbar (){
         vl.b1 = blo0.blBtn(vl,vl.id+"b1","b1",blGrey[0]);
         vl.b1.onclick = function(){
             var p = this.parentElement;
-            var s = new CSprite(x+100+w+p.listSprite.length*90,y+n*60,20,20);
+            var s = new blo0.blprite(x+100+w+p.listSprite.length*90,y+n*60,20,20);
             blo0.regCtxMousedown(s);
             p.listSprite.push(s);
         }

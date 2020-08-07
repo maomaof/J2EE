@@ -46,13 +46,47 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0. 55 </h2>
+  <h2>script Editor v0. 114 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
   <p>mvn clean install</p>
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
+ blo0.blprite =  function  (_x,_y,_w,_h){
+   this.x = 0;
+   this.y = 0;
+    var x=_x,y=_y,w=_w,h=_h;
+	var clr = "blue";
+	var s = "[]";
+	var n = 0;
+    this.show = function(ctx){
+        ctx.fillStyle = clr;
+        ctx.font = "20px Arial";
+        ctx.fillRect(x,y,w,h);
+        
+	    s = "["+x+","+y+"] n=" + n;	 
+	    ctx.fillText(s,x,y);
+    }
+    this.toCtxMousedown = function(_x,_y){
    
+	    if(_x<x || _x>x+w || _y<y || _y>y+w){
+		    clr = "blue";
+		    if(n==1){
+			    n = 0;
+			    x=_x;
+          y=_y;
+          
+          this.x = _x;
+          this.y = _y;
+		    }
+	    }
+	    else{
+            blo0.tellPlxMng(this);
+		    clr = "yellow";
+		    if(n==0) n=1;		    
+	    }
+    }
+}
 blo0.ShowSprite2Div = function (oBoss,obj)
   {                 
         oBoss.innerHTML = "";

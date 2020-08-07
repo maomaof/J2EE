@@ -1,7 +1,7 @@
 ﻿ 
 blo0.blAjx(w,"nodelib/CPlay.js");    
 
-const tag = "[plx/p2.js_v0.143]";
+const tag = "[plx/p2.js_v0.145]";
 const b = bl$("plx_p2_btn"); 
 b.v = blo0.blMDiv(b.parentElement,"id_4_MDiv_CPlay",tag,333,1,55,55,blGrey[0]);
 
@@ -11,7 +11,7 @@ if(!b.v.parent){
     
     b.v.tellMe = function(_o){
         b.v.o = _o;
-        //b.v.tb.b1.onclick();
+        blo0.ShowSprite2Div(b.v.v2,b.v.o);
     }
     b.v.parent.listDivFrameMsg.push(b.v);
     b.v.showFrame = function(_f,_ga){ 
