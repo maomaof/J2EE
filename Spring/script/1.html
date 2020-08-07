@@ -46,12 +46,48 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0. 54 </h2>
+  <h2>script Editor v0. 55 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
   <p>mvn clean install</p>
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
+   
+blo0.ShowSprite2Div = function (oBoss,obj)
+  {                 
+        oBoss.innerHTML = "";
+        for(i in obj)
+		    { 
+            if (typeof obj[i] == "function"){
+                if("test"==i){
+                    var b = document.createElement("button");
+                      b.id = b.innerHTML = i;
+                      b.style.backgroundColor = "gray";              
+                      oBoss.appendChild(b); 
+                      b.onclick = function(_go,_o,_oBass){
+                          return function(){
+                            _go(_o,_oBass);
+                          }
+                      }(obj[i],obj,oBoss);
+                } 
+            } 
+            else{
+                var b = document.createElement("button");
+                  b.id = b.innerHTML = i;
+                  b.style.backgroundColor = "gray";              
+                  oBoss.appendChild(b); 
+    
+                var d = document.createElement("button");
+                  d.innerHTML = obj[i];
+                  d.style.border = "blue 1px solid";
+                  d.style.backgroundColor = "green";
+                  d.style.color = "yellow";
+                  oBoss.appendChild(d);         
+            }    
+		    }
+    }    
+
+
   blo0.myInit = function(){
     var v = "v0.13";
     var x = 10;
