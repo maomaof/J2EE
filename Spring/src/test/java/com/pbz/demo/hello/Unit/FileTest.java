@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -31,14 +33,30 @@ public class FileTest {
 	@Autowired
 	private FileController fileOperator = null;
 	
-	private static final String FILENAME_JSON = "saveJson2File.json";
-	private static final String FILENAME_AUDIO = "FJ2BRHEC0005877V.html"; 
-	private static final String FILENAME_UPLOAD = "uploadFile.txt";
-	private static final String DOWNLOAD_URL = "https://sports.163.com/20/0802/21/";
+	private static String FILENAME_JSON;
+	private static String FILENAME_UPLOAD;
+	private static String DOWNLOAD_URL;
+	private static String FILENAME_WEBPAGE; 
 	
 	@BeforeClass
 	public static void setup() throws Exception {
 
+		Properties properties=new Properties();  
+		InputStream inputstream = FileTest.class.getClassLoader().getResourceAsStream("config.properties");
+        properties.load(inputstream);  
+ 
+        FILENAME_JSON = properties.getProperty("jsonFileName");  
+        FILENAME_UPLOAD= properties.getProperty("uploadFileName");
+        FILENAME_WEBPAGE= properties.getProperty("webpageFileName");
+        DOWNLOAD_URL= properties.getProperty("downloadURL");   
+        
+		File jsonFile = new File(System.getProperty("user.dir") + "/" + FILENAME_JSON);
+		jsonFile.delete();
+		File htmlFile = new File(System.getProperty("user.dir") + "/" + FILENAME_WEBPAGE);
+		htmlFile.delete();
+		File tempFile = new File(System.getProperty("user.dir") + "/temp/" +  FILENAME_UPLOAD);
+		tempFile.delete();
+		tempFile.getParentFile().delete();	
 	}
 
 	@AfterClass
@@ -46,10 +64,8 @@ public class FileTest {
 		
 		File jsonFile = new File(System.getProperty("user.dir") + "/" + FILENAME_JSON);
 		jsonFile.delete();
-
-		File audioFile = new File(System.getProperty("user.dir") + "/" + FILENAME_AUDIO);
-		audioFile.delete();
-		
+		File htmlFile = new File(System.getProperty("user.dir") + "/" + FILENAME_WEBPAGE);
+		htmlFile.delete();
 		File tempFile = new File(System.getProperty("user.dir") + "/temp/" +  FILENAME_UPLOAD);
 		tempFile.delete();
 		tempFile.getParentFile().delete();	
@@ -74,20 +90,20 @@ public class FileTest {
 	@SuppressWarnings("unchecked")
 	public void TEST_downLoadFileToServer() throws Exception {
 
-		File audioFile = new File(System.getProperty("user.dir") + "/" + FILENAME_AUDIO);
+		File audioFile = new File(System.getProperty("user.dir") + "/" + FILENAME_WEBPAGE);
 
-		String url = DOWNLOAD_URL + FILENAME_AUDIO;//https://littleflute.github.io/english/NewConceptEnglish/Book2/5.mp3
+		String url = DOWNLOAD_URL + FILENAME_WEBPAGE;//https://littleflute.github.io/english/NewConceptEnglish/Book2/5.mp3
 		System.out.println("Begin test downLoadFileToServer");
 		Map<String, Object> respObject = (Map<String, Object>) fileOperator.downLoadFileToServer(url);
 
 		System.out.println(respObject.toString());
-		Assert.assertEquals(System.getProperty("user.dir") + "/" +FILENAME_AUDIO, respObject.get("pathOnServer").toString());
+		Assert.assertEquals(System.getProperty("user.dir") + "/" +FILENAME_WEBPAGE, respObject.get("pathOnServer").toString());
 		Assert.assertEquals(200, respObject.get("code"));
-		Assert.assertEquals(FILENAME_AUDIO, respObject.get("filename").toString());		
+		Assert.assertEquals(FILENAME_WEBPAGE, respObject.get("filename").toString());		
 		Assert.assertThat(respObject.get("message").toString(), containsString("文件下载成功"));
 
 		if (!audioFile.exists()) {
-			Assert.fail("Cannot found audio file:" + FILENAME_AUDIO);
+			Assert.fail("Cannot found html file:" + FILENAME_WEBPAGE);
 		}
 		System.out.println("End of test downLoadFileToServer");
 	}
@@ -143,7 +159,7 @@ public class FileTest {
 		
 		fileType = "html";
 		respObject = (Map<String, Object>) fileOperator.getResourceOnServer(fileType);
-		Assert.assertThat(respObject.get("resource").toString(), containsString(FILENAME_AUDIO));
+		Assert.assertThat(respObject.get("resource").toString(), containsString(FILENAME_WEBPAGE));
 		
 		fileType = "txt";
 		respObject = (Map<String, Object>) fileOperator.getResourceOnServer(fileType);
