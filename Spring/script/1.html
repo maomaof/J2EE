@@ -46,12 +46,43 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0. 114 </h2>
+  <h2>script Editor v0. 121 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
   <p>mvn clean install</p>
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
+  blo0.frameMD = function () {   
+        var v = blo0.blMD("id_4_MD_frame","xd",33,1,111,55,blGrey[0]);
+        v.v1 = blo0.blDiv(v,v.id+"v1","v1",blGrey[0]);
+        v.v1.style.overflow = "auto";
+        v.v1.style.width = "400px";
+        v.v1.style.height = "250px";
+        v.v1.v = blo0.blDiv(v.v1,v.v1.id+"v","",blGrey[2]);
+        v.v1.v.style.width = "11200px";
+        v.v1.v.style.height = "1250px";
+        v.v1.v.style.backgroundColor = "coral";
+        v.v1.v.style.float = "left";
+        var vf = blo0.blDiv(v.v1.v,v.v1.v.id+"vf","",blGrey[1]);
+        vf.l = [];
+
+        vf.style.float="left";
+        vf.style.width="100%";
+        vf.style.height="100%";
+
+
+        for(var i=0;i<101;i++){
+          var b = blo0.blBtn(vf,vf.id+"b"+i,"b",blGrey[1]);    
+            b.style.float="left";
+            b.style.width="20px";
+            vf.l.push(b);    
+            b.onclick = function(_this){
+              return function(){alert(_this.id)}
+            }(b);
+        }
+        return v;
+  }
+
  blo0.blprite =  function  (_x,_y,_w,_h){
    this.x = 0;
    this.y = 0;

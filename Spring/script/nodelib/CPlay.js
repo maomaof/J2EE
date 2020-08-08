@@ -1,4 +1,4 @@
-const tag = "[nodelib/CPlay.js_v0.233]";
+const tag = "[nodelib/CPlay.js_v0.252]";
 
 
 function CToolbar (){
@@ -24,7 +24,8 @@ function CToolbar (){
     ui.b1 = blo0.blBtn(ui.tb,ui.tb+"plB1","plB1",blGrey[1]);
     ui.b1.onclick = function(){    
         var n = listLayer.length + 1;
-        var vl = blo0.blDiv(ui.v0,ui.v0.id+"vl"+n,"vl"+n,blGrey[3]);
+        var vl = blo0.blDiv(ui.v0,ui.v0.id+"vl"+n,"vl"+n,blGrey[3]); 
+
         vl.listSprite = [];
         vl.b1 = blo0.blBtn(vl,vl.id+"b1","b1",blGrey[0]);
         vl.b1.onclick = function(){
@@ -50,7 +51,8 @@ function CToolbar (){
             }
         }(n,vl);
         listLayer.push(vl);
-    }
+    }  
+
 }
 
 function CPlay (){
