@@ -7,8 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -19,6 +23,7 @@ public final class JsonSriptParser {
 	private static final String subtitle_video_name = "vSubtitle.mp4";
 	private static final String final_video_name = "vFinal.mp4";
 	private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
+	private static List<Map<String, Object>> supperObjectsMapList = new ArrayList<Map<String, Object>>();
 
 	public static boolean generateVideoByScriptFile(String scriptFilePath) throws Exception {
 		String jsonString = new String(Files.readAllBytes(new File(scriptFilePath).toPath()));
@@ -37,7 +42,8 @@ public final class JsonSriptParser {
 	private static boolean generateVideo(String jsonString) throws Exception {
 		JSONObject jsonObj = new JSONObject(jsonString);
 		JSONObject requestObj = getJsonObjectbyName(jsonObj, "request");
-
+		supperObjectsMapList.clear();
+		initMap(requestObj);
 		String version = requestObj.getString("version");
 		System.out.println("剧本版本:" + version);
 		int width = requestObj.getInt("width");
@@ -122,6 +128,11 @@ public final class JsonSriptParser {
 								drawGraphic(obj, g);
 							}
 						}
+
+						List<JSONObject> objs = getSuperObjectsByframeNumber(index + 1);
+						for (JSONObject obj : objs) {
+							drawSupperObjects(obj, g, index + 1);
+						}
 						g.setColor(new Color(0, 0, 255));// 帧号颜色
 						g.setFont(new Font("黑体", Font.BOLD, 40));
 						g.drawString(Integer.toString(index + 1), width - 100, 50);// 显示帧号
@@ -160,6 +171,127 @@ public final class JsonSriptParser {
 		String[] cmds = { ffmpegPath, "-y", "-i", subtitle_video_name, "-i", tmpAudioFile, final_video_name };
 		boolean bRunScript = ExecuteCommand.executeCommand(cmds, null, new File("."), null);
 		return bRunScript;
+	}
+
+	private static void initMap(JSONObject requestObj) {
+		Iterator<String> keys = requestObj.keys();
+		while (keys.hasNext()) {
+			String key = keys.next();
+			if (key.equalsIgnoreCase("superObjects")) {
+				JSONArray objectsArray = (JSONArray) requestObj.get(key);
+				for (Object object : objectsArray) {
+					if (!(object instanceof JSONObject)) {
+						continue;
+					}
+					JSONObject superObj = (JSONObject) object;
+					supperObjectsMapList.add(superObj.toMap());
+				}
+			}
+		}
+	}
+
+	private static List<JSONObject> getSuperObjectsByframeNumber(int num) {
+		List<JSONObject> superObjects = new ArrayList<JSONObject>();
+		for (Map<String, Object> map : supperObjectsMapList) {
+			JSONObject jsonObj = new JSONObject(map);
+			String rangeValue = jsonObj.getString("frameRange");
+			String rangeArray[] = rangeValue.split(",");
+			String s = rangeArray[0].substring(1);
+			String e = rangeArray[1].substring(0, rangeArray[1].length() - 1);
+			int sf = Integer.parseInt(s);
+			int ef = Integer.parseInt(e);
+			System.out.println(sf + "," + ef);
+			if (num >= sf && num <= ef) {
+				superObjects.add(jsonObj);
+			}
+		}
+		return superObjects;
+	}
+
+	private static void drawSupperObjects(JSONObject jObj, Graphics2D gp2d, int number) {
+		String type = jObj.getString("type");
+
+		JSONObject attributeObj = jObj.getJSONObject("attribute");
+		int X0 = attributeObj.getInt("left");// 初始X0坐标
+		Color color = null;
+		if (attributeObj.has("color")) {
+			String cr = attributeObj.getString("color");
+			color = getColor(cr);
+		}
+		JSONObject actionObj = jObj.getJSONObject("action");
+		String actionTrace = actionObj.getString("trace"); // 目前只按照二次函数曲线来解析 Y=aX^2+bX+c
+		float step = actionObj.getFloat("step");
+
+		String rangeValue = jObj.getString("frameRange");
+		String rangeArray[] = rangeValue.split(",");
+		String startFrameNumber = rangeArray[0].substring(1);
+		int sfNum = Integer.parseInt(startFrameNumber);
+		float X = X0 + (number - sfNum) * step;
+		String parm[] = actionTrace.split("\\+");
+		float a = Float.parseFloat(parm[0].substring(2, parm[0].indexOf("*")));
+		float b = Float.parseFloat(parm[1].substring(0, parm[1].indexOf("*")));
+		float c = Float.parseFloat(parm[2]);
+		float Y = (float) (a * X * X + b * X + c);
+
+		if ("rayline".equalsIgnoreCase(type)) {
+			int right = attributeObj.getInt("right");
+			int bottom = attributeObj.getInt("bottom");
+			if (attributeObj.has("size")) {
+				float fSize = attributeObj.getFloat("size");
+				BasicStroke bs = new BasicStroke(fSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
+				gp2d.setStroke(bs);
+			}
+			gp2d.setColor(color);
+			gp2d.drawLine((int) X, (int) Y, right, bottom);
+
+		} else if ("line".equalsIgnoreCase(type)) {
+			int X2 = attributeObj.getInt("right");
+			int bottom = attributeObj.getInt("bottom");
+			int top = attributeObj.getInt("top");
+			float XX = X2 + (number - sfNum) * step;
+			float YY = (float) (a * XX * XX + b * XX + c + bottom - top);
+			if (attributeObj.has("size")) {
+				float fSize = attributeObj.getFloat("size");
+				BasicStroke bs = new BasicStroke(fSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
+				gp2d.setStroke(bs);
+			}
+			gp2d.setColor(color);
+			gp2d.drawLine((int) X, (int) Y, (int) XX, (int) YY);
+
+		} else if ("circle".equalsIgnoreCase(type)) {
+			int width = attributeObj.getInt("width");
+			int height = attributeObj.getInt("height");
+			gp2d.setColor(color);
+			gp2d.fillOval((int) X, (int) Y, width, height);
+		} else if ("rect".equalsIgnoreCase(type)) {
+			int width = attributeObj.getInt("width");
+			int height = attributeObj.getInt("height");
+			gp2d.setColor(color);
+			gp2d.fill3DRect((int) X, (int) Y, width, height, false);
+		} else if ("text".equalsIgnoreCase(type)) {
+			String content = attributeObj.getString("content");
+			int size = attributeObj.getInt("size");
+			gp2d.setColor(color);
+			Font font = new Font("黑体", Font.BOLD, size);
+			gp2d.setFont(font);
+			gp2d.drawString(content, X, Y);
+		} else if ("picture".equalsIgnoreCase(type)) {
+			String picFile = attributeObj.getString("name");
+			File imgFile = new File(picFile);
+			if (imgFile.exists()) {
+				Image img = null;
+				try {
+					img = ImageIO.read(imgFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				int w = attributeObj.getInt("width");
+				int h = attributeObj.getInt("heigth");
+				gp2d.drawImage(img, (int) X, (int) Y, w, h, null);
+			} else {
+				System.out.println("WARNING: The file " + imgFile.getName() + " doesn't exist!");
+			}
+		}
 	}
 
 	private static void drawGraphic(JSONObject jObj, Graphics2D gp2d) {
