@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.54] ";
+﻿const tag = "[nodelib/l1.js_v0.0.113] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -16,6 +16,7 @@ o.resource = [
 
 var myJSON = JSON.stringify(o);
     
+console.log(tag );
 
 exports.f1 = function(req,res){
   console.log(tag + req.url);
@@ -62,7 +63,8 @@ exports.f1 = function(req,res){
     });
   }
   else if (r1 == '/1.html'
-  || req.url == '/nodelib/CPlay.js'
+    || req.url == '/2.html'
+    || req.url == '/nodelib/CPlay.js'
     || req.url == '/plxScriptEditor.js'
     || req.url == '/plx1.js'
     || req.url == '/plx11.js'
@@ -102,7 +104,8 @@ exports.f1 = function(req,res){
   } 
   else {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<a href="1.html">1.html</a>');
+    res.write('<a href="1.html">1.html</a> ');
+    res.write('<a href="2.html">2.html</a> ');
     res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
     res.write('<input type="file" name="filetoupload"><br>');
     res.write('<input type="submit">');
