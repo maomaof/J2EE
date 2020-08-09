@@ -1,0 +1,160 @@
+{
+    "request": {
+        "version": "0.0.4", 
+        "width": 1024, 
+        "height": 768, 
+        "music": "1.mp3", 
+        "rate": "3", 
+        "frames": [
+            {
+                "number": "1", 
+                "time": 100, 
+                "objects": [
+                    {
+                        "graphic": "line", 
+                        "attribute": {
+                            "left": 100, 
+                            "top": 100, 
+                            "right": 100, 
+                            "bottom": 300, 
+                            "size": 5.5, 
+                            "color": "255,0,255"
+                        }
+                    }, 
+                    {
+                        "text": "超级帧穿越对象演示", 
+                        "x": 200, 
+                        "y": 220, 
+                        "size": 60, 
+                        "color": "107,142,35"
+                    }
+                ], 
+                "backgroundColor": "100,100,100"
+            }
+        ], 
+        "superObjects": [
+            {
+                "type": "circle", 
+                "attribute": {
+                    "left": 0, 
+                    "top": 200, 
+                    "width": 50, 
+                    "height": 50, 
+                    "color": "0,255,0"
+                }, 
+                "frameRange": "(10,50)", 
+                "action": {
+                    "trace": "y=0.005*x*x+0.005*x+0.01", 
+                    "step": 10
+                }
+            }, 
+            {
+                "type": "circle", 
+                "attribute": {
+                    "left": 20, 
+                    "top": 200, 
+                    "width": 100, 
+                    "height": 100, 
+                    "color": "0,255,255"
+                }, 
+                "frameRange": "(50,100)", 
+                "action": {
+                    "trace": "y=0*x*x+2.0*x+10", 
+                    "step": 10
+                }
+            }, 
+            {
+                "type": "circle", 
+                "attribute": {
+                    "left": 20, 
+                    "top": 200, 
+                    "width": 100, 
+                    "height": 100, 
+                    "color": "255,250,0"
+                }, 
+                "frameRange": "(2,100)", 
+                "action": {
+                    "trace": "y=0*x*x+0*x+300", 
+                    "step": 10
+                }
+            }, 
+            {
+                "type": "rayline", 
+                "attribute": {
+                    "left": 100, 
+                    "top": 100, 
+                    "right": 100, 
+                    "bottom": 300, 
+                    "size": 5.5, 
+                    "color": "0,199,140"
+                }, 
+                "frameRange": "(2,100)", 
+                "action": {
+                    "trace": "y=0*x*x+0*x+200", 
+                    "step": 10
+                }
+            }, 
+            {
+                "type": "line", 
+                "attribute": {
+                    "left": 100, 
+                    "top": 100, 
+                    "right": 100, 
+                    "bottom": 300, 
+                    "size": 5.5, 
+                    "color": "199,97,20"
+                }, 
+                "frameRange": "(2,100)", 
+                "action": {
+                    "trace": "y=0*x*x+0*x+200", 
+                    "step": 10
+                }
+            }, 
+            {
+                "type": "rect", 
+                "attribute": {
+                    "left": 1000, 
+                    "top": 400, 
+                    "width": 60, 
+                    "height": 60, 
+                    "color": "142,28,124"
+                }, 
+                "frameRange": "(2,100)", 
+                "action": {
+                    "trace": "y=0*x*x+1*x+-400", 
+                    "step": -10
+                }
+            }, 
+            {
+                "type": "text", 
+                "attribute": {
+                    "left": 50, 
+                    "top": 500, 
+                    "size": 50, 
+                    "content": "漂泊者乐园是个好地方", 
+                    "color": "200,182,193"
+                }, 
+                "frameRange": "(2,100)", 
+                "action": {
+                    "trace": "y=0*x*x+1*x+0", 
+                    "step": 10
+                }
+            }, 
+            {
+                "type": "picture", 
+                "attribute": {
+                    "name": "bb.gif", 
+                    "left": 900, 
+                    "top": 500, 
+                    "width": 80, 
+                    "heigth": 80
+                }, 
+                "frameRange": "(50,100)", 
+                "action": {
+                    "trace": "y=0*x*x+0*x+600", 
+                    "step": -10
+                }
+            }
+        ]
+    }
+}
