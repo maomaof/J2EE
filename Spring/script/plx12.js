@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.343]";
+﻿const tag = "[plx12.js_v0.421]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -12,8 +12,15 @@ function classFrame(){
   var   xx = 0;
   var   yy = 0;
   var _curNO = 0;
-  var curFrame = new CFrame(0,1);
+  var curFrame = new CFrame(0,1);  
+  var bXdTest = false;
   var myGameArea = { 
+    setXdTextOnOff: function(){
+      bXdTest = bXdTest?false:true;
+    },
+    runDbg: function(){
+        blo0.ondraw(this);  
+    },
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 480;
@@ -71,6 +78,16 @@ function classFrame(){
     setWH: function(_w,_h){
       this.canvas.width = _w;
       this.canvas.height = _h;
+    },
+    xdText: function(_txt,_x,_y,_w,_h,_c1,_c2){
+        if(!bXdTest) return;
+        var ctx = this.context;
+        var d = 22;
+        ctx.fillStyle = _c1;
+        ctx.fillRect(_x-d,_y-d,_w,_h);
+        
+        ctx.fillStyle = _c2;
+        ctx.fillText(_txt, _x,_y);
     }
   } 
   
@@ -173,14 +190,16 @@ function classFrame(){
   }
 
   function updateGameArea() {
-    myGameArea.redrawStage();    
-    curFrame.onDraw(myGameArea);
+    myGameArea.redrawStage(); 
+    myGameArea.runDbg();
+
+    curFrame.onDraw(myGameArea);    
+
     _curNO++;
     var go = blo0.showFrame2PlxMng; 
     if(go){   
              go(_curNO,myGameArea);        
     } 
-    blo0.ondraw();
     
   }
 
@@ -192,6 +211,12 @@ function classFrame(){
     var btn_760x480 = blo0.blBtn(tb,tb.id + "btn_760x480","760x480",blGrey[2]);
     var btn_1280x1024 = blo0.blBtn(tb,tb.id + "btn_1280x1024","1280x1024",blGrey[2]);
     var btn_createJSON = blo0.blBtn(tb,tb.id + "btn_createJSON","createJSON",blGrey[2]);
+    var btn_setXdText = blo0.blBtn(tb,tb.id + "btn_setXdText","dbg",blGrey[2]);
+    btn_setXdText.onclick = function(){
+      myGameArea.setXdTextOnOff();
+      var b = this;
+      b.style.background = b.style.background==blColor[4]?blGrey[5]:blColor[4];  
+    }
     
    
     var d1 = blo0.blDiv(v1, "id_4_debug","d1",blGrey[3]);

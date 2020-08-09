@@ -46,7 +46,7 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0. 123 </h2>
+  <h2>script Editor v0.142 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
   <p>mvn clean install</p>
   <p>bash jpg2video.sh 360 1</p>
@@ -56,10 +56,11 @@ body {
     if(!blo0.ondrawList) blo0.ondrawList = [];
     blo0.ondrawList.push(o);
   }
-  blo0.ondraw = function(){
+  blo0.ondraw = function(_ga){
+    _ga.xdText("blo0.ondraw v0.11",50,50,100,50,"lightblue","yellow");
     for(i in blo0.ondrawList){
-      if(blo0.ondrawList[i].ondraw){
-        blo0.ondrawList[i].ondraw();
+      if(blo0.ondrawList[i].fnLetHostDrawMe){
+        blo0.ondrawList[i].fnLetHostDrawMe(_ga);
       }
     }
   }
@@ -101,14 +102,15 @@ body {
         vDbg.v.style.float="left";
         if(!vDbg.ondraw){
           blo0.reg_on_draw(vDbg);
-          vDbg.ondraw = function(){
+          vDbg.fnLetHostDrawMe = function(_ga){
+            _ga.xdText(vDbg.id,222,50,100,50,"lightgreen","red");
             var dms = 0;
             if(v.n){
               var dNow = new Date();
               dms = dNow.getTime() - v.ms0;
             }
             var fNo = v.getFrameNo(dms);
-            var r = vf.ondraw(fNo);
+            var r = vf.ondraw(fNo,_ga);
             vDbg.v.innerHTML = v.n + "_"+ dms + " r="+ r ;
           }
         }
@@ -116,9 +118,10 @@ body {
         var vf = blo0.blDiv(v.v1.v,v.v1.v.id+"vf","",blGrey[1]);
         if(!vf.l){
             vf.l = [];
-            vf.ondraw = function(n){ 
+            vf.ondraw = function(n,_ga){ 
+              _ga.xdText("vfNo."+n,100,100,100,100,"lightblue","yellow");
               for(i in vf.l){
-                vf.l[i].ondraw(n);
+                vf.l[i].ondraw(n,_ga);
               }
               return n;
             }
@@ -130,7 +133,7 @@ body {
 
 
         for(var i=0;i<101;i++){
-          var b = blo0.blBtn(vf,vf.id+"b"+i,"b",blGrey[1]);    
+          var b = blo0.blBtn(vf,vf.id+"b"+i,i,blGrey[1]);    
             b.style.float="left";
             b.style.width="20px";
             b.i = i + 1;
@@ -138,9 +141,10 @@ body {
               return function(){vDbg.v.innerHTML = _this.id;}
             }(b);
             b.ondraw = function(_this){
-              return function(n){
+              return function(n,_ga){
                 if(Math.floor(n)==_this.i){
-                  _this.style.backgroundColor="yellow";
+                  _this.style.backgroundColor="yellow";                 
+                  _ga.xdText(_this.i,200,200,50,50,blGrey[0],"red");
                 }
                 else{
                   _this.style.backgroundColor="grey";
