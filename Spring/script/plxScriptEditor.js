@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.231]";
+const tag = "[plxScriptEditor.js_v0.0.232]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
@@ -49,6 +49,7 @@ d.tb.b1.onclick = function(){
 		var btnV3 = blo0.blBtn(d.v0, d.v0.id+ "b3", "lh.V1", blGrey[2]);
 		var btnV4 = blo0.blBtn(d.v0, d.v0.id+ "b4", "lh.V2", blGrey[2]);
 		var btnPlx1 = blo0.blBtn(d.v0, d.v0.id+ "b5", "plx1", blGrey[2]);
+		var btnPlx2 = blo0.blBtn(d.v0, d.v0.id+ "b6", "plx2", blGrey[2]);
 		var v = blo0.blDiv(d.v0, d.v0.id + "v", "", blGrey[1]); 
 		var ta = blo0.blTextarea(v, "id_ta_4_script_editor" , "xd", blGrey[2]);  
 		ta.style.width = "98%";
@@ -74,6 +75,12 @@ d.tb.b1.onclick = function(){
 			_on_off_div(this,btnPlx1.v);
 			var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];   
 		}			 
+		btnPlx2.onclick = function(){ 
+				var v = blo0.frameMD();
+				var b = this;
+				_on_off_div(b,v);
+				b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];   
+		}
 	}
 	_on_off_div(this,d.v0);
 	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      

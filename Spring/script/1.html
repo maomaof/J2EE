@@ -46,12 +46,182 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0. 54 </h2>
+  <h2>script Editor v0. 123 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
   <p>mvn clean install</p>
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
+  blo0.reg_on_draw = function (o) { 
+    if(!blo0.ondrawList) blo0.ondrawList = [];
+    blo0.ondrawList.push(o);
+  }
+  blo0.ondraw = function(){
+    for(i in blo0.ondrawList){
+      if(blo0.ondrawList[i].ondraw){
+        blo0.ondrawList[i].ondraw();
+      }
+    }
+  }
+  blo0.frameMD = function () {   
+        var v = blo0.blMD("id_4_MD_frame","xd",33,1,222,55,blGrey[0]);
+        v.v1 = blo0.blDiv(v,v.id+"v1","v1",blGrey[0]);
+        v.v1.style.overflow = "auto";
+        v.v1.style.width = "400px";
+        v.v1.style.height = "250px";
+        v.v1.v = blo0.blDiv(v.v1,v.v1.id+"v","",blGrey[2]);
+        v.v1.v.style.width = "11200px";
+        v.v1.v.style.height = "1250px";
+        v.v1.v.style.backgroundColor = "coral";
+        v.v1.v.style.float = "left";
+
+        
+        v.n = 0;
+        v.ms0 = 0;
+        v.fps = 3;
+        v.getFrameNo = function(dms){
+          var dt = 1000/v.fps;
+          return dms/dt;
+        }
+        
+        var tb = blo0.blDiv(v.v1.v,v.v1.v.id+"tb","tb","grey");
+        tb.b1 = blo0.blBtn(tb,tb.id+"b1","play",blGrey[0]);
+        tb.b1.style.float="left";
+        tb.b1.onclick = function(){
+          if(v.n==0) {
+            v.n=1;
+            this.innerHTML = "stop";
+            var d = new Date();
+            v.ms0 = d.getTime();
+          }
+          else if(v.n==1) {v.n=0;this.innerHTML = "play";} 
+        }
+        var vDbg = blo0.blDiv(v.v1.v,v.v1.v.id+"vDbg","vDbg","lightgreen");
+        vDbg.v = blo0.blDiv(vDbg,vDbg.id+"v","v",blGrey[1]);
+        vDbg.v.style.float="left";
+        if(!vDbg.ondraw){
+          blo0.reg_on_draw(vDbg);
+          vDbg.ondraw = function(){
+            var dms = 0;
+            if(v.n){
+              var dNow = new Date();
+              dms = dNow.getTime() - v.ms0;
+            }
+            var fNo = v.getFrameNo(dms);
+            var r = vf.ondraw(fNo);
+            vDbg.v.innerHTML = v.n + "_"+ dms + " r="+ r ;
+          }
+        }
+
+        var vf = blo0.blDiv(v.v1.v,v.v1.v.id+"vf","",blGrey[1]);
+        if(!vf.l){
+            vf.l = [];
+            vf.ondraw = function(n){ 
+              for(i in vf.l){
+                vf.l[i].ondraw(n);
+              }
+              return n;
+            }
+        }
+
+        vf.style.float="left";
+        vf.style.width="100%";
+        vf.style.height="20px";
+
+
+        for(var i=0;i<101;i++){
+          var b = blo0.blBtn(vf,vf.id+"b"+i,"b",blGrey[1]);    
+            b.style.float="left";
+            b.style.width="20px";
+            b.i = i + 1;
+            b.onclick = function(_this){
+              return function(){vDbg.v.innerHTML = _this.id;}
+            }(b);
+            b.ondraw = function(_this){
+              return function(n){
+                if(Math.floor(n)==_this.i){
+                  _this.style.backgroundColor="yellow";
+                }
+                else{
+                  _this.style.backgroundColor="grey";
+                } 
+              }
+            }(b);
+            vf.l.push(b);    
+        }
+        return v;
+  }
+
+ blo0.blprite =  function  (_x,_y,_w,_h){
+   this.x = 0;
+   this.y = 0;
+    var x=_x,y=_y,w=_w,h=_h;
+	var clr = "blue";
+	var s = "[]";
+	var n = 0;
+    this.show = function(ctx){
+        ctx.fillStyle = clr;
+        ctx.font = "20px Arial";
+        ctx.fillRect(x,y,w,h);
+        
+	    s = "["+x+","+y+"] n=" + n;	 
+	    ctx.fillText(s,x,y);
+    }
+    this.toCtxMousedown = function(_x,_y){
+   
+	    if(_x<x || _x>x+w || _y<y || _y>y+w){
+		    clr = "blue";
+		    if(n==1){
+			    n = 0;
+			    x=_x;
+          y=_y;
+          
+          this.x = _x;
+          this.y = _y;
+		    }
+	    }
+	    else{
+            blo0.tellPlxMng(this);
+		    clr = "yellow";
+		    if(n==0) n=1;		    
+	    }
+    }
+}
+blo0.ShowSprite2Div = function (oBoss,obj)
+  {                 
+        oBoss.innerHTML = "";
+        for(i in obj)
+		    { 
+            if (typeof obj[i] == "function"){
+                if("test"==i){
+                    var b = document.createElement("button");
+                      b.id = b.innerHTML = i;
+                      b.style.backgroundColor = "gray";              
+                      oBoss.appendChild(b); 
+                      b.onclick = function(_go,_o,_oBass){
+                          return function(){
+                            _go(_o,_oBass);
+                          }
+                      }(obj[i],obj,oBoss);
+                } 
+            } 
+            else{
+                var b = document.createElement("button");
+                  b.id = b.innerHTML = i;
+                  b.style.backgroundColor = "gray";              
+                  oBoss.appendChild(b); 
+    
+                var d = document.createElement("button");
+                  d.innerHTML = obj[i];
+                  d.style.border = "blue 1px solid";
+                  d.style.backgroundColor = "green";
+                  d.style.color = "yellow";
+                  oBoss.appendChild(d);         
+            }    
+		    }
+    }    
+
+
   blo0.myInit = function(){
     var v = "v0.13";
     var x = 10;

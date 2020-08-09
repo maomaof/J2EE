@@ -180,6 +180,7 @@ function classFrame(){
     if(go){   
              go(_curNO,myGameArea);        
     } 
+    blo0.ondraw();
     
   }
 
