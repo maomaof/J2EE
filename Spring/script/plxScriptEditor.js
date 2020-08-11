@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.232]";
+const tag = "[plxScriptEditor.js_v0.0.233]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
