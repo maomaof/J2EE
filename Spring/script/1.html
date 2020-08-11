@@ -80,6 +80,7 @@ body {
         v.fps = 3;
         v.allFrames = v.duration*v.fps;        
 
+	v.nSel = 1;  
 
         v.v1 = blo0.blDiv(v,v.id+"v1","v1",blGrey[0]);
         v.v1.style.overflow = "auto";
@@ -134,7 +135,8 @@ body {
               var dNow = new Date();
               dms = dNow.getTime() - v.ms0;
             }
-            v.fNo = v.getFrameNo(dms);
+	    if(v.n==1)             v.fNo = v.getFrameNo(dms);
+            else v.fNo = v.nSel;
             var r = vf.ondraw(v.fNo,_ga);
             vDbg.v.innerHTML = v.n + "_"+ dms + " r="+ r ;
           }
@@ -164,14 +166,16 @@ body {
 
 
         for(var i=0;i<v.allFrames;i++){
-          var b = blo0.blBtn(vf,vf.id+"b"+i,i,blGrey[1]);    
+          var b = blo0.blBtn(vf,vf.id+"b"+i,i+1,blGrey[1]);    
             b.style.float="left";
             b.style.width="20px";
             b.i = i + 1;
             b.listSrites = [];
             b.markText = "x";
             b.onclick = function(_this){
-              return function(){vDbg.v.innerHTML = _this.id;}
+              return function(){
+		      v.nSel = _this.i;
+	      }
             }(b);
             b.drawSprites = function(_this){
               return function(n,_ga){
