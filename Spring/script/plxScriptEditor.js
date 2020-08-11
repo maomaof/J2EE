@@ -76,6 +76,14 @@ d.tb.b1.onclick = function(){
 			var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];   
 		}			 
 		btnPlx2.onclick = function(){ 
+				if(!this.player){
+					var sss = '<video id="vPlayer" width="180" height="1" controls>';
+					sss+= '<source src="1.mp3" type="video/mp4">';
+					sss+='Your browser does not support HTML5 video. '
+					sss+='</video>';
+					this.vPlayer = blo0.blDiv(this.parentElement,this.parentElement.id+"vPlayer",sss,"lightblue");
+				}
+
 				var v = blo0.frameMD();
 				var b = this;
 				_on_off_div(b,v);

@@ -1,4 +1,4 @@
-﻿const tag = "[plx12.js_v0.422]";
+﻿const tag = "[plx12.js_v0.424]";
 var v1 = bl$("id_div_4_Plx1_v1");
 v1.innerHTML = tag+new Date;
 //* 
@@ -89,7 +89,7 @@ function classFrame(){
         ctx.fillStyle = _c2;
         ctx.fillText(_txt, _x,_y);
     },
-    drawListOfSprites: function(_i,_l){
+    drawListOfSprites: function(_sp){
       var ctx = this.context; 
       ctx.fillStyle = "green";
       var x = 50;
@@ -98,9 +98,11 @@ function classFrame(){
       var h = 100;
       ctx.font= 33 + "px Comic Sans MS";
       ctx.fillRect(x,y,w,h);
-      ctx.fillStyle = "red";
-      var s = _i + ": " + _l.length;
+      ctx.fillStyle = "white";
+      var s = _sp.i + ": " + _sp.listSrites.length;
       ctx.fillText(s, x,y);
+
+      ctx.fillText(_sp.markText, x+150,y);
 
     }
   } 
@@ -145,7 +147,7 @@ function classFrame(){
     var _width = width;
     var _height = height; 
     this.test = function(_this,_oBass){ 
-      var dd = blo0.blDiv(_oBass,_oBass.id+"id_mdiv_test_in_sprite", "[Editor]", blGrey[5]);
+      var dd = blo0.blDiv(_oBass,_oBass.id+"id_mdiv_test_in-sprite", "[Editor]", blGrey[5]);
       dd.tb = blo0.blDiv(dd,dd.id+"tb","tb",blGrey[0]);
       dd.v = blo0.blDiv(dd,dd.id+"v","",blGrey[0]);
       const ta = blo0.blTextarea(dd.v,dd.v.id+"ta",_this.text,blGrey[1]);
