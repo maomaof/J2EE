@@ -46,7 +46,7 @@ body {
 </div>
 
 <div style="padding-left:16px">
-  <h2>script Editor v0.144 </h2>
+  <h2>script Editor v0.151 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
  
   <p> mvn clean install -DskipTests  <br>
@@ -69,6 +69,15 @@ body {
   }
   blo0.frameMD = function () {   
         var v = blo0.blMD("id_4_MD_frame","xd",33,1,222,55,blGrey[0]);
+        var sss = '<video id="vPlayer" width="180" height="1" controls>';
+        sss+= '<source src="1.mp3" type="video/mp4">';
+        sss+='Your browser does not support HTML5 video. '
+        sss+='</video>';
+        v.vPlayer = blo0.blDiv(v,v.id+"vPlayer",sss,blGrey[1]);
+        var p = bl$("vPlayer");
+        p.controls = false;
+
+
         v.v1 = blo0.blDiv(v,v.id+"v1","v1",blGrey[0]);
         v.v1.style.overflow = "auto";
         v.v1.style.width = "400px";
@@ -89,17 +98,30 @@ body {
         }
         
         var tb = blo0.blDiv(v.v1.v,v.v1.v.id+"tb","tb","grey");
-        tb.b1 = blo0.blBtn(tb,tb.id+"b1","play",blGrey[0]);
-        tb.b1.style.float="left";
-        tb.b1.onclick = function(){
+        tb.btnPlay = blo0.blBtn(tb,tb.id+"btnPlay","Play",blGrey[0]);
+        tb.btnPlay.style.float="left";
+        tb.btnPlay.onclick = function(){
           if(v.n==0) {
             v.n=1;
             this.innerHTML = "stop";
             var d = new Date();
             v.ms0 = d.getTime();
+
+            p.currentTime = 0;
+            p.play();
           }
-          else if(v.n==1) {v.n=0;this.innerHTML = "play";} 
+          else if(v.n==1) {
+            v.n=0;this.innerHTML = "play";
+            p.pause();
+          } 
         }
+        
+        tb.btnMark = blo0.blBtn(tb,tb.id+"btnMark","mark",blGrey[0]);
+        tb.btnMark.style.float="left";
+        tb.btnMark.onclick = function(){
+          alert(1);
+        }
+
         var vDbg = blo0.blDiv(v.v1.v,v.v1.v.id+"vDbg","vDbg","lightgreen");
         vDbg.v = blo0.blDiv(vDbg,vDbg.id+"v","v",blGrey[1]);
         vDbg.v.style.float="left";
@@ -124,7 +146,7 @@ body {
             vf.ondraw = function(n,_ga){ 
               _ga.xdText("vfNo."+n,100,100,100,100,"lightblue","yellow");
               for(i in vf.l){
-                vf.l[i].ondraw(n,_ga);
+                vf.l[i].drawSprites(n,_ga);
               }
               return n;
             }
@@ -140,14 +162,16 @@ body {
             b.style.float="left";
             b.style.width="20px";
             b.i = i + 1;
+            b.listSrites = [];
             b.onclick = function(_this){
               return function(){vDbg.v.innerHTML = _this.id;}
             }(b);
-            b.ondraw = function(_this){
+            b.drawSprites = function(_this){
               return function(n,_ga){
                 if(Math.floor(n)==_this.i){
                   _this.style.backgroundColor="yellow";                 
                   _ga.xdText(_this.i,200,200,50,50,blGrey[0],"red");
+                  _ga.drawListOfSprites(_this.i,_this.listSrites);
                 }
                 else{
                   _this.style.backgroundColor="grey";

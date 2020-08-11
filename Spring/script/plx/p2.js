@@ -1,7 +1,7 @@
 ﻿ 
 blo0.blAjx(w,"nodelib/CPlay.js");    
 
-const tag = "[plx/p2.js_v0.145]";
+const tag = "[plx/p2.js_v0.151]";
 const b = bl$("plx_p2_btn"); 
 b.v = blo0.blMDiv(b.parentElement,"id_4_MDiv_CPlay",tag,333,1,55,55,blGrey[0]);
 
@@ -24,14 +24,16 @@ b.v.style.width = "300px";
 b.v.tb = blo0.blDiv(b.v,b.v.id+"tb","tb",blGrey[0]);
 
 //*
-var s = '<video id="myVideo" width="180" height="120" controls>';
-s+= '<source src="1.mp3" type="video/mp4">';
-s+='Your browser does not support HTML5 video. '
-s+='</video>';
+var sss = '<video id="myVideo" width="180" height="120" controls>';
+sss+= '<source src="1.mp3" type="video/mp4">';
+sss+='Your browser does not support HTML5 video. '
+sss+='</video>';
 //*/
 
 b.v.v0 = blo0.blDiv(b.v,b.v.id+"v0","v0",blGrey[1]);
-b.v.v1 = blo0.blDiv(b.v,b.v.id+"v1",s,blGrey[1]);
+b.v.v1 = blo0.blDiv(b.v,b.v.id+"v1",sss,blGrey[1]);
+var p = bl$("myVideo");
+p.controls = false;
 b.v.v2 = blo0.blDiv(b.v,"id_4_plx2_dbg2","v2",blGrey[2]);
 b.v.v2.showCurFrame = function(_ga){
     var ctx = _ga.context;
@@ -60,12 +62,19 @@ b.v.tb.bPlay.onclick = function(){
         this.innerHTML = "Play";
         blo0.p.toStop();        
         b.v.sf = null;
+        var p = bl$("myVideo");
+        p.pause();
     }
     else{
         this.b = true;
         this.innerHTML = "Stop"; 
         blo0.p.toPlay();       
         b.v.sf = blo0.p.toShowCurFrame; 
+
+        
+        var p = bl$("myVideo");
+        p.currentTime = 0;
+        p.play();
     }
 }  
 
