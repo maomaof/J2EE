@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.311]";
+const tag = "[plxScriptEditor.js_v0.0.312]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
@@ -36,7 +36,7 @@ d.tb.btnScriptEditor.onclick = function(){
 		btnPlx1.onclick = function(){
 			if(!btnPlx1.v)
 			{
-				btnPlx1.v = blo0.blMDiv(d.v0,"id_div_4_Plx1","plx1.v0.13",200,100,800,600,blGrey[0]);
+				btnPlx1.v = blo0.blMDiv(d.v0,"id_div_4_Plx1","plx1.v0.14",200,120,800,600,blGrey[0]);
 				//blo0.blScript( "id_js_plx1_script_editor" ,"plx1.js");
 				var w = {};	w._2do = function(txt){		eval(txt);}
 				blo0.blAjx(w, "plx1.js" );
