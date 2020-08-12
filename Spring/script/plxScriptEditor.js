@@ -1,13 +1,17 @@
-const tag = "[plxScriptEditor.js_v0.0.253]";
+const tag = "[plxScriptEditor.js_v0.0.311]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
-d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]); 
-d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
-d.tb.b3_upload 		= blo0.blBtn(d.tb, d.tb.id+ "b3", "b3_uploadFile", blGrey[2]); 
-d.tb.b4_uploadJson 	= blo0.blBtn(d.tb, d.tb.id+ "b4", "b4_uploadJson", blGrey[2]); 
+d.tb.btnScriptEditor 		= blo0.blBtn(d.tb, d.tb.id+ "btnScriptEditor", "scriptEditor", blGrey[2]); 
+d.tb.btnScriptEditor.style.float = "left";
+d.tb.btnServer 		= blo0.blBtn(d.tb, d.tb.id+ "btnServer", "server", blGrey[2]); 
+d.tb.btnServer.style.float = "left";
+d.tb.b3_upload 		= blo0.blBtn(d.tb, d.tb.id+ "b3", "uploadFile", blGrey[2]);  
+d.tb.b3_upload.style.float = "left";
+d.tb.b4_uploadJson 	= blo0.blBtn(d.tb, d.tb.id+ "b4", "uploadJson", blGrey[2]); 
+d.tb.b4_uploadJson.style.float = "left";
  
-d.tb.b1.onclick = function(){
+d.tb.btnScriptEditor.onclick = function(){
 	if(!d.v0){
 		d.v0 = blo0.blDiv(d, d.id + "v0", "v0", blGrey[1]);
 		var btnV1 = blo0.blBtn(d.v0, d.v0.id+ "b1", "gh.V1", blGrey[2]);
@@ -36,7 +40,6 @@ d.tb.b1.onclick = function(){
 				//blo0.blScript( "id_js_plx1_script_editor" ,"plx1.js");
 				var w = {};	w._2do = function(txt){		eval(txt);}
 				blo0.blAjx(w, "plx1.js" );
-
 			} 
 			_on_off_div(this,btnPlx1.v);
 			var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];   
@@ -60,11 +63,12 @@ d.tb.b1.onclick = function(){
 	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];      
 }
 
-d.tb.b2.onclick = function(){
+d.tb.btnServer.onclick = function(){
 	if(!d.v2){
 		d.v2 = blo0.blDiv(d, d.id + "v2", "jsonFiles", blGrey[1]); 
 		var btnJSONF = blo0.blBtn(d.v2, d.v2.id+ "btnJSONF", "getAllJsonFiles", blGrey[2]);
 		var btnMp3F = blo0.blBtn(d.v2, d.v2.id+ "btnMp3F", "getAllMp3Files", blGrey[2]);
+		var btnExeCmd = blo0.blBtn(d.v2, d.v2.id+ "btnExeCmd", "ExeCmd", blGrey[2]);
 		var v = blo0.blDiv(d.v2, d.v2.id + "v", "v", blGrey[5]); 	
 		var v0 = blo0.blDiv(v, v.id + "v0", "v0", blGrey[0]);  
 		var v1 = blo0.blDiv(v, v.id + "v1", "v1", blGrey[1]);	
@@ -77,6 +81,10 @@ d.tb.b2.onclick = function(){
 		btnMp3F.onclick = function(){ 
 			var c = new CClient();
 			c.getMp3Files(v0,v1,v2);			
+		}
+		btnExeCmd.onclick = function(){ 
+			var c = new CClient();
+			c.exeCmd(v0,v1,v2);			
 		}
 	}
 	_on_off_div(this,d.v2);

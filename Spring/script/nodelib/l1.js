@@ -1,8 +1,9 @@
-﻿const tag = "[nodelib/l1.js_v0.0.115] ";
+﻿const tag = "[nodelib/l1.js_v0.0.122] ";
 
 var url = require('url');
 var formidable = require('formidable');
 var fs = require('fs');
+const { runInNewContext } = require('vm');
 var n = 0;
 var o = {};
 o.resource = [
@@ -41,6 +42,13 @@ exports.f1 = function(req,res){
     else{
       res.write(myJSON);
     }    
+    res.end();
+  }  
+  else if (r1 == '/command'){  
+    n++;
+    var b = a[1].split("=");
+
+    res.write(tag + " command: " + b[0] + ":"+ b[1]);
     res.end();
   }
   else if (r1 == '/json'){  

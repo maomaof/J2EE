@@ -1,5 +1,5 @@
 ﻿
-const p1Tag = "[plx/p1.js_v0.151]";
+const p1Tag = "[plx/p1.js_v0.153]";
 const btn4p1 = bl$("plx_p1_btn");
 if(btn4p1){ 
     btn4p1.v = blo0.blMD(btn4p1.id+p1Tag,p1Tag,210,88,155,150,blGrey[0]);
@@ -13,6 +13,20 @@ if(btn4p1){
 
 function CClient(){
     var w = {};
+    this.exeCmd = function(v0,v1,v2){
+        var ta = bl$("id_ta_4_script_editor");
+        if(!ta) v0.innerHTML = "No ta.";
+        else{
+            ta.value = "exeCmd" + Date();
+            var btnRun = blo0.blBtn(v1, v1.id+ "btnRun", "run", "green");
+            btnRun.onclick = function(){                    
+                w._2do = function(txt){ 
+                    v0.innerHTML = txt;        
+                } 
+                blo0.blAjx(w, "http://localhost:8080/command?cmd="+ta.value ); 
+            }
+        }
+    };
     this.getJSFiles = function(v0,v1,v2){
 			w._2do = function(txt){ 
 				v0.innerHTML = ""; 
