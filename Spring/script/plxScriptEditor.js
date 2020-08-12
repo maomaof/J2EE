@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.234]";
+const tag = "[plxScriptEditor.js_v0.0.252]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
@@ -6,41 +6,7 @@ d.tb.b1 		= blo0.blBtn(d.tb, d.tb.id+ "b1", "b1", blGrey[2]);
 d.tb.b2 		= blo0.blBtn(d.tb, d.tb.id+ "b2", "b2", blGrey[2]); 
 d.tb.b3_upload 		= blo0.blBtn(d.tb, d.tb.id+ "b3", "b3_uploadFile", blGrey[2]); 
 d.tb.b4_uploadJson 	= blo0.blBtn(d.tb, d.tb.id+ "b4", "b4_uploadJson", blGrey[2]); 
-
-d.tb.btnTestMyInit 	= blo0.blBtn(d.tb, d.tb.id+ "btnTestMyInit", "btnTestMyInit", blGrey[2]); 
-d.tb.btnTestMyInit.onclick = function(){
-	if(!this.v)
-	{
-		this.v = blo0.blMDiv(this.parentElement,this.parentElement.id+"v","blo0.TestMyInit",511,1,222,111,blGrey[0]);
-		this.v.tb = blo0.blDiv(this.v, this.v.id+"tb","tb",blGrey[1]);
-		this.v.v = blo0.blDiv(this.v, this.v.id+"v","v",blGrey[2]);
-		var b1 = blo0.blBtn(this.v.tb,this.v.tb.id+"b1","b1",blGrey[2]);
-		b1.onclick = function(){
-			blo0.checkMyInit();
-		}
-		var b2 = blo0.blBtn(this.v.tb,this.v.tb.id+"b2","b2_reg",blGrey[2]);
-		b2.onclick = function(_v){
-			return function(){
-				blo0.regCtxMousedown(_v);
-			}
-		}(this.v);
-
-		var b3 = blo0.blBtn(this.v.tb,this.v.tb.id+"b3","b3_regTest",blGrey[2]);
-		b3.onclick = function(_v){
-			return function(){
-				blo0.toCtxMousedown();
-			}
-		}(this.v);
-
-		this.v.toCtxMousedown = function(_v){
-			return function(x,y){
-				_v.v.innerHTML = "[" + x+ ","+y+"] "+Date();
-			} 
-		}(this.v);
-	}
-	_on_off_div(this,this.v);
-	var b=this; b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];  
-}
+ 
 d.tb.b1.onclick = function(){
 	if(!d.v0){
 		d.v0 = blo0.blDiv(d, d.id + "v0", "v0", blGrey[1]);
@@ -97,40 +63,20 @@ d.tb.b1.onclick = function(){
 d.tb.b2.onclick = function(){
 	if(!d.v2){
 		d.v2 = blo0.blDiv(d, d.id + "v2", "jsonFiles", blGrey[1]); 
-		var b1 = blo0.blBtn(d.v2, d.v2.id+ "b1", "getAllJsonFiles", blGrey[2]);
+		var btnJSONF = blo0.blBtn(d.v2, d.v2.id+ "btnJSONF", "getAllJsonFiles", blGrey[2]);
+		var btnMp3F = blo0.blBtn(d.v2, d.v2.id+ "btnMp3F", "getAllMp3Files", blGrey[2]);
 		var v = blo0.blDiv(d.v2, d.v2.id + "v", "v", blGrey[5]); 	
 		var v0 = blo0.blDiv(v, v.id + "v0", "v0", blGrey[0]);  
 		var v1 = blo0.blDiv(v, v.id + "v1", "v1", blGrey[1]);	
 		var v2 = blo0.blDiv(v, v.id + "v2", "v2", blGrey[2]);  
 	
-		b1.onclick = function(){ 
-			var w = {};
-			w._2do = function(txt){ 
-				v0.innerHTML = "";
-				//*
-				eval("var o=" + txt);
-				for(i in o.resource){
-					var b = blo0.blBtn(v0,v0.id+i,i,blGrey[2]);
-					b.onclick = function(_this,_jsf){						
-						return function(){
-							 v1.innerHTML = _this.id;
-							 var btnMP4 = blo0.blBtn(v1, v1.id+ "b1", "createMP4", blGrey[2]);
-							 v2.innerHTML = _jsf;
-							 var vMP4 = blo0.blDiv(v2, v2.id + "vMP4", "vMP4", blGrey[2]);  
-
-							 btnMP4.onclick = function(){
-								var url = "http://localhost:8080/image/video?script="+_jsf; 
-								var w1 = {};
-								w1._2do = function(txt){ 
-									vMP4.innerHTML = txt;	
-								}
-								blo0.blAjx(w1,url);							
-							}
-						}
-					}(b,o.resource[i]);					
-				} //*/
-			}
-			blo0.blAjx(w, "http://localhost:8080/getResourceOnServer?filetype=json" ); 
+		btnJSONF.onclick = function(){ 
+			var c = new CClient();
+			c.getJSFiles(v0);			
+		}
+		btnMp3F.onclick = function(){ 
+			var c = new CClient();
+			c.getMp3Files(v0);			
 		}
 	}
 	_on_off_div(this,d.v2);

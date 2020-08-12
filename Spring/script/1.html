@@ -35,8 +35,9 @@ body {
 </head>
 <body>
     <script src="https://littleflute.github.io/JavaScript/w3.js" ></script>
-    <script src="https://littleflute.github.io/JavaScript/blclass.js" ></script>
-    <script src="https://littleflute.github.io/JavaScript/blApp.js"></script>
+    <script src="https://littleflute.github.io/JavaScript/blclass.js" ></script> 
+    <script src="https://littleflute.github.io/JavaScript/blApp.js" ></script> 
+     
 
 <div class="topnav">
   <a class="active" href="http://localhost:8080/">Home</a>
@@ -44,9 +45,12 @@ body {
   <a href="http://localhost:8080/image/video?script=video.json">video.json</a>
   <a href="http://localhost:8080/image/video?script=v1.json">v1.json</a>
 </div>
-
+<div>
+	<button id="plx_p1_btn">p1</button>
+  <script src="plx/p1.js"></script>
+</div>
 <div style="padding-left:16px">
-  <h2>script Editor v0.154 </h2>
+  <h2>script Editor v0.214 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
  
   <p> mvn clean install -DskipTests  <br>
@@ -55,6 +59,7 @@ body {
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
+  //*
   blo0.reg_on_draw = function (o) { 
     if(!blo0.ondrawList) blo0.ondrawList = [];
     blo0.ondrawList.push(o);
@@ -289,7 +294,9 @@ blo0.ShowSprite2Div = function (oBoss,obj)
       d.loadPlx = blo0.blScript( "id_js_plx_script_editor" ,"plxScriptEditor.js");            
 		}
 		_on_off_div(null,d);
-	}
+  }
+ // */
+ bl$("plx_p1_btn").click();
 </script>
 
 </body>

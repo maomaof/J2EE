@@ -1,4 +1,4 @@
-﻿const tag = "[nodelib/l1.js_v0.0.113] ";
+﻿const tag = "[nodelib/l1.js_v0.0.115] ";
 
 var url = require('url');
 var formidable = require('formidable');
@@ -13,8 +13,15 @@ o.resource = [
       "v2.json",
       "v1.json"
     ];
+    
+var oMp3 = {};
+oMp3.resource = [
+      "1.mp3",
+      "2.mp3"
+    ];
 
 var myJSON = JSON.stringify(o);
+var myMP3 = JSON.stringify(oMp3);
     
 console.log(tag );
 
@@ -22,13 +29,18 @@ exports.f1 = function(req,res){
   console.log(tag + req.url);
 
   var a = req.url.split('?');
-  console.log(tag + n + ":" + a.length  + " " + a[0]);
+  console.log(tag + n + ":" + a.length  + " " + a[0] + " a[1]= " + a[1]);
 
   var r1 = a[0];
   if (r1 == '/getResourceOnServer') {
     n++;
-    
-    res.write(myJSON);
+    var b = a[1].split("=");
+    if(b[1]=="mp3"){
+      res.write(myMP3);
+    }
+    else{
+      res.write(myJSON);
+    }    
     res.end();
   }
   else if (r1 == '/json'){  
