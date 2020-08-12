@@ -1,4 +1,4 @@
-const tag = "[plxScriptEditor.js_v0.0.252]";
+const tag = "[plxScriptEditor.js_v0.0.253]";
 var d = bl$( "id_mdiv_plx_script_editor" );
 d.tb = blo0.blDiv(d, d.id + "tb", tag, blGrey[0]);
 
@@ -72,11 +72,11 @@ d.tb.b2.onclick = function(){
 	
 		btnJSONF.onclick = function(){ 
 			var c = new CClient();
-			c.getJSFiles(v0);			
+			c.getJSFiles(v0,v1,v2);			
 		}
 		btnMp3F.onclick = function(){ 
 			var c = new CClient();
-			c.getMp3Files(v0);			
+			c.getMp3Files(v0,v1,v2);			
 		}
 	}
 	_on_off_div(this,d.v2);

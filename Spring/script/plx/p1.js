@@ -1,5 +1,5 @@
 ﻿
-const p1Tag = "[plx/p1.js_v0.145]";
+const p1Tag = "[plx/p1.js_v0.151]";
 const btn4p1 = bl$("plx_p1_btn");
 if(btn4p1){ 
     btn4p1.v = blo0.blMD(btn4p1.id+p1Tag,p1Tag,210,88,155,150,blGrey[0]);
@@ -13,7 +13,7 @@ if(btn4p1){
 
 function CClient(){
     var w = {};
-    this.getJSFiles = function(v0){
+    this.getJSFiles = function(v0,v1,v2){
 			w._2do = function(txt){ 
 				v0.innerHTML = ""; 
 				eval("var o=" + txt);
