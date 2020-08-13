@@ -56,7 +56,9 @@ public class FileTest {
 		htmlFile.delete();
 		File tempFile = new File(System.getProperty("user.dir") + "/temp/" +  FILENAME_UPLOAD);
 		tempFile.delete();
-		tempFile.getParentFile().delete();	
+		tempFile.getParentFile().delete();
+		File uploadFile = new File(System.getProperty("user.dir") + "/" + FILENAME_UPLOAD);
+		uploadFile.delete();
 	}
 
 	@AfterClass
@@ -68,7 +70,9 @@ public class FileTest {
 		htmlFile.delete();
 		File tempFile = new File(System.getProperty("user.dir") + "/temp/" +  FILENAME_UPLOAD);
 		tempFile.delete();
-		tempFile.getParentFile().delete();	
+		tempFile.getParentFile().delete();
+		File uploadFile = new File(System.getProperty("user.dir") + "/" + FILENAME_UPLOAD);
+		uploadFile.delete();
 	}
 
 	@Test
