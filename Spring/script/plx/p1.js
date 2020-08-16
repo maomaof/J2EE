@@ -5,7 +5,7 @@ const btn4p1 = bl$("plx_p1_btn");
 
 if(btn4p1){ 
     btn4p1.v = blo0.blMD(btn4p1.id+p1Tag,p1Tag,210,88,555,150,blGrey[0]);
-    var tb = blo0.blDiv(btn4p1.v,btn4p1.v.id+"tb","tb",blGrey[1]);
+    var tb = blo0.blDiv(btn4p1.v,btn4p1.v.id+"tb","tb0",blGrey[1]);
     tb.btnStoryBoard = blo0.blBtn(tb,"btnStoryBoard","storyBoard",blGrey[2]);
     tb.btnStoryBoard.style.float = "left";
     
@@ -40,6 +40,13 @@ function CPlayground(parentDiv){
         if(!ui){
             ui=blo0.blMDiv(p,"id_mdiv_4_playground","playground",555,5,w,111,blGrey[0]);
             var tb = blo0.blDiv(ui, "id_4_tb_playground","tb",blGrey[1]);
+            tb.btnPlay = blo0.blBtn(tb,"id_4_btnPlay","play",blGrey[2]);
+            tb.btnPlay.style.float = "left";
+            tb.btnPlay.onclick = function(){
+                o.play(this);
+            }
+            tb.btnDbg = o.dbgBtn(tb,"id_btn_4_dbgPlayground","dbg");
+
             var v1 = blo0.blDiv(ui,ui.id+"v1","",blGrey[1]);            
             var cvs = document.createElement("canvas");
             cvs.width = w;
@@ -70,12 +77,22 @@ function CStoryBoard(parentDiv){
     
      
     this.show = function(b){
-        if(!ui){
+        if(!ui){    
+            
             ui=blo0.blDiv(p,p.id+"_StoryBoard",v,blGrey[1]);   
+            var tb =blo0.blDiv(ui,"tb4StoryBoard","tb2",blGrey[1]);
+            tb.b1 = o.dbgBtn(tb,"id_btn_4_StoryBoardDbg","dbg");
+            
+
             o.addClass(ui,"w3-row");  
             o.addClass(ui,"w3-red");
 
             o.uiColum(ui);   
+
+            ui.draw = function(ctx){
+                if(tb.b1.b)         o.text(ctx,ui.id,11,222);
+            }
+            o.reg2draw(ui);
         }
         _on_off_div(b,ui);
         b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];   
@@ -147,6 +164,49 @@ var o = {};
 o.x = 50;
 o.y = 30;
 o.s = "o.s";
+o.list2draw = [];
+o.bPlay = false;
+o.play = function(btn){
+    if(o.bPlay){
+        o.bPlay = false;
+        btn.innerHTML = "play";
+    }
+    else{
+        o.bPlay = true;
+        btn.innerHTML = "stop";
+    }
+}
+o.draw = function(ctx){
+    var s = "o.draw: " + o.bPlay ;
+    s += " o.list2draw.length=" + o.list2draw.length;
+    o.text(ctx,s,100,100);
+
+    for(i in o.list2draw){
+        o.list2draw[i].draw(ctx);
+    }
+}
+o.reg2draw  = function(user){
+    o.list2draw.push(user);
+}
+o.dbgBtn = function(tb,id,html){
+    var btn = blo0.blBtn(tb,id,html,"grey"); 
+           
+    btn.style.float = "left";
+       
+    btn.onclick = function(_tb){ 
+        return function(){
+                if("grey"==this.style.backgroundColor){
+                    this.style.backgroundColor = "green";
+                    this.b = true;
+                }
+                else{
+                    this.style.backgroundColor = "grey";
+                    this.b = false;
+                }
+            }
+    }(tb); 
+    return btn;            
+}
 o.mousedown = function(ctx,x,y){
     o.s = x + ":" + y;
     o.x = x;
@@ -160,6 +220,8 @@ o.ftnTimer = function(ctx,w,h){
  
     o.text(ctx,"xd--" + Date(),15,20);  
     o.text(ctx,o.s,o.x,o.y);  
+
+    o.draw(ctx);
 };
 o.text = function(ctx,txt,x,y){ 
     ctx.font= 12 + "px Comic Sans MS";
