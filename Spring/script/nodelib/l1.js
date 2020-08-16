@@ -1,8 +1,9 @@
-﻿const tag = "[nodelib/l1.js_v0.0.54] ";
+﻿const tag = "[nodelib/l1.js_v0.0.122] ";
 
 var url = require('url');
 var formidable = require('formidable');
 var fs = require('fs');
+const { runInNewContext } = require('vm');
 var n = 0;
 var o = {};
 o.resource = [
@@ -13,21 +14,41 @@ o.resource = [
       "v2.json",
       "v1.json"
     ];
+    
+var oMp3 = {};
+oMp3.resource = [
+      "1.mp3",
+      "2.mp3"
+    ];
 
 var myJSON = JSON.stringify(o);
+var myMP3 = JSON.stringify(oMp3);
     
+console.log(tag );
 
 exports.f1 = function(req,res){
   console.log(tag + req.url);
 
   var a = req.url.split('?');
-  console.log(tag + n + ":" + a.length  + " " + a[0]);
+  console.log(tag + n + ":" + a.length  + " " + a[0] + " a[1]= " + a[1]);
 
   var r1 = a[0];
   if (r1 == '/getResourceOnServer') {
     n++;
-    
-    res.write(myJSON);
+    var b = a[1].split("=");
+    if(b[1]=="mp3"){
+      res.write(myMP3);
+    }
+    else{
+      res.write(myJSON);
+    }    
+    res.end();
+  }  
+  else if (r1 == '/command'){  
+    n++;
+    var b = a[1].split("=");
+
+    res.write(tag + " command: " + b[0] + ":"+ b[1]);
     res.end();
   }
   else if (r1 == '/json'){  
@@ -62,7 +83,8 @@ exports.f1 = function(req,res){
     });
   }
   else if (r1 == '/1.html'
-  || req.url == '/nodelib/CPlay.js'
+    || req.url == '/2.html'
+    || req.url == '/nodelib/CPlay.js'
     || req.url == '/plxScriptEditor.js'
     || req.url == '/plx1.js'
     || req.url == '/plx11.js'
@@ -102,7 +124,8 @@ exports.f1 = function(req,res){
   } 
   else {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<a href="1.html">1.html</a>');
+    res.write('<a href="1.html">1.html</a> ');
+    res.write('<a href="2.html">2.html</a> ');
     res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
     res.write('<input type="file" name="filetoupload"><br>');
     res.write('<input type="submit">');

@@ -35,8 +35,9 @@ body {
 </head>
 <body>
     <script src="https://littleflute.github.io/JavaScript/w3.js" ></script>
-    <script src="https://littleflute.github.io/JavaScript/blclass.js" ></script>
-    <script src="https://littleflute.github.io/JavaScript/blApp.js"></script>
+    <script src="https://littleflute.github.io/JavaScript/blclass.js" ></script> 
+    <script src="https://littleflute.github.io/JavaScript/blApp.js" ></script> 
+     
 
 <div class="topnav">
   <a class="active" href="http://localhost:8080/">Home</a>
@@ -44,71 +45,104 @@ body {
   <a href="http://localhost:8080/image/video?script=video.json">video.json</a>
   <a href="http://localhost:8080/image/video?script=v1.json">v1.json</a>
 </div>
-
+<div>
+	<button id="plx_p1_btn">p1</button>
+  <script src="plx/p1.js"></script>
+</div>
 <div style="padding-left:16px">
-  <h2>script Editor v0. 123 </h2>
+  <h2>script Editor v0.221 </h2>
   <p style="float:right;"><button id = "id_4_plxScriptEditor" >plxScriptEditor</button> <button id = "id_btn_4_blApp" >+blApp</button></p>
-  <p>mvn clean install</p>
+ 
+  <p> mvn clean install -DskipTests  <br>
+    mvn test  <br>
+    mvn clean install  </p>
   <p>bash jpg2video.sh 360 1</p>
 </div>
 <script>
+  //*
   blo0.reg_on_draw = function (o) { 
     if(!blo0.ondrawList) blo0.ondrawList = [];
     blo0.ondrawList.push(o);
   }
-  blo0.ondraw = function(){
+  blo0.ondraw = function(_ga){
+    _ga.xdText("blo0.ondraw v0.11",50,50,100,50,"lightblue","yellow");
     for(i in blo0.ondrawList){
-      if(blo0.ondrawList[i].ondraw){
-        blo0.ondrawList[i].ondraw();
+      if(blo0.ondrawList[i].fnLetHostDrawMe){
+        blo0.ondrawList[i].fnLetHostDrawMe(_ga);
       }
     }
   }
   blo0.frameMD = function () {   
-        var v = blo0.blMD("id_4_MD_frame","xd",33,1,222,55,blGrey[0]);
+        var p = bl$("vPlayer"); 
+        p.controls = false;
+
+        var v = blo0.blMD("id_4_MD_frame","xd:d="+p.duration,33,1,222,55,blGrey[0]);
+       
+
+        v.duration = 300;
+        v.n = 0;
+        v.ms0 = 0;
+        v.fps = 3;
+        v.allFrames = v.duration*v.fps;        
+
+	v.nSel = 1;  
+
         v.v1 = blo0.blDiv(v,v.id+"v1","v1",blGrey[0]);
         v.v1.style.overflow = "auto";
         v.v1.style.width = "400px";
         v.v1.style.height = "250px";
         v.v1.v = blo0.blDiv(v.v1,v.v1.id+"v","",blGrey[2]);
-        v.v1.v.style.width = "11200px";
+        v.v1.v.style.width = 20*v.allFrames +"px";
         v.v1.v.style.height = "1250px";
         v.v1.v.style.backgroundColor = "coral";
         v.v1.v.style.float = "left";
 
         
-        v.n = 0;
-        v.ms0 = 0;
-        v.fps = 3;
         v.getFrameNo = function(dms){
           var dt = 1000/v.fps;
           return dms/dt;
         }
         
         var tb = blo0.blDiv(v.v1.v,v.v1.v.id+"tb","tb","grey");
-        tb.b1 = blo0.blBtn(tb,tb.id+"b1","play",blGrey[0]);
-        tb.b1.style.float="left";
-        tb.b1.onclick = function(){
+        tb.btnPlay = blo0.blBtn(tb,tb.id+"btnPlay","Play",blGrey[0]);
+        tb.btnPlay.style.float="left";
+        tb.btnPlay.onclick = function(){
           if(v.n==0) {
             v.n=1;
             this.innerHTML = "stop";
             var d = new Date();
             v.ms0 = d.getTime();
+
+            p.currentTime = 0;
+            p.play();
           }
-          else if(v.n==1) {v.n=0;this.innerHTML = "play";} 
+          else if(v.n==1) {
+            v.n=0;this.innerHTML = "play";
+            p.pause();
+          } 
         }
+        
+        tb.btnMark = blo0.blBtn(tb,tb.id+"btnMark","mark",blGrey[0]);
+        tb.btnMark.style.float="left";
+        tb.btnMark.onclick = function(){          
+          vf.setMark(v.fNo,"text");
+        }
+
         var vDbg = blo0.blDiv(v.v1.v,v.v1.v.id+"vDbg","vDbg","lightgreen");
         vDbg.v = blo0.blDiv(vDbg,vDbg.id+"v","v",blGrey[1]);
         vDbg.v.style.float="left";
         if(!vDbg.ondraw){
           blo0.reg_on_draw(vDbg);
-          vDbg.ondraw = function(){
+          vDbg.fnLetHostDrawMe = function(_ga){
+            _ga.xdText(vDbg.id,222,50,100,50,"lightgreen","red");
             var dms = 0;
             if(v.n){
               var dNow = new Date();
               dms = dNow.getTime() - v.ms0;
             }
-            var fNo = v.getFrameNo(dms);
-            var r = vf.ondraw(fNo);
+	    if(v.n==1)             v.fNo = v.getFrameNo(dms);
+            else v.fNo = v.nSel;
+            var r = vf.ondraw(v.fNo,_ga);
             vDbg.v.innerHTML = v.n + "_"+ dms + " r="+ r ;
           }
         }
@@ -116,11 +150,18 @@ body {
         var vf = blo0.blDiv(v.v1.v,v.v1.v.id+"vf","",blGrey[1]);
         if(!vf.l){
             vf.l = [];
-            vf.ondraw = function(n){ 
+            vf.ondraw = function(n,_ga){ 
+              _ga.xdText("vfNo."+n,100,100,100,100,"lightblue","yellow");
               for(i in vf.l){
-                vf.l[i].ondraw(n);
+                vf.l[i].drawSprites(n,_ga);
               }
               return n;
+            }
+            vf.setMark = function(_n,_txt){
+              var n = Math.floor(_n);
+              for(i in vf.l){
+                if(vf.l[i].i>=n) vf.l[i].markText = i + ":" + _txt + ":" + _n;
+              } 
             }
         }
 
@@ -129,18 +170,24 @@ body {
         vf.style.height="20px";
 
 
-        for(var i=0;i<101;i++){
-          var b = blo0.blBtn(vf,vf.id+"b"+i,"b",blGrey[1]);    
+        for(var i=0;i<v.allFrames;i++){
+          var b = blo0.blBtn(vf,vf.id+"b"+i,i+1,blGrey[1]);    
             b.style.float="left";
             b.style.width="20px";
             b.i = i + 1;
+            b.listSrites = [];
+            b.markText = "x";
             b.onclick = function(_this){
-              return function(){vDbg.v.innerHTML = _this.id;}
+              return function(){
+		      v.nSel = _this.i;
+	      }
             }(b);
-            b.ondraw = function(_this){
-              return function(n){
+            b.drawSprites = function(_this){
+              return function(n,_ga){
                 if(Math.floor(n)==_this.i){
-                  _this.style.backgroundColor="yellow";
+                  _this.style.backgroundColor="yellow";                 
+                  _ga.xdText(_this.i,200,200,50,50,blGrey[0],"red");
+                  _ga.drawListOfSprites(_this);
                 }
                 else{
                   _this.style.backgroundColor="grey";
@@ -247,7 +294,9 @@ blo0.ShowSprite2Div = function (oBoss,obj)
       d.loadPlx = blo0.blScript( "id_js_plx_script_editor" ,"plxScriptEditor.js");            
 		}
 		_on_off_div(null,d);
-	}
+  }
+ // */
+ bl$("plx_p1_btn").click();
 </script>
 
 </body>
