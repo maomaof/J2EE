@@ -34,8 +34,8 @@ function CStoryBoard(parentDiv){
         cardV.style.float = "left";
     };
     o.uiColum = function(ui){           
-        var s = '<div class="w3-col s6 w3-green w3-center"><p>s6</p></div>';
-        s+='<div class="w3-col s6 w3-dark-grey w3-center" id="uiRight"> <p>s6</p> </div>';
+        var s = '<div class="w3-col s3 w3-green w3-center"><p>s6</p></div>';
+        s+='<div class="w3-col s9 w3-dark-grey w3-center" id="uiRight">   </div>';
         var v1 = blo0.blDiv(ui,ui.id+"v1",s,blGrey[2]);
        
         o.addClass(v1,"w3-row"); 
