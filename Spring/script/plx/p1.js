@@ -1,10 +1,10 @@
 ﻿
-const p1Tag = "[plx/p1.js_v0.215]";
+const p1Tag = "[plx/p1.js_v0.221]";
 
 const btn4p1 = bl$("plx_p1_btn");
 
 if(btn4p1){ 
-    btn4p1.v = blo0.blMD(btn4p1.id+p1Tag,p1Tag,210,88,555,150,blGrey[0]);
+    btn4p1.v = blo0.blMD(btn4p1.id+p1Tag,p1Tag,210,11,555,150,blGrey[0]);
     var tb = blo0.blDiv(btn4p1.v,btn4p1.v.id+"tb","tb0",blGrey[1]);
     tb.btnStoryBoard = blo0.blBtn(tb,"btnStoryBoard","storyBoard",blGrey[2]);
     tb.btnStoryBoard.style.float = "left";
@@ -70,6 +70,12 @@ function CPlayground(parentDiv){
     this.show = function(b){
         if(!ui){
             ui=blo0.blMDiv(p,"id_mdiv_4_playground","playground",555,5,w,111,blGrey[0]);
+            ui.inf = {};
+            ui.inf.x = 0;
+            ui.inf.y = 0;
+                        
+            ui.inf.text = "playground.text";     
+
             var tb = blo0.blDiv(ui, "id_4_tb_playground","tb",blGrey[1]);
             tb.btnPlay = blo0.blBtn(tb,"id_4_btnPlay","play",blGrey[2]);
             tb.btnPlay.style.float = "left";
@@ -108,7 +114,7 @@ function CPlayground(parentDiv){
                 else if(cDbg=="yellow"){
                     cDbg = "brown";
                     xDbg =x;
-                    yDbg = y;
+                    yDbg = y;                    
                 }
             }
             ui.draw = function(ctx){
@@ -134,8 +140,7 @@ function CStoryBoard(parentDiv){
        
      
     this.show = function(b){
-        if(!ui){    
-            
+        if(!ui){           
 
             var xDbg = 11;
             var yDbg = 222;
@@ -145,7 +150,10 @@ function CStoryBoard(parentDiv){
             
             ui=blo0.blDiv(p,p.id+"_StoryBoard",v,blGrey[1]);   
             ui.inf = {};
-            ui.x = 0;
+            ui.inf.x = 17809;
+            ui.inf.y = 17809;
+            ui.inf.text = "storyBoard.text";   
+
             var tb =blo0.blDiv(ui,"tb4StoryBoard","tb2",blGrey[1]);
             tb.b1 = o.dbgBtn(tb,"id_btn_4_StoryBoardDbg","dbg");
             tb.btnAddCard = blo0.blBtn(tb,"id_4_btnAddCard","+Card",blGrey[2]);
@@ -265,9 +273,38 @@ o.bPlay = false;
 o.status = function(me){
     var d = bl$("id_4_vStatus");
     d.innerHTML = "";
-    var vs = blo0.blDiv(d,d.id+"vs","vs::",blGrey[0]); 
-    var n = 0; 
-    vs.innerHTML = me.inf;
+    var vs = blo0.blMDiv(d,d.id+"vs","vs::",3,340,555,100,blGrey[0]); 
+    var n = 0;
+    //*
+    for(i in me.inf){
+        n++;
+        var b = blo0.blBtn(vs,vs.id+"b" + n, i ,blGrey[1]);
+        var bv = blo0.blBtn(vs,vs.id+"bv"+ n, me.inf[i] ,"lightgreen");
+        b.style.float="left";
+        bv.style.float="left";
+        if(i=="text"){
+            b.style.backgroundColor = "lightblue";
+            b.onclick = function(_bv,_me,_i){
+                var vta = blo0.blDiv(vs,vs.id+"vta","vta" ,"green");
+                vta.innerHTML = "";
+                return function(){
+                   if(b.style.backgroundColor=="lightblue"){
+                       b.style.backgroundColor="grey";
+                       _bv.ta = blo0.blTextarea(vta,vta.id+"ta",_me.inf[_i],"grey");
+                       _bv.ta.style.width= "100%";
+                       ta.value = _bv.innerHTML;
+                   }
+                   else if(b.style.backgroundColor=="grey"){
+                       b.style.backgroundColor="lightblue";
+                       _bv.innerHTML = _bv.ta.value;
+                       _me.inf[_i] = _bv.ta.value; 
+                       vta.innerHTML = "";
+                   }
+                }
+            }(bv,me,i);
+        }
+    }
+    //*/
 }
 o.addCard= function(_ls){
     return function(btn){
