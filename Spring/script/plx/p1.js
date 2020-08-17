@@ -21,6 +21,15 @@ if(btn4p1){
         if(!this.pg)  this.pg = new CPlayground(btn4p1.v);
         this.pg.show(this);
     }
+    
+    tb.btnServer = blo0.blBtn(tb,"btnServer","Server",blGrey[2]);
+    tb.btnServer.style.float = "left";
+    
+    tb.btnServer.onclick = function(){
+        if(!this.pg)  this.pg = new CServer(btn4p1.v);
+        this.pg.show(this);
+    }
+    
     btn4p1.onclick = function(){
         var b = this;
         _on_off_div(b,b.v);
@@ -29,6 +38,23 @@ if(btn4p1){
     btn4p1.onclick();
 }
  
+function CServer(parentDiv){
+    var p = parentDiv;
+    var ui = null;
+    var x = 0;
+    var y = 220;
+    var w = 500;
+    var h = 50;
+    
+    this.show = function(b){ 
+        if(!ui){
+            ui=blo0.blMDiv(p,"id_mdiv_4_server","server",x,y,w,h,blGrey[0]);
+            var tb = blo0.blDiv(ui, "id_4_tb_server","tb",blGrey[1]);
+        }
+        _on_off_div(b,ui);
+        b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];    
+    }
+}
 function CPlayground(parentDiv){
     var p = parentDiv;
     var ui = null;
@@ -52,7 +78,10 @@ function CPlayground(parentDiv){
             }
             tb.b1 = o.dbgBtn(tb,"id_btn_4_dbgPlayground","dbg");
 
-            var v1 = blo0.blDiv(ui,ui.id+"v1","",blGrey[1]);            
+            var vStatus = blo0.blDiv(ui,"id_4_vStatus","status::",blGrey[3]);   
+            var v1 = blo0.blDiv(ui,ui.id+"v1","",blGrey[1]);          
+                
+
             var cvs = document.createElement("canvas");
             cvs.width = w;
             cvs.height = h;
@@ -73,6 +102,7 @@ function CPlayground(parentDiv){
                 if(cDbg=="brown"){
                     if(o.inRect(x,y,xDbg,yDbg,wDbg,hDbg)){
                         cDbg = "yellow";
+                        o.status(ui);
                     }
                 }
                 else if(cDbg=="yellow"){
@@ -101,10 +131,12 @@ function CStoryBoard(parentDiv){
     var v = "CStoryBoard v0.12";
     var ui = null;
     var p = parentDiv; 
-    
+       
      
     this.show = function(b){
         if(!ui){    
+            
+
             var xDbg = 11;
             var yDbg = 222;
             var wDbg = 20;
@@ -112,6 +144,8 @@ function CStoryBoard(parentDiv){
             var cDbg = "lightgreen";
             
             ui=blo0.blDiv(p,p.id+"_StoryBoard",v,blGrey[1]);   
+            ui.inf = {};
+            ui.x = 0;
             var tb =blo0.blDiv(ui,"tb4StoryBoard","tb2",blGrey[1]);
             tb.b1 = o.dbgBtn(tb,"id_btn_4_StoryBoardDbg","dbg");
             tb.btnAddCard = blo0.blBtn(tb,"id_4_btnAddCard","+Card",blGrey[2]);
@@ -140,6 +174,7 @@ function CStoryBoard(parentDiv){
                 if(cDbg=="lightgreen"){
                     if(o.inRect(x,y,xDbg,yDbg,wDbg,hDbg)){
                         cDbg = "yellow";
+                        o.status(ui);
                     }
                 }
                 else if(cDbg=="yellow"){
@@ -227,6 +262,13 @@ o.listCards = [];
 o.curCard = 0;
 
 o.bPlay = false;
+o.status = function(me){
+    var d = bl$("id_4_vStatus");
+    d.innerHTML = "";
+    var vs = blo0.blDiv(d,d.id+"vs","vs::",blGrey[0]); 
+    var n = 0; 
+    vs.innerHTML = me.inf;
+}
 o.addCard= function(_ls){
     return function(btn){
         var n = _ls.length;
@@ -363,3 +405,7 @@ o.rect = function(ctx,x,y,w,h,c){
     var b = bl$("btnPlayground");    
     o.addClass(b,"w3-button"); 
     o.addClass(b,"w3-green"); 
+
+    var b = bl$("btnServer");    
+    o.addClass(b,"w3-button"); 
+    o.addClass(b,"w3-brown"); 
