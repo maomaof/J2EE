@@ -1,5 +1,5 @@
 ﻿
-const p1Tag = "[plx/p1.js_v0.221]";
+const p1Tag = "[plx/p1.js_v0.223]";
 
 const btn4p1 = bl$("plx_p1_btn");
 
@@ -45,11 +45,57 @@ function CServer(parentDiv){
     var y = 220;
     var w = 500;
     var h = 50;
+    var xDbg = 20;
+    var yDbg = 55;
+    var wDbg = 20;
+    var hDbg = 20;
+    var cDbg = "lightgreen";
     
     this.show = function(b){ 
         if(!ui){
             ui=blo0.blMDiv(p,"id_mdiv_4_server","server",x,y,w,h,blGrey[0]);
+            
+            ui.inf = {};
+            ui.inf.x = 123;
+            ui.inf.y = 321;
+            ui.inf.l8080 = "http://localhost:8080";  
+            ui.inf.href = window.location.href;  
+            ui.inf.file = "No file.";  
+            ui.inf.text = "CServer.text";   
+
             var tb = blo0.blDiv(ui, "id_4_tb_server","tb",blGrey[1]);
+            var v = blo0.blDiv(ui, "id_4_v_server","v",blGrey[2]);
+            tb.b1 = o.dbgBtn(tb,"id_btn_4_dbgServer","dbg");
+            o.btnServerFiles(tb,v,"json"); 
+            o.btnServerFiles(tb,v,"mp3"); 
+            o.btnServerFiles(tb,v,"mp4"); 
+            o.btnServerFiles(tb,v,"jpg"); 
+
+            
+            ui.draw = function(ctx){
+                if(tb.b1.b)  {
+                    o.rect(ctx,xDbg,yDbg,wDbg,hDbg,cDbg);    
+                    o.text(ctx,ui.id,xDbg,yDbg);
+                    o.rendFile(ctx,ui.inf.file,xDbg+20,yDbg+20);
+                }   
+            }
+            ui.mousedown = function(x,y){   
+                if(!tb.b1.b) return;
+
+                if(cDbg=="lightgreen"){
+                    if(o.inRect(x,y,xDbg,yDbg,wDbg,hDbg)){
+                        cDbg = "yellow";
+                        o.status(ui);
+                    }
+                }
+                else if(cDbg=="yellow"){
+                    cDbg = "lightgreen";
+                    xDbg =x;
+                    yDbg = y;
+                }
+            }
+            o.regMousedown(ui);
+            o.reg2draw(ui);
         }
         _on_off_div(b,ui);
         b.style.background = b.style.background=="red"?blGrey[5]:blColor[4];    
@@ -270,6 +316,49 @@ o.listCards = [];
 o.curCard = 0;
 
 o.bPlay = false;
+o.img = function(ctx,f,x,y,w,h){
+    var i = new Image();
+    i.src = "http://localhost:8080/"+f; 
+    o.text(ctx,i.src,x,y);
+    ctx.drawImage(i,x,y,w,h);
+}
+o.rendFile = function(ctx,f,x,y){
+    o.img(ctx,f,x,y,20,20);
+}
+o.btnServerFiles = function(tb,v,ft){
+    var b = blo0.blBtn(tb,tb.id+ft,ft,blGrey[1]);
+    b.style.float = "left";
+    b.onclick = function(_v,_ft){
+        return function(){
+            _v.dbg = blo0.blDiv(_v,_v.id+"dbg","dbg","lightgreen");   
+            _v.d = blo0.blDiv(_v,_v.id+"d","d","lightblue");   
+            _v.d.style.overflow = "auto";           
+            _v.d.innerHTML = Date();
+            
+            _v.d.v = blo0.blDiv(_v.d,_v.d.id+"v","v","grey");   
+            _v.d.v.style.width = 11100 + "px";
+
+            var w = {};
+            w._2do = function(txt){
+                var s = 'var ro='+txt;
+                eval(s);
+                //blo0.blShowObj2Div(_v,ro.resource);
+                for(i in ro.resource){
+                    var bf=blo0.blBtn(_v.d.v,_v.d.v.id+"_bf_"+i,ro.resource[i],blGrey[2]);
+                    bf.style.float = "left";
+                    bf.onclick = function(_dbg,_me){
+                        return function(){  
+                            tb.parentElement.inf.file = _me;
+                            _dbg.innerHTML = _me ;
+                        }
+                    }(_v.dbg,ro.resource[i]);
+                }
+            }
+            var url = 'http://localhost:8080/getResourceOnServer?filetype='+_ft;
+            blo0.blAjx(w,url);
+        }
+    }(v,ft);
+}
 o.status = function(me){
     var d = bl$("id_4_vStatus");
     d.innerHTML = "";
@@ -314,12 +403,21 @@ o.addCard= function(_ls){
         var b = blo0.blBtn(v,v.id+"_"+n,n+1,"grey");
         b.style.float="left";
         b.No = n+1;
+        b.inf = {};
+        b.inf.index = n;
+        b.inf.x = n;
+        b.inf.y = 55;
+        b.inf.w = 192;
+        b.inf.h = 108;
+        b.inf.c = "lightgreen";
+        b.inf.text = "Card.txt";
         b.onclick = function(_o,_this){
             return function(){
                 _o.curCard = _this.No;
                 for(i in _o.listCards){
                     if((_this.No-1)==i){
                         _o.listCards[i].style.backgroundColor = "yellow";
+                        _o.status(_this);
                     }
                     else{
                         _o.listCards[i].style.backgroundColor = "grey";
@@ -327,6 +425,21 @@ o.addCard= function(_ls){
                 }
             }
         }(o,b);
+        b._2_draw = function(_this){
+            return function(ctx){
+                var x = _this.inf.x;
+                var y = _this.inf.y;
+                var w = _this.inf.w;
+                var h = _this.inf.h;
+                var c = _this.inf.c;
+                var s = "o.bPlay: " + o.bPlay ;
+                s += " o.list2draw.length=" + o.list2draw.length;
+                s += ": " + o.curCard + "/" + o.listCards.length;
+                o.text(ctx,s,x,y);        
+                o.rect(ctx,x,y,w,h,c);
+                o.text(ctx,_this.inf.text,x+w/2,y+h/2);        
+            }
+        }(b);
         _ls.push(b);
     }
 }(o.listCards);
@@ -351,11 +464,11 @@ o.inRect = function(x,y,x0,y0,w,h){
     }
     return b;
 }
+o._2drawCurCard = function(ctx){
+    o.listCards[o.curCard-1]._2_draw(ctx);
+}
 o.draw = function(ctx){
-    var s = "o.draw: " + o.bPlay ;
-    s += " o.list2draw.length=" + o.list2draw.length;
-    s += ": " + o.curCard + "/" + o.listCards.length;
-    o.text(ctx,s,100,100);
+    o._2drawCurCard(ctx);
 
     for(i in o.list2draw){
         o.list2draw[i].draw(ctx);
