@@ -119,6 +119,7 @@ function CPlayground(parentDiv){
             ui.inf = {};
             ui.inf.x = 0;
             ui.inf.y = 0;
+            ui.inf.click = "no click";
                         
             ui.inf.text = "playground.text";     
 
@@ -167,6 +168,7 @@ function CPlayground(parentDiv){
                 if(tb.b1.b)  {
                     o.rect(ctx,xDbg,yDbg,wDbg,hDbg,cDbg);    
                     o.text(ctx,ui.id,xDbg,yDbg);
+                    o.text(ctx,ui.inf.click,xDbg,yDbg+20);
                 }   
             }
             o.reg2draw(ui);
@@ -310,6 +312,7 @@ var o = {};
 o.x = 50;
 o.y = 30;
 o.s = "o.s";
+o.s1 = "s1:";
 o.list2draw = [];
 o.listMousedown = [];
 o.listCards = [];
@@ -346,12 +349,15 @@ o.btnServerFiles = function(tb,v,ft){
                 for(i in ro.resource){
                     var bf=blo0.blBtn(_v.d.v,_v.d.v.id+"_bf_"+i,ro.resource[i],blGrey[2]);
                     bf.style.float = "left";
-                    bf.onclick = function(_dbg,_me){
+                    bf.inf = {};
+                    bf.onclick = function(_this,_dbg,_me){
                         return function(){  
                             tb.parentElement.inf.file = _me;
                             _dbg.innerHTML = _me ;
+                            _this.inf.file = _me;
+                            o.status(_this);
                         }
-                    }(_v.dbg,ro.resource[i]);
+                    }(bf,_v.dbg,ro.resource[i]);
                 }
             }
             var url = 'http://localhost:8080/getResourceOnServer?filetype='+_ft;
@@ -368,10 +374,18 @@ o.status = function(me){
     for(i in me.inf){
         n++;
         var b = blo0.blBtn(vs,vs.id+"b" + n, i ,blGrey[1]);
-        var bv = blo0.blBtn(vs,vs.id+"bv"+ n, me.inf[i] ,"lightgreen");
+        var clr = "brown";
+        var bv = blo0.blBtn(vs,vs.id+"bv"+ n, me.inf[i] ,clr);
+        if(i=="c") bv.style.backgroundColor = me.inf[i];
         b.style.float="left";
         bv.style.float="left";
-        if(i=="text"){
+        bv.onclick = function(_this){
+            return function(){
+                var uiPG = bl$("id_mdiv_4_playground");
+                uiPG.inf.click = _this.innerHTML;
+            }
+        }(bv);
+        if(i=="text" || i=="c"){
             b.style.backgroundColor = "lightblue";
             b.onclick = function(_bv,_me,_i){
                 var vta = blo0.blDiv(vs,vs.id+"vta","vta" ,"green");
@@ -388,6 +402,7 @@ o.status = function(me){
                        _bv.innerHTML = _bv.ta.value;
                        _me.inf[_i] = _bv.ta.value; 
                        vta.innerHTML = "";
+                       o.status(_me);
                    }
                 }
             }(bv,me,i);
@@ -465,8 +480,10 @@ o.inRect = function(x,y,x0,y0,w,h){
     return b;
 }
 o._2drawCurCard = function(ctx){
+     
     o.listCards[o.curCard-1]._2_draw(ctx);
 }
+ 
 o.draw = function(ctx){
     o._2drawCurCard(ctx);
 
