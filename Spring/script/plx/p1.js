@@ -76,7 +76,7 @@ function CServer(parentDiv){
                 if(tb.b1.b)  {
                     o.rect(ctx,xDbg,yDbg,wDbg,hDbg,cDbg);    
                     o.text(ctx,ui.id,xDbg,yDbg);
-                    o.rendFile(ctx,ui.inf.file,xDbg+20,yDbg+20);
+                    o.rendFile(ctx,ui.inf.file,xDbg+20,yDbg+20,192,108);
                 }   
             }
             ui.mousedown = function(x,y){   
@@ -325,8 +325,8 @@ o.img = function(ctx,f,x,y,w,h){
     o.text(ctx,i.src,x,y);
     ctx.drawImage(i,x,y,w,h);
 }
-o.rendFile = function(ctx,f,x,y){
-    o.img(ctx,f,x,y,20,20);
+o.rendFile = function(ctx,f,x,y,w,h){
+    o.img(ctx,f,x,y,w,h);
 }
 o.btnServerFiles = function(tb,v,ft){
     var b = blo0.blBtn(tb,tb.id+ft,ft,blGrey[1]);
