@@ -1,5 +1,5 @@
 ﻿
-const p1Tag = "[plx/p1.js_v0.223]";
+const p1Tag = "[plx/p1.js_v0.224]";
 
 const btn4p1 = bl$("plx_p1_btn");
 
@@ -66,10 +66,10 @@ function CServer(parentDiv){
             var tb = blo0.blDiv(ui, "id_4_tb_server","tb",blGrey[1]);
             var v = blo0.blDiv(ui, "id_4_v_server","v",blGrey[2]);
             tb.b1 = o.dbgBtn(tb,"id_btn_4_dbgServer","dbg");
-            o.btnServerFiles(tb,v,"json"); 
-            o.btnServerFiles(tb,v,"mp3"); 
-            o.btnServerFiles(tb,v,"mp4"); 
-            o.btnServerFiles(tb,v,"jpg"); 
+            o.getServerFiles(tb,v,"json"); 
+            o.getServerFiles(tb,v,"mp3"); 
+            o.getServerFiles(tb,v,"mp4"); 
+            o.getServerFiles(tb,v,"jpg"); 
 
             
             ui.draw = function(ctx){
@@ -319,8 +319,67 @@ o.list2draw = [];
 o.listMousedown = [];
 o.listCards = [];
 o.curCard = 0;
-
 o.bPlay = false;
+
+o.AddFrame2Script = function(oScript,oFrame){
+    oScript.request.frames.push(oFrame);
+}
+o.AddObj2Frame = function(ls,oObj){ 
+    ls.push(oObj);
+}
+
+o.newScript = function(v,w,h,m,r){ 
+    var json = {}; 
+    json.request = {}; 
+    json.request.version    = v;
+    json.request.width      = w;
+    json.request.height     = h;
+    json.request.music      = m;
+    json.request.rate       = r;  
+    json.request.frames     = [];
+    return json;
+}
+o.newFrame = function(number,time,backgroundColor){
+    var r = {};
+    r.number = number;
+    r.time = time;
+    r.objects = [];
+    r.backgroundColor = backgroundColor;
+    return r;
+}
+o.newObj = function(type,left,top,right,bottom,size,color){
+    var r = {};
+    r.graphic = type; 
+    r.attribute = {};
+    r.attribute.left = left; 
+    r.attribute.top = top;
+    r.attribute.right = right;
+    r.attribute.bottom = bottom;
+    r.attribute.size = size;
+    r.attribute.color = color;  
+    return r;
+}
+
+o.drawObj = function(ctx,obj){
+    o.text(ctx, obj.graphic , obj.attribute.left,150);
+
+    if(obj.graphic=="line"){
+        ctx.moveTo(obj.attribute.left,obj.attribute.top);
+        ctx.lineTo(obj.attribute.right,obj.attribute.bottom);
+        ctx.stroke();
+    }
+    else if(obj.graphic=="circle"){
+        ctx.beginPath();
+        ctx.arc(obj.attribute.left + (obj.attribute.right-obj.attribute.left)/2,
+                obj.attribute.top + (obj.attribute.bottom-obj.attribute.right)/2,
+                20,
+                0, 2 * Math.PI);
+        ctx.stroke();
+    }
+    else if(obj.graphic=="rect"){
+        ctx.strokeRect(obj.attribute.left, obj.attribute.top, obj.attribute.right, obj.attribute.bottom);
+    }
+}
 o.img = function(ctx,f,x,y,w,h){
     var i = new Image();
     i.src = "http://localhost:8080/"+f; 
@@ -329,8 +388,9 @@ o.img = function(ctx,f,x,y,w,h){
 }
 o.rendFile = function(ctx,f,x,y,w,h){
     o.img(ctx,f,x,y,w,h);
-}
-o.btnServerFiles = function(tb,v,ft){
+} 
+o.getServerFiles = function(tb,v,ft){o._getServerFiles(tb,v,ft);}
+o._getServerFiles = function(tb,v,ft){
     var b = blo0.blBtn(tb,tb.id+ft,ft,blGrey[1]);
     b.style.float = "left";
     b.onclick = function(_v,_ft){
@@ -346,17 +406,15 @@ o.btnServerFiles = function(tb,v,ft){
             var w = {};
             w._2do = function(txt){
                 var s = 'var ro='+txt;
-                eval(s);
-                //blo0.blShowObj2Div(_v,ro.resource);
+                eval(s); 
                 for(i in ro.resource){
                     var bf=blo0.blBtn(_v.d.v,_v.d.v.id+"_bf_"+i,ro.resource[i],blGrey[2]);
                     bf.style.float = "left";
                     bf.inf = {};
                     bf.onclick = function(_this,_dbg,_me){
-                        return function(){  
-                            tb.parentElement.inf.file = _me;
-                            _dbg.innerHTML = _me ;
-                            _this.inf.file = _me;
+                        return function(){    
+                            _dbg.innerHTML = _me ; 
+                            o.makeINF(_this,_me);
                             o.status(_this);
                         }
                     }(bf,_v.dbg,ro.resource[i]);
@@ -367,12 +425,72 @@ o.btnServerFiles = function(tb,v,ft){
         }
     }(v,ft);
 }
-o.status = function(me){
+o.makeINF = function(obj,fileName){
+    obj.inf.file = fileName; 
+    var a = fileName.split(".");
+    obj.inf.n = a.length;
+    if(a[1]=="json"){
+        obj.inf.toDo = function(v1){
+            var vta = blo0.blDiv(v1,v1.id+"vta","vta" ,"grey"); 
+            vta.innerHTML = "";
+            var tb = blo0.blDiv(vta,vta.id + "tb","tb",blGrey[0]);
+            var v = blo0.blDiv(vta,vta.id + "v","v",blGrey[0]);
+            tb.showMe = blo0.blBtn(tb,tb.id+"showMe","showMe",blGrey[1]);
+            tb.showMe.style.float="left";
+            tb.showMe.onclick = function(){
+                var w = {};
+                w._2do = function(txt){       
+                    v.innerHTML = "";             
+                    var ta = blo0.blTextarea(v,v.id+"ta","ta","lightgreen");
+                    ta.style.width = 100 + "%";
+                    ta.style.height = 100 + "px";
+                    ta.value = txt;
+                }
+                blo0.blAjx(w,"http://localhost:8080/"+fileName);
+            }
+            tb.makeMP4 = blo0.blBtn(tb,tb.id+"b1","makeMP4",blGrey[1]);
+            tb.makeMP4.style.float="left";
+            tb.makeMP4.onclick = function(){
+                var w = {};
+                w._2do = function(txt){
+                    v.innerHTML = txt;
+                }
+                blo0.blAjx(w,"http://localhost:8080/image/video?script="+fileName);
+            }
+        }
+    }
+    if(a[1]=="mp4" || a[1]=="mp3"){
+        obj.inf.toDo = function(v1){
+            var vta = blo0.blDiv(v1,v1.id+"vta","vta" ,"grey"); 
+            vta.innerHTML = "";
+            var tb = blo0.blDiv(vta,vta.id + "tb","tb",blGrey[0]);
+            var v = blo0.blDiv(vta,vta.id + "v","v",blGrey[0]);
+            tb.play = blo0.blBtn(tb,tb.id+"b1","play",blGrey[1]);
+            tb.play.style.float="left";
+            tb.play.onclick = function(){
+                //*
+                var sss = '<video id="myVideo" width="180" height="120" controls>';
+                sss+= '<source src="'
+                sss+= 'http://localhost:8080/';
+                sss+= fileName;
+                sss+= ' " type="video/mp4">';
+                sss+='Your browser does not support HTML5 video. '
+                sss+='</video>'; 
+                v.v1 = blo0.blDiv(v,v.id+"v1",sss,blGrey[1]);
+                var p = bl$("myVideo");
+               // p.controls = false;
+            }
+        }
+    }
+}
+o.status = function(me){    o._status(me);  }
+o._status = function(me){
     var d = bl$("id_4_vStatus");
     d.innerHTML = "";
-    var vs = blo0.blMDiv(d,d.id+"vs","vs::",3,340,555,100,blGrey[0]); 
-    var n = 0;
-    //*
+    var md = blo0.blMDiv(d,d.id+"md","o._status ",3,340,555,100,blGrey[0]); 
+    var vs = blo0.blDiv(md,md.id+"vs","",blGrey[1]);
+    var v1 = blo0.blDiv(md,md.id+"v1","v1",blGrey[1]);
+    var n = 0; 
     for(i in me.inf){
         n++;
         var b = blo0.blBtn(vs,vs.id+"b" + n, i ,blGrey[1]);
@@ -389,28 +507,45 @@ o.status = function(me){
         }(bv);
         if(i=="text" || i=="c"){
             b.style.backgroundColor = "lightblue";
-            b.onclick = function(_bv,_me,_i){
-                var vta = blo0.blDiv(vs,vs.id+"vta","vta" ,"green");
-                vta.innerHTML = "";
-                return function(){
-                   if(b.style.backgroundColor=="lightblue"){
-                       b.style.backgroundColor="grey";
-                       _bv.ta = blo0.blTextarea(vta,vta.id+"ta",_me.inf[_i],"grey");
-                       _bv.ta.style.width= "100%";
-                       ta.value = _bv.innerHTML;
+            b.onclick = function(_this,_bv,_me,_i){
+                return function(){ 
+                    var vta = blo0.blDiv(v1,v1.id+"vta","vta" ,"green"); 
+                    vta.innerHTML = "";
+                   if(_this.style.backgroundColor=="lightblue"){
+                        _this.style.backgroundColor="grey";
+                         _bv.ta = blo0.blTextarea(vta,vta.id+"ta",_me.inf[_i],"grey");
+                        _bv.ta.style.width= "100%";
+                        ta.value = _bv.innerHTML;
                    }
-                   else if(b.style.backgroundColor=="grey"){
-                       b.style.backgroundColor="lightblue";
-                       _bv.innerHTML = _bv.ta.value;
-                       _me.inf[_i] = _bv.ta.value; 
-                       vta.innerHTML = "";
-                       o.status(_me);
+                   else if(_this.style.backgroundColor=="grey"){
+                        _this.style.backgroundColor="lightblue";
+                        _bv.innerHTML = _bv.ta.value;
+                        _me.inf[_i] = _bv.ta.value; 
+                        vta.innerHTML = "";
+                        o.status(_me);
                    }
                 }
-            }(bv,me,i);
+            }(b,bv,me,i);
         }
-    }
-    //*/
+        else if(i=="toJSON"){
+            bv.innerHTML = "fn...";
+            b.style.backgroundColor = "green";            
+            b.onclick = function(_this,_v1,_me,_i){
+                return function(){ 
+                    _me.inf[_i](_v1);
+                }
+            }(b,v1,me,i);
+        }
+        else if(i=="toDo"){
+            bv.innerHTML = ".";
+            b.style.backgroundColor = "green";            
+            b.onclick = function(_this,_v1,_me,_i){
+                return function(){ 
+                    _me.inf[_i](_v1);
+                }
+            }(b,v1,me,i);
+        }
+    } 
 }
 o.addCard= function(_ls){
     return function(btn){
@@ -421,13 +556,62 @@ o.addCard= function(_ls){
         b.style.float="left";
         b.No = n+1;
         b.inf = {};
-        b.inf.index = n;
+        b.inf.type = "t_Card";
+        b.inf.index = n; 
+        b.inf.toJSON = function(_btn){
+            return function(v1){        
+                var vta = blo0.blDiv(v1,v1.id+"vta","vta" ,"grey"); 
+                vta.innerHTML = "";
+                vta.v1 = blo0.blDiv(vta,vta.id+"v1","v1" ,blGrey[1]); 
+                vta.v2 = blo0.blDiv(vta,vta.id+"v2","v2" ,blGrey[2]); 
+
+                var ta = blo0.blTextarea(vta.v1,vta.v1.id+"ta","ta","lightgreen");
+                ta.style.width = 100 + "%";
+                ta.value = _btn.inf2JSON();
+
+                vta.v2.saveAs_v3 = blo0.blBtn(vta.v2,vta.v2.id+"b1","saveAs_v3.json",blGrey[0]);
+                vta.v2.saveAs_v3.onclick = function(){ 
+                    var data = ta.value;
+                    var xhr = new XMLHttpRequest();
+                    xhr.withCredentials = true;
+                    xhr.addEventListener("readystatechange", function() {
+                    if(this.readyState === 4) {
+                        ta.value = this.responseText;
+                    }	
+                    });
+                    xhr.open("POST", "http://localhost:8080/json?fileName=v3.json");
+                    xhr.setRequestHeader("Content-Type", "text/plain");
+                    xhr.send(data);
+                }
+            }
+        }(b);
+        b.inf.version = "0.0.3";
         b.inf.x = n;
         b.inf.y = 55;
         b.inf.w = 192;
         b.inf.h = 108;
-        b.inf.c = "lightgreen";
-        b.inf.text = "Card.txt";
+        b.inf.music = "1.mp3";
+        b.inf.rate = "1";
+        b.inf.objects = [];
+        b.inf.c = "skyblue";
+        b.inf.text = "Card.txt"; 
+        o.AddObj2Frame(b.inf.objects,o.newObj("circle",10,10,100,100,5,"red"));
+        o.AddObj2Frame(b.inf.objects,o.newObj("line",55,10,100,100,5,"blue"));
+        o.AddObj2Frame(b.inf.objects,o.newObj("rect",111,10,100,100,5,"blue"));
+        b.inf2JSON = function(_this){
+            return function(){
+                var r = o.newScript(b.inf.version,
+                            b.inf.x+b.inf.w,
+                            b.inf.y+b.inf.h,
+                            b.inf.music,
+                            b.inf.rate);
+                var f = o.newFrame(1,120,"1,100,200");
+                o.AddFrame2Script(r,f);
+                
+                var s = JSON.stringify(r); 
+                return s;
+            }
+        }(b);
         b.onclick = function(_o,_this){
             return function(){
                 _o.curCard = _this.No;
@@ -454,7 +638,13 @@ o.addCard= function(_ls){
                 s += ": " + o.curCard + "/" + o.listCards.length;
                 o.text(ctx,s,x,y);        
                 o.rect(ctx,x,y,w,h,c);
-                o.text(ctx,_this.inf.text,x+w/2,y+h/2);        
+                s = _this.inf.text + ": N[Obj]=" + _this.inf.objects.length;
+                o.text(ctx,s,x ,y+h/2);       
+                for(i in _this.inf.objects){
+                    var a = _this.inf.objects[i]; 
+                    o.drawObj(ctx,a);                    
+                } 
+
             }
         }(b);
         _ls.push(b);
