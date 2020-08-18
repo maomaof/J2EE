@@ -1,9 +1,10 @@
-﻿const tag = "[nodelib/l1.js_v0.0.122] ";
+﻿const tag = "[nodelib/l1.js_v0.0.123] ";
 
 var url = require('url');
 var formidable = require('formidable');
 var fs = require('fs');
 const { runInNewContext } = require('vm');
+const { SIGUSR1 } = require('constants');
 var n = 0;
 var o = {};
 o.resource = [
@@ -68,8 +69,33 @@ exports.f1 = function(req,res){
     n++;
     var b = a[1].split("=");
 
-    res.write(tag + " command: " + b[0] + ":"+ b[1]);
-    res.end();
+   // res.write(tag + "***************** command: " + b[0] + ":"+ b[1]);
+   var s =b[1].split("%20");
+   var sCmd = "";
+   for(i in s){
+      sCmd+=" " + s[i];
+   }
+
+    const { exec } = require("child_process"); 
+    function f1(r){ 
+      res.write(r); 
+      res.end();
+    }
+    exec(sCmd, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);    
+            f1(error.message);             
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            f1(stderr);                 
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        f1(stdout); 
+    });
+ 
   }
   else if (r1 == '/json'){  
     console.log(tag + n + ":" + a.length  + " " + a[1]  + ": body=" + req.body);  
@@ -104,6 +130,7 @@ exports.f1 = function(req,res){
   }
   else if (r1 == '/1.html'
     || req.url == '/2.html'
+    || req.url == '/3.html'
     || req.url == '/nodelib/CPlay.js'
     || req.url == '/plxScriptEditor.js'
     || req.url == '/plx1.js'

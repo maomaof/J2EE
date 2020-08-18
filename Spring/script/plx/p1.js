@@ -251,8 +251,10 @@ function CClient(){
     var w = {};
     this.exeCmd = function(v0,v1,v2){
         var ta = bl$("id_ta_4_script_editor");
-        if(!ta) v0.innerHTML = "No ta.";
-        else{
+        if(!ta){
+            ta = blo0.blTextarea(v1,"id_ta_4_script_editor","dir",blGrey[0]);
+        } 
+        {
             ta.value = "exeCmd" + Date();
             var btnRun = blo0.blBtn(v1, v1.id+ "btnRun", "run", "green");
             btnRun.onclick = function(){                    
