@@ -1,5 +1,5 @@
 ﻿
-const p1Tag = "[plx/p1.js_v0.231]";
+const p1Tag = "[plx/p1.js_v0.241]";
 
 const btn4p1 = bl$("plx_p1_btn");
 
@@ -210,6 +210,7 @@ function CStoryBoard(parentDiv){
                 _this.inf={};
                 var d = new Date();
                 _this.inf.D = d;
+                _this.inf.n = 0; 
                 _this.inf.v = "0.0.3";
                 _this.inf.w = 1920;
                 _this.inf.h = 1080;
@@ -218,7 +219,8 @@ function CStoryBoard(parentDiv){
                 
                 _this.inf2JSON = function(_btn){
                     return function(){
-                        var r = o.newScript(_btn.inf.version,
+                        _btn.inf.n = o.listCards.length;
+                        var r = o.newScript(_btn.inf.v,
                                 _btn.inf.w,
                                 _btn.inf.h,
                                 _btn.inf.music,
@@ -265,11 +267,33 @@ function CStoryBoard(parentDiv){
                 }
             }(tb.btnCurStory);
 
-            tb.btnAddCard = blo0.blBtn(tb,"id_4_btnAddCard","+Card",blGrey[2]);
+            tb.btnAddCard = blo0.blBtn(tb,"id_4_btnAddCard","+1",blGrey[2]);
             tb.btnAddCard.style.float="left";
             tb.btnAddCard.onclick = function(){
                 o.addCard(this);
             }
+            tb.btnAdd2Cards = blo0.blBtn(tb,"id_4_btnAdd2Cards","+2",blGrey[2]);
+            tb.btnAdd2Cards.style.float="left";
+            tb.btnAdd2Cards.onclick = function(){
+                o.addCard(this);o.addCard(this);
+            }
+            tb.btnAdd5Cards = blo0.blBtn(tb,"id_4_btnAdd5Cards","+5",blGrey[2]);
+            tb.btnAdd5Cards.style.float="left";
+            tb.btnAdd5Cards.onclick = function(){
+                o.addCard(this);o.addCard(this);o.addCard(this);o.addCard(this);o.addCard(this);
+            }
+            tb.btnAdd10Cards = blo0.blBtn(tb,"id_4_btnAdd10Cards","+10",blGrey[2]);
+            tb.btnAdd10Cards.style.float="left";
+            tb.btnAdd10Cards.onclick = function(){
+                o.addCard(this);o.addCard(this);o.addCard(this);o.addCard(this);o.addCard(this);
+                o.addCard(this);o.addCard(this);o.addCard(this);o.addCard(this);o.addCard(this);
+            }
+            tb.btnAdd100Cards = blo0.blBtn(tb,"id_4_btnAdd100Cards","+100",blGrey[2]);
+            tb.btnAdd100Cards.style.float="left";
+            tb.btnAdd100Cards.onclick = function(){
+                for(var i = 0; i < 100; i++ ){o.addCard(this);}
+            }
+            
             
 
             o.addClass(ui,"w3-row");  
