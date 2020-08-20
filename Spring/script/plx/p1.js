@@ -397,6 +397,8 @@ function CClient(){
 }
 
 var o = {};
+o.music = "1.mp3";
+o.duration = 120;
 o.x = 50;
 o.y = 30;
 o.s = "o.s";
@@ -446,6 +448,16 @@ o.newObj = function(type,left,top,right,bottom,size,color){
     return r;
 }
 
+o.newTextObj = function(txt,x,y,size,color){
+    var r = {};
+    r.text = txt; 
+    r.x = x;
+    r.y = y; 
+    r.size = size;
+    r.color = color; 
+    return r;
+}
+
 o.drawObj = function(ctx,obj){
     o.text(ctx, obj.graphic , obj.attribute.left,150);
 
@@ -464,6 +476,9 @@ o.drawObj = function(ctx,obj){
     }
     else if(obj.graphic=="rect"){
         ctx.strokeRect(obj.attribute.left, obj.attribute.top, obj.attribute.right, obj.attribute.bottom);
+    }
+    else if(obj.graphic=="text"){
+        o.text(ctx,"TEXT",obj.attribute.left, obj.attribute.top);
     }
 }
 o.img = function(ctx,f,x,y,w,h){
@@ -563,8 +578,20 @@ o.makeINF = function(obj,fileName){
                 sss+='Your browser does not support HTML5 video. '
                 sss+='</video>'; 
                 v.v1 = blo0.blDiv(v,v.id+"v1",sss,blGrey[1]);
+                
+            }
+            tb.getDuration = blo0.blBtn(tb,tb.id+"getDuration","getDuration",blGrey[1]);
+            tb.getDuration.style.float="left";
+            tb.getDuration.onclick = function(){
                 var p = bl$("myVideo");
-               // p.controls = false;
+                if(p){
+                    o.music = fileName;
+                    o.duration = p.duration;
+                    alert(o.music);
+                }
+                else{
+                    alert("No myVideo");
+                }
             }
         }
     }
@@ -669,21 +696,29 @@ o.addCard= function(_ls){
                     xhr.setRequestHeader("Content-Type", "text/plain");
                     xhr.send(data);
                 }
+                vta.v2.setMusic = blo0.blBtn(vta.v2,vta.v2.id+"setMusic","setMusic",blGrey[0]);
+                vta.v2.setMusic.onclick = function(){ 
+                    o.music = "a.mp3";
+                }
             }
         }(b);
         b.inf.version = "0.0.3";
-        b.inf.x = n;
-        b.inf.y = 55;
+        b.inf.x = 17;
+        b.inf.y = 80;
         b.inf.w = 1920;
         b.inf.h = 1080;
-        b.inf.music = "1.mp3";
+        b.inf.music = o.music;//"1.mp3";
+        b.inf.duration = o.duration;
         b.inf.rate = "1";
         b.inf.objects = [];
         b.inf.c = "skyblue";
         b.inf.text = "Card.txt"; 
-        o.AddObj2Frame(b.inf.objects,o.newObj("circle",111,111,222,222,5,"red"));
-        o.AddObj2Frame(b.inf.objects,o.newObj("line",55,10,100,100,5,"blue"));
-        o.AddObj2Frame(b.inf.objects,o.newObj("rect",111,10,100,100,5,"blue"));
+      //  o.AddObj2Frame(b.inf.objects,o.newObj("circle",111,111,222,222,5,"red"));
+      // o.AddObj2Frame(b.inf.objects,o.newObj("rect",111,10,100,100,5,"blue"));
+       // o.AddObj2Frame(b.inf.objects,o.newTextObj("test",10,10,60,"0,255,255"));
+        o.AddObj2Frame(b.inf.objects,o.newObj("text",15,110,333,222,5,"255,255,1"));
+        o.AddObj2Frame(b.inf.objects,o.newObj("line",15,110,333,222,5,"255,255,1"));
+        o.AddObj2Frame(b.inf.objects,o.newObj("line",15,222,333,111,5,"255,1,1"));
         b.inf2JSON = function(_this){
             return function(){
                 var r = o.newScript(b.inf.version,
@@ -692,7 +727,10 @@ o.addCard= function(_ls){
                             b.inf.music,
                             b.inf.rate);
                 var f = o.newFrame(1,120,"1,100,200");                
-                o.AddObj2Frame(f.objects,o.newObj("line",111,111,333,333,5,"255,0,0"));
+                for(i in b.inf.objects){
+                    o.AddObj2Frame(f.objects,b.inf.objects[i]);
+                }
+                //o.AddObj2Frame(f.objects,o.newObj("line",111,111,333,111,5,"255,0,0"));
                 o.AddFrame2Script(r,f);
                 
                 var s = JSON.stringify(r); 
