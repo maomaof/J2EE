@@ -1,5 +1,5 @@
 ﻿
-const p1Tag = "[plx/p1.js_v0.241]";
+const p1Tag = "[plx/p1.js_v0.242]";
 
 const btn4p1 = bl$("plx_p1_btn");
 
@@ -229,6 +229,7 @@ function CStoryBoard(parentDiv){
                         for(i in o.listCards){
                             n++;
                             var f = o.newFrame(n,1,i*50%250+",100,200");
+
                             o.AddFrame2Script(r,f);                            
                         }
                         var s = JSON.stringify(r); 
@@ -680,7 +681,7 @@ o.addCard= function(_ls){
         b.inf.objects = [];
         b.inf.c = "skyblue";
         b.inf.text = "Card.txt"; 
-        o.AddObj2Frame(b.inf.objects,o.newObj("circle",10,10,100,100,5,"red"));
+        o.AddObj2Frame(b.inf.objects,o.newObj("circle",111,111,222,222,5,"red"));
         o.AddObj2Frame(b.inf.objects,o.newObj("line",55,10,100,100,5,"blue"));
         o.AddObj2Frame(b.inf.objects,o.newObj("rect",111,10,100,100,5,"blue"));
         b.inf2JSON = function(_this){
@@ -690,7 +691,8 @@ o.addCard= function(_ls){
                             b.inf.h,
                             b.inf.music,
                             b.inf.rate);
-                var f = o.newFrame(1,120,"1,100,200");
+                var f = o.newFrame(1,120,"1,100,200");                
+                o.AddObj2Frame(f.objects,o.newObj("line",111,111,333,333,5,"255,0,0"));
                 o.AddFrame2Script(r,f);
                 
                 var s = JSON.stringify(r); 
