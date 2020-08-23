@@ -1,9 +1,10 @@
-﻿const tag = "[nodelib/l1.js_v0.0.122] ";
+﻿const tag = "[nodelib/l1.js_v0.0.123] ";
 
 var url = require('url');
 var formidable = require('formidable');
 var fs = require('fs');
 const { runInNewContext } = require('vm');
+const { SIGUSR1 } = require('constants');
 var n = 0;
 var o = {};
 o.resource = [
@@ -14,6 +15,19 @@ o.resource = [
       "v2.json",
       "v1.json"
     ];
+var oMp4 = {};
+    oMp4.resource = [
+          "1.mp4",
+          "2.mp4"
+        ];
+    
+var oJPG = {};
+oJPG.resource = [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ];
+
     
 var oMp3 = {};
 oMp3.resource = [
@@ -23,7 +37,8 @@ oMp3.resource = [
 
 var myJSON = JSON.stringify(o);
 var myMP3 = JSON.stringify(oMp3);
-    
+var myMP4 = JSON.stringify(oMp4);    
+var myJPG = JSON.stringify(oJPG);
 console.log(tag );
 
 exports.f1 = function(req,res){
@@ -39,6 +54,12 @@ exports.f1 = function(req,res){
     if(b[1]=="mp3"){
       res.write(myMP3);
     }
+    else if(b[1]=="mp4"){
+      res.write(myMP4);
+    }
+    else if(b[1]=="jpg"){
+      res.write(myJPG);
+    }
     else{
       res.write(myJSON);
     }    
@@ -48,8 +69,33 @@ exports.f1 = function(req,res){
     n++;
     var b = a[1].split("=");
 
-    res.write(tag + " command: " + b[0] + ":"+ b[1]);
-    res.end();
+   // res.write(tag + "***************** command: " + b[0] + ":"+ b[1]);
+   var s =b[1].split("%20");
+   var sCmd = "";
+   for(i in s){
+      sCmd+=" " + s[i];
+   }
+
+    const { exec } = require("child_process"); 
+    function f1(r){ 
+      res.write(r); 
+      res.end();
+    }
+    exec(sCmd, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);    
+            f1(error.message);             
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            f1(stderr);                 
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        f1(stdout); 
+    });
+ 
   }
   else if (r1 == '/json'){  
     console.log(tag + n + ":" + a.length  + " " + a[1]  + ": body=" + req.body);  
@@ -84,6 +130,7 @@ exports.f1 = function(req,res){
   }
   else if (r1 == '/1.html'
     || req.url == '/2.html'
+    || req.url == '/3.html'
     || req.url == '/nodelib/CPlay.js'
     || req.url == '/plxScriptEditor.js'
     || req.url == '/plx1.js'
@@ -93,7 +140,7 @@ exports.f1 = function(req,res){
     || req.url == '/plx/p1.js'
     || req.url == '/plx/p2.js'
     || req.url == '/v1.json'
-    || req.url == '/v2.json'
+    || req.url == '/v2.json' 
   ) {
     var q = url.parse(req.url, true);
     var filename = "." + q.pathname;
@@ -118,6 +165,22 @@ exports.f1 = function(req,res){
         return res.end("404 Not Found");
       } 
       res.writeHead(200, {'Content-Type': 'audio/mp3'});
+      res.write(data);
+      return res.end();
+    });
+  } 
+  else if ( r1 == '/1.jpg'
+        || r1 == '/2.jpg'  
+        || r1 == '/3.jpg'  
+  ) {
+    var q = url.parse(req.url, true);
+    var filename = "." + q.pathname;
+    fs.readFile(filename, function(err, data) {
+      if (err) {
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        return res.end("404 Not Found");
+      } 
+      res.writeHead(200, {'Content-Type': 'image/jpg'});
       res.write(data);
       return res.end();
     });
