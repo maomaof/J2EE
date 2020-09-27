@@ -1,7 +1,9 @@
 package com.pbz.demo.hello.Unit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
@@ -77,11 +79,18 @@ class DocTest {
 	void testGetAllDocs() throws Exception {
 		docOperator.saveJsonDoc2DataBase(id1, title, description, author, jsonString);
 		docOperator.saveJsonDoc2DataBase(id2, title, description, author, jsonString);
-		
+
+		List<Long> expectIds = new ArrayList<Long>();
+		List<Long> returnedIds = new ArrayList<Long>();
+		expectIds.add(id);
+		expectIds.add(id1);
+		expectIds.add(id2);
+
 		List<DocEntity> docEntityList = docOperator.getAllDocs();
-		assertEquals(id, docEntityList.get(0).getId());
-		assertEquals(id1, docEntityList.get(1).getId());
-		assertEquals(id2, docEntityList.get(2).getId());
+		for (DocEntity doc : docEntityList) {
+			returnedIds.add(doc.getId());
+		}
+		assertTrue(returnedIds.containsAll(expectIds));
 	}
 	
 	@Test
