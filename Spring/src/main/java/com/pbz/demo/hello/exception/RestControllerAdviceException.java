@@ -32,7 +32,7 @@ public class RestControllerAdviceException extends ResponseEntityExceptionHandle
 		LOGGER.error("Handle unexpected Exception", e);
 		return status;
 	}
-
+	
 	@ExceptionHandler(HtmlRequestException.class)
 	public ModelAndView processHtmlRequestException(HtmlRequestException e) {
 		ModelAndView mv = new ModelAndView();
