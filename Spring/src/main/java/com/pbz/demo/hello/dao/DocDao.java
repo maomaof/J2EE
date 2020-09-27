@@ -18,6 +18,12 @@ public interface DocDao {
 	void updateDoc(DocEntity demoEntity);
 
 	DocEntity findDocById(Long id);
+	
+	List<DocEntity> findDocById(String id);
+	
+	List<DocEntity> findDocByTitle(String title);
+	
+	List<DocEntity> findDocByAuthor(String author);
 
 	public List<DocEntity> getAllDocs();
 

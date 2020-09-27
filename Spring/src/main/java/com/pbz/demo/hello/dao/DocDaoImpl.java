@@ -47,6 +47,27 @@ public class DocDaoImpl implements DocDao {
 		DocEntity docEntity = mongoTemplate.findOne(query, DocEntity.class);
 		return docEntity;
 	}
+	
+	@Override
+	public List<DocEntity> findDocById(String id) {
+		Query query = new Query(Criteria.where("id").is(Long.parseLong(id)));
+		List<DocEntity> docEntity = mongoTemplate.find(query, DocEntity.class);
+		return docEntity;
+	}
+	
+	@Override
+	public List<DocEntity> findDocByTitle(String title) {
+		Query query = new Query(Criteria.where("title").is(title));
+		List<DocEntity> docEntity = mongoTemplate.find(query, DocEntity.class);
+		return docEntity;
+	}
+	
+	@Override
+	public List<DocEntity> findDocByAuthor(String author) {
+		Query query = new Query(Criteria.where("author").is(author));
+		List<DocEntity> docEntity = mongoTemplate.find(query, DocEntity.class);
+		return docEntity;
+	}
 
 	@Override
 	public boolean testDBConnection() {
