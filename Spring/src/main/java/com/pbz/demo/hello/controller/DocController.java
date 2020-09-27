@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pbz.demo.hello.dao.DocDao;
 import com.pbz.demo.hello.entity.DocEntity;
-import com.pbz.demo.hello.exception.NotFoundException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import javassist.NotFoundException;
 
 @RestController
 @Api(tags = "剧本数据库Rest API")
