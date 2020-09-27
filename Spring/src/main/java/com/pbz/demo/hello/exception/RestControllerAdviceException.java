@@ -33,21 +33,6 @@ public class RestControllerAdviceException extends ResponseEntityExceptionHandle
 		return status;
 	}
 	
-	@ExceptionHandler(NotFoundException.class)
-	@ResponseStatus(code = HttpStatus.NOT_FOUND)
-	public ReturnStatus processHtmlRequestException(NotFoundException e) {
-		ReturnStatus status = new ReturnStatus();
-		status.setHttpStatus(HttpStatus.NOT_FOUND);
-		status.exceptionClass = e.getClass().getName();
-		if (e.getMessage() == null || e.getMessage().trim().length() == 0) {
-			status.message = "Not found resource.";
-		} else {
-			status.message = e.getMessage();
-		}
-		LOGGER.error("Handle unexpected Exception", e);
-		return status;
-	}
-	
 	@ExceptionHandler(HtmlRequestException.class)
 	public ModelAndView processHtmlRequestException(HtmlRequestException e) {
 		ModelAndView mv = new ModelAndView();
