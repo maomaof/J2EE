@@ -273,6 +273,11 @@ public final class JsonSriptParser {
 			gp2d.drawString(name, X, Y);
 		} else if ("picture".equalsIgnoreCase(type)) {
 			String picFile = name;
+			if (actionObj.has("loop")) {
+				JSONArray loopArray = actionObj.getJSONArray("loop");
+				int index = (number - sfNum) % loopArray.length();
+				picFile = (String) loopArray.get(index);
+			}
 			File imgFile = new File(picFile);
 			if (imgFile.exists()) {
 				Image img = null;
